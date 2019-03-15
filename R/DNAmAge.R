@@ -181,6 +181,19 @@ DNAmAge <- function(x, GestationalAge=FALSE,
     }
   }
 
+    if (sum(is.element(colnames(cpgs.norm), coefSkin$CpG)) !=
+        (nrow(coefSkin) -1)) {
+      warning(
+        "The CpGs needed for new skin & blood Horvath's method are not in your input data. This method will not be computed"
+      )
+      skinHorvath <- rep(NA, nrow(cpgs.norm))
+    }
+    else {
+      cpgs.skin <- cpgs.norm[, coefSkin$CpG[-1]]
+      skinHorvath <- anti.trafo(coefSkin$Coef[1] +
+                                  cpgs.levine%*%coefSkin$Coef[-1])
+    }  
+    
   cpgs.bn <- t(cpgs.norm[,coefHorvath$CpGmarker[-1]])
   bn <- main_NewModel1Clean(cpgs.bn)
 
@@ -189,6 +202,7 @@ DNAmAge <- function(x, GestationalAge=FALSE,
                       horvath,
                       hannum,
                       Levine = levine,
+                      skinHorvath = skinHorvath,
                       BNN = bn,
                       age = age)
   else
@@ -196,6 +210,7 @@ DNAmAge <- function(x, GestationalAge=FALSE,
                       horvath,
                       hannum,
                       Levine = levine,
+                      skinHorvath = skinHorvath,
                       BayNet = bn)
 
   out <- tibble::as_tibble(out)

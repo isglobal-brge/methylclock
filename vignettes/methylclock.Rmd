@@ -37,7 +37,7 @@ This manual describes how to estimate DNA methylation age (DNAmAge) using differ
 - **DNAm PhenoAge** (Levine's method): It uses 513 CpGs described in @levine2018epigenetic. 
 - **BNN**: It uses Horvath's CpGs to train a Bayesian Neural Network (BNN) to predict DNAmAge as described in @alfonso2018.
 - **Gestational Age (GA) clock**: It uses 148 CpGs described in @knight2016epigenetic to estimate gestational age (in months).
-- **Skin clock**: Is epigenetic clock for skin and blood cells. It uses 391 CpGs described in @horvath2018epigenetic.
+- **Skin clock**: Is epigenetic clock for skin and blood cells. It uses 391 CpGs described in @horvath2018epigenetic. It requires 450K and/or EPIC array data.
 
 The main aim of this package is to facilitate the interconnection with R and Bioconductor's infrastructure and, hence, avoiding submitting data to online calculators. Additionally, `methylclock` also provides an unified way of computing DNAm age to help downstream analyses.
 
@@ -63,6 +63,7 @@ library(Biobase)
 library(tibble)
 library(ggplot2)
 library(ggpmisc)
+library(GEOquery)
 ```
 
 # DNAm age estimation
@@ -216,9 +217,6 @@ age.gse19711
 ```
 
 
-
-
-
 The association between disease status and DNAmAge estimated using Horvath's method can be computed by
 
 ```{r assoc_hpv}
@@ -297,6 +295,9 @@ ga.progress <- DNAmAge(dat1, GestationalAge = TRUE)
 head(ga.progress)
 ```
 
+# Example with a 450K illumina array
+
+Some of the clocks require more CpGs than those available in 27K arrays. Here we illustrate how to estimate all the available DNA methylation biomarkers using data from .....  TO BE SUPPLIED.
 
 
 # References

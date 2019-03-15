@@ -1,0 +1,9 @@
+useDynLib(methylclock, .registration=TRUE)
+
+export(DNAmAge)
+export(BMIQcalibration)
+export(plotDNAmAge)
+
+importFrom(meffil, meffil.estimate.cell.counts.from.betas)
+importFrom(impute, impute.knn)
+importFrom(Rcpp, evalCpp, sourceCpp)

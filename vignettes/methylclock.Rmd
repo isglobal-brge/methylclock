@@ -1,0 +1,303 @@
+---
+title: "DNAm age estimation using different methylation clocks"
+subtitle: "Gerardo Alfonso, Dolors Pelegri and Juan R Gonzalez"
+author: |
+  Institute for Global Health (ISGlobal), Barcelona, Spain
+  Bioinformatics Research Group in Epidemiolgy (BRGE)
+  http://brge.isglobal.org
+date: "`r Sys.Date()`"
+package: "`r pkg_ver('methylclock')`"
+output: 
+  BiocStyle::html_document:
+    number_sections: true
+    toc: yes
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{DNAm age using diffrent methylation clocks}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+bibliography: methylclock.bib  
+---
+
+```{r setup_knitr, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE,
+                      cache=TRUE, comment = " ")
+```
+
+# Introduction
+
+This manual describes how to estimate DNA methylation age (DNAmAge) using different methylation clocks. The package includes the following estimators:
+
+- **DNAmAge** (Horvath's method): It uses 353 CpGs described in @horvath2013dna.
+- **AgeAcDiff** (DNAmAge acceleration difference): Difference between DNAmAge and chronological age.
+- **IEAA** (Intrinsic Epigenetic Age Acceleration): Residuals obtained after regressing DNAmAge and chronological age. This measure was also known as DNAmAge acceleration residual in the first Horvath's paper.
+- **EEAA** (Extrinsic Epigenetic Age Acceleration): Residuals obtained after regressing DNAmAge and chronological age adjusted by cell counts. 
+- **Hannum's** method: It uses 50 CpGs described in @hannum2013genome.
+- **AMAR** (Apparent Methylomic Aging Rate): Measure proposed in @hannum2013genome computed as the ratio between DNAm age and the chronological age.
+- **DNAm PhenoAge** (Levine's method): It uses 513 CpGs described in @levine2018epigenetic. 
+- **BNN**: It uses Horvath's CpGs to train a Bayesian Neural Network (BNN) to predict DNAmAge as described in @alfonso2018.
+- **Gestational Age (GA) clock**: It uses 148 CpGs described in @knight2016epigenetic to estimate gestational age (in months).
+- **Skin clock**: Is epigenetic clock for skin and blood cells. It uses 391 CpGs described in @horvath2018epigenetic.
+
+The main aim of this package is to facilitate the interconnection with R and Bioconductor's infrastructure and, hence, avoiding submitting data to online calculators. Additionally, `methylclock` also provides an unified way of computing DNAm age to help downstream analyses.
+
+# Getting started
+
+Package can be installed by executing:
+
+```{r install_packages, eval=FALSE}
+library(devtools)
+install_github("isglobal-brge/methylclock")
+``` 
+
+Then, the package is loaded into R as usual:
+
+```{r load_package}
+library(methylclock)
+```
+
+Other libraries are required to reproduce this document:
+
+```{r load_others}
+library(Biobase)
+library(tibble)
+library(ggplot2)
+library(ggpmisc)
+```
+
+# DNAm age estimation
+
+The main function of the package is called `DNAmAge` that computes all the methylation clocks previously described but Gestational Age that can be computed by setting the argument `GestationalAge=TRUE`. Next subsection describes the main features of this function.
+
+## Data format
+The methylation data is given in the argument `x`. They can be either beta or M values. The argument `toBetas` should be set to TRUE when M values are provided. The `x` object can be:
+
+- A **data frame** or a **tibble** with CpGs in rows and individuals in columns having the name of the CpGs in the first column (e.g.  cg00000292, cg00002426, cg00003994,  ...) as required in the Horvath's DNA Methylation Age Calculator website (https://dnamage.genetics.ucla.edu/home).
+
+- A **GenomicRatioSet** object, the default method to encapsulate methylation data in `minfi` Bioconductor package.
+
+- An **ExpressionSet** object as obtained, for instance, when downloading methylation data from GEO. 
+
+## Data nomalization
+In principle, data can be normalized by using any of the existing standard methods such as QN, ASMN, PBC, SWAN, SQN, BMIQ (see a revision of those methods in @wang2015systematic). `DNAmAge` function includes the BMIQ method proposed by @teschendorff2012beta using Horvath's robust implementation that basically consists of an optimal R code implementation and optimization procedures. This normalization is recommended by Horvath since it improves their predictions. This normalization procedure is very time-consuming. In order to overcome these difficulties, we have parallelize this process using `BiocParallel` library. This step is not mandatory, so that, you can use your normalized data and set the argument `normalize` equal to FALSE (default).
+
+## Missing data
+All the implemented methods require complete cases. `DNAmAge` function implements an imputation method based on KNN implemented in the function `knn.impute` from `impute` package. This is performed when missing data is present in the CpGs used in Horvath's method. There is also another option based on a fast imputation method that uses a set of ~21K CpGs as reference to impute missing data which are proposed by Horvath's method. This can be performed by setting `fastImp=TRUE` and, of course, it is only recommended for 27K arrays. 
+
+## Cell counts
+The EEAA method requires to estimate cell counts. We use the package `meffil` (@min2018meffil) that provides some functions to estimate cell counts using predefined datasets. This is performed by setting `cell.count=TRUE` (default value). The reference panel is passed through the argument `cell.count.reference`. So far, the following options are available:
+
+- **"blood gse35069 complete"**: methylation profiles from @reinius2012differential for purified blood cell types. It includes CD4T, CD8T, Mono, Bcell, NK, Neu and Eos.
+- **"blood gse35069"**: methylation profiles from @reinius2012differential for purified blood cell types. It includes CD4T, CD8T, Mono, Bcell, NK and Gran.
+- **"blood gse35069 chen"**: methylation profiles from @chen2017epigenome blood cell types. It includes CD4T, CD8T, Mono, Bcell, NK, Neu and Eos.
+- **"andrews and bakulski cord blood"**. Cord blood reference from @bakulski2016dna. It includes Bcell, CD4T, CD8T, Gran, Mono, NK and nRBC.
+- **"cord blood gse68456"** Cord blood methylation profiles from @de2015nucleated. It includes CD4T, CD8T, Mono, Bcell, NK, Neu, Eos and RBC.
+- **"gervin and lyle cord blood"** Cord blood reference generated by Kristina Gervin and Robert Lyle, available at `miffil` package. It includes CD14, Bcell, CD4T, CD8T, NK, Gran.
+- **"saliva gse48472"**: Reference generated from the multi-tissue pannel from @slieker2013identification. It includes Buccal, CD4T, CD8T, Mono, Bcell, NK, Gran.
+
+
+# Illustrative examples
+
+## Horvath's example
+Let us start by reproducing the results proposed in @horvath2013dna. The file 'MethylationDataExample55.csv" contains an example used in their tutorial (available [here](https://dnamage.genetics.ucla.edu/home)). These data are available when loading `methylclock` package as tibble which is one of the possible formats of `DNAmAge` function
+
+```{r load_horvath_example}
+MethylationDataExample55
+```
+
+Covariates (sample annotation data) are available at 'SampleAnnotationExample55.csv' file that is also available at `methylclocl` package:
+
+```{r covariates_horvath_example}
+SampleAnnotationExample55
+```
+
+Cronological age is required to compute some of the age estimators. In this example, the variable `Age` is encoding such information:
+
+```{r age_horvath_example}
+age <- SampleAnnotationExample55$Age
+head(age)
+``` 
+
+The different methylation ages can be simply computed by:
+
+```{r DNAmAge_horvath}
+age.example55 <- DNAmAge(MethylationDataExample55, age=age)
+age.example55
+```
+
+Then, we can compare, for instance, the DNAmAge estimates between Autistic and control individuals by using a non-parametric test (low sample size)
+
+```{r compare_autistic}
+autism <- SampleAnnotationExample55$diseaseStatus
+kruskal.test(age.example55$Horvath ~ autism)
+kruskal.test(age.example55$BNN ~ autism)
+```
+
+## DNAmAge prediction on healthy people 
+
+One may be interested in assessing association between chronologial age and DNA methylation age or evaluating how well chronological age is predicted by DNAmAge. In other to illustrate this analysis we downloaded data from GEO corresponding to a set of healthy individuals (GEO accession number GSE58045). Data can be retrieved into R by using `GEOquery` package as an `ExpressionSet` object that can be the input of our main function. 
+
+```{r get_gse58045, echo=FALSE}
+ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/epigeneticclock"
+load(file.path(ff, "data/GSE58045.Rdata"))
+``` 
+
+```{r get_geo_gse58045, eval=FALSE}
+dd <- GEOquery::getGEO("GSE58045")
+gse58045 <- dd[[1]]
+gse58045
+```
+
+The chronological age is obtained by using `pData` function from  `Biobase` package that is able to deal with `ExpressionSet` objects:
+
+```{r age_gse58045}
+pheno <- pData(gse58045)
+age <- as.numeric(pheno$`age:ch1`)
+``` 
+
+And the different DNA methylation age estimates are obtained by using `DNAmAge` function (NOTE: as there are missing values, the program automatically runs `impute.knn` function to get complete cases):
+
+```{r DNAmAge_gse58045}
+age.gse58045 <- DNAmAge(gse58045, age=age)
+age.gse58045
+```
+
+Figure \ref{fig:horvath_age} shows the correlation between DNAmAge obtained from Horvath's method and the chronological age, while Figure \ref{fig:bnn_age} depicts the correlation of a new method based on fitting a Bayesian Neural Network to predict DNAmAge based on Horvath's CpGs.
+
+```{r horvat_age}
+plotDNAmAge(age.gse58045$Horvath, age)
+```
+
+```{r bnn_age}
+plotDNAmAge(age.gse58045$BNN, age, tit="Bayesian Neural Network")
+```
+
+## DNAmAge in association studies
+
+Let us illustrate how to use DNAmAge information in association studies (e.g case/control, smokers/non-smokers, responders/non-responders, ...). GEO number GSE58045 contains transcriptomic and epigenomic data of a study in lung cancer. Data can be retrieved into R by
+
+```{r get_gse19711, eval=FALSE}
+dd <- GEOquery::getGEO("GSE19711")
+gse19711 <- dd[[1]]
+```
+
+```{r get_gse19711_ok, echo=FALSE}
+load(file.path(ff, "data/GSE19711.Rdata"))
+```
+
+The object `gse19711`is an `ExpressionSet` that can contains CpGs and phenotypic (e.g clinical) information
+
+```{r show_gse19711}
+gse19711
+```
+
+Let us imagine we are interested in comparing the DNAmAge between cases and controls. Age and case/control status information can be obtained by:
+
+```{r get_case_control}
+pheno <- pData(gse19711)
+age <- as.numeric(pheno$`ageatrecruitment:ch1`)
+disease <- pheno$`sample type:ch1`
+disease[grep("Control", disease)] <- "Control"
+disease[grep("Case", disease)] <- "Case"
+disease <- factor(disease, levels=c("Control", "Case"))
+table(disease)
+```
+
+The DNAmAge estimates of different methods is computed by 
+
+```{r DNAmAge_gse19711}
+age.gse19711 <- DNAmAge(gse19711, age=age)
+```
+
+We can observe there are missing data. The funcion automatically impute those using `impute.knn` function from `impute` package since complete cases are required to compute the different methylation clocks. The estimates are:
+
+```{r show_age.gse19711}
+age.gse19711
+```
+
+
+
+
+
+The association between disease status and DNAmAge estimated using Horvath's method can be computed by
+
+```{r assoc_hpv}
+mod.horvath <- glm(disease ~ Horvath , data=age.gse19711,
+           family="binomial")
+summary(mod.horvath)
+```
+
+We do not observe statistical significant association between DNAmAge estimated using Horvath method and the risk of developing lung cancer. The point here is that cases and controls were matched by age, so that, it is difficult to find differences when using a methylation clock that was designed to predict chronological age. On the other hand,  Levine's clock aimed to distinguish risk between same-aged individuals. Let us evaluate whether this DNAmAge estimates can be associated with lung cancer
+
+```{r mod_levine}
+mod.levine <- glm(disease ~ Levine , data=age.gse19711,
+           family="binomial")
+summary(mod.levine)
+```
+
+Here we observe as the risk of developing lung cancer increases `r round((exp(coef(mod.levine)[2]) - 1)*100,2)` percent per each increase in the Levine methylation age. 
+
+In some occasions cell composition should be used to assess association. This information is calculated in `DNAmAge` function and it can be incorporated in the model by:
+
+```{r assoc_cell}
+cell <- attr(age.gse19711, "cell_proportion")
+mod.cell <- glm(disease ~ Levine + cell, data=age.gse19711,
+           family="binomial")
+summary(mod.cell)
+```
+
+Here we observe as the positive association disapears after adjustinc for cell counts.
+
+## Gestational Age
+
+Let us start by reproducing the example provided in @knight2016epigenetic as a test data set (file 'TestDataset.csv'). It consists on 3 individuals whose methylation data are available as supplementary data of their paper. The data is also available at `methylclock` package as a data frame.
+
+```{r load_3_inds}
+TestDataset[1:5,]
+```
+
+The Gestational Age (in months) is simply computed by
+
+```{r age_test}
+ga.test <- DNAmAge(TestDataset, GestationalAge = TRUE)
+ga.test
+```
+The results are the same as those described in the additional file 7 of @knight2016epigenetic (link [here](https://static-content.springer.com/esm/art%3A10.1186%2Fs13059-016-1068-z/MediaObjects/13059_2016_1068_MOESM7_ESM.docx))
+
+Let us continue by illustrating how to compute GA of real examples. The PROGRESS cohort data is available in the additional file 8 of  @knight2016epigenetic. It can be retrieved in to R by simply:
+
+```{r get_progress, eval=FALSE}
+progress <- read.csv("PROGRESS_data.csv", as.is=TRUE)
+```
+
+```{r get_progress_ok, echo=FALSE}
+progress <- read.csv(file.path(ff, "data/PROGRESS_data.csv"), as.is=TRUE)
+```
+
+This data is having different variables (in rows) and CpGs to reproduce some of the analyses performed in @knight2016epigenetic. The first column has the name of those variables:
+
+```{r show_progress}
+progress[1:15, 1]
+```
+
+The requiered data frame including CpGs as well as covariates such as birthweight can be obtained by:
+
+```{r get_progress_data}
+birthweight <- as.numeric(unlist(progress[5, -1]))
+EGA <- as.numeric(unlist(progress[4, -1]))
+cpgs <- data.frame(lapply(progress[-c(1:10), -1], as.numeric))
+dat1 <- data.frame(CpGName=progress[-c(1:10), 1], cpgs)
+dat1[1:4, 1:5]
+```
+
+The Gestational Age (in months) is simply computed by
+
+```{r age_progress}
+ga.progress <- DNAmAge(dat1, GestationalAge = TRUE)
+head(ga.progress)
+```
+
+
+
+# References
+

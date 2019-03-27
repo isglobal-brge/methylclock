@@ -1,0 +1,17 @@
+OriginalOrder,id,title,geo_accession,TissueDetailed,Tissue,diseaseStatus,Age,PostMortemInterval,CauseofDeath,individual,Female,Caucasian,FemaleOriginal
+3,GSM946048,Autism_occ_AN09714,GSM946048,Fresh frozen brain tissue,occipitalcortex,1,60,26.5,cancer,18,0,NA,NA
+4,GSM946049,Control_occ_AN05475,GSM946049,Fresh frozen brain tissue,occipitalcortex,0,39,,cardiac,2,0,NA,NA
+7,GSM946052,Autism_occ_AN08166,GSM946052,Fresh frozen brain tissue,occipitalcortex,1,28,43,cancer,3,0,NA,NA
+9,GSM946054,Autism_occ_AN06420,GSM946054,Fresh frozen brain tissue,occipitalcortex,1,39,14,cardiac,6,0,NA,NA
+10,GSM946055,Autism_occ_AN19511,GSM946055,Fresh frozen brain tissue,occipitalcortex,1,8,22.2,cancer,4,0,NA,NA
+11,GSM946056,Autism_occ_AN09730,GSM946056,Fresh frozen brain tissue,occipitalcortex,1,22,25,hypoxia,8,0,NA,NA
+14,GSM946059,Control_occ_UMB4670,GSM946059,Fresh frozen brain tissue,occipitalcortex,0,4,17,cardiac,28,0,NA,NA
+17,GSM946062,Control_occ_UMB4543,GSM946062,Fresh frozen brain tissue,occipitalcortex,0,28,13,other,35,0,NA,NA
+19,GSM946064,Autism_occ_AN08873,GSM946064,Fresh frozen brain tissue,occipitalcortex,1,5,25.5,hypoxia,21,0,NA,NA
+20,GSM946065,Autism_occ_AN03345,GSM946065,Fresh frozen brain tissue,occipitalcortex,1,2,4,hypoxia,14,0,NA,NA
+21,GSM946066,Autism_occ_AN11989,GSM946066,Fresh frozen brain tissue,occipitalcortex,1,30,16,cardiac,17,0,NA,NA
+22,GSM946067,Control_occ_BTB1453,GSM946067,Fresh frozen brain tissue,occipitalcortex,0,1,19,unknown,30,0,NA,NA
+28,GSM946073,Control_occ_AN10723,GSM946073,Fresh frozen brain tissue,occipitalcortex,0,60,24.2,unknown,13,0,NA,NA
+29,GSM946074,Control_occ_AN10833,GSM946074,Fresh frozen brain tissue,occipitalcortex,0,22,21.5,unknown,24,0,NA,NA
+30,GSM946075,Control_occ_UMB1860,GSM946075,Fresh frozen brain tissue,occipitalcortex,0,8,5,cardiac,33,0,NA,NA
+31,GSM946076,Control_occ_AN15622,GSM946076,Fresh frozen brain tissue,occipitalcortex,0,30,15,hypoxia,11,0,NA,NA

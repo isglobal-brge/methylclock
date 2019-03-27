@@ -24,8 +24,11 @@ DNAmAge <- function(x, GestationalAge=FALSE,
                     age){
 
   if (inherits(x, "data.frame")){
+    cpgs.names <- as.character(x[, 1, drop=TRUE]) 
+    if (length(grep("cg", cpgs.names))==0)
+      stop("First column should contain CpG names")
     cpgs <- t(as.matrix(x[, -1]))
-    colnames(cpgs) <- as.character(x[, 1, drop=TRUE])
+    colnames(cpgs) <- cpgs.names
   }
   else if (inherits(x, "ExpressionSet")){
     cpgs <- t(Biobase::exprs(x))

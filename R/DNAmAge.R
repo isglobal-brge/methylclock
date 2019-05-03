@@ -1,5 +1,5 @@
 #' DNAm age estimation using Horvath's, Hannum's and Levine's method.
-#' @param x matrix ... ponemos un MethlylSet? rows -> CpGs columns 1ª nombres
+#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet.
 #' @param GestationalAge Is gestational age clock estimated? Default is FALSE.
 #' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
 #' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
@@ -72,7 +72,7 @@ DNAmAge <- function(x, GestationalAge=FALSE,
       }
     }
     else{
-      cpgs.imp <- t(impute.knn(t(cpgs))$data)
+      cpgs.imp <- suppressMessages(t(impute.knn(t(cpgs))$data))
     }
   }
   else{

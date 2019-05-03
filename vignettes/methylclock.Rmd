@@ -116,8 +116,7 @@ Let us start by reproducing the results proposed in @horvath2013dna. The file 'M
 ```{r load_horvath_example}
 library(tidyverse)
 path <- system.file("extdata", package = "methylclock")
-MethylationData <- read_csv(file.path(path,
-                                      "MethylationDataExample55.csv"))
+MethylationData <- read_csv(file.path(path,                                      "MethylationDataExample55.csv"))
 MethylationData
 ```
 

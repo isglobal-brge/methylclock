@@ -2,24 +2,31 @@
 % Please edit documentation in R/DNAmAge.R
 \name{DNAmAge}
 \alias{DNAmAge}
-\title{Estimating DNAm age using Steve Horvath's method.}
+\title{DNAm age estimation using different DNA methylation clocks.}
 \usage{
-DNAmAge(x, fastImp = FALSE, cell.type = TRUE,
-  cell.type.reference = "blood gse35069", age)
+DNAmAge(x, GestationalAge = FALSE, toBetas = FALSE, fastImp = FALSE,
+  normalize = FALSE, cell.count = TRUE,
+  cell.count.reference = "blood gse35069 complete", age)
 }
 \arguments{
-\item{x}{matrix ... ponemos un MethlylSet? rows -> CpGs columns 1ª nombres}
+\item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet.}
+
+\item{GestationalAge}{Is gestational age clock estimated? Default is FALSE.}
+
+\item{toBetas}{Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.}
 
 \item{fastImp}{Is fast imputation performed if necessary? (see details). Default is FALSE}
 
-\item{cell.type}{Are IEAA and EEAA computed? Default is TRUE.}
+\item{normalize}{Is Horvath's normalization performed? By default is FALSE}
 
-\item{cell.type.reference}{Used when 'cell.type' is TRUE. Default is "blood gse35069". See 'meffil::meffil.list.cell.type.references()' for possible values.}
+\item{cell.count}{Are IEAA and EEAA computed? Default is TRUE.}
 
-\item{age}{individual's chronological age. Required when 'cell.type' is TRUE.}
+\item{cell.count.reference}{Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.}
+
+\item{age}{individual's chronological age. Required when 'cell.count' is TRUE.}
 }
 \description{
-Estimating DNAm age using Steve Horvath's method.
+DNAm age estimation using different DNA methylation clocks.
 }
 \details{
 Imputation is performed when having missing data.

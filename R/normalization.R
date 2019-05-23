@@ -1,7 +1,7 @@
 #' BMIQ normallization
 #'
-#' @param datM
-#' @param goldstandard.beta,
+#' @param datM data matrix
+#' @param goldstandard.beta 'goldstandard.beta'
 #' @param nL default value is 3
 #' @param doH default value is TRUE
 #' @param nfit devault value id 20000

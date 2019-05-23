@@ -1,15 +1,15 @@
 Package: methylclock
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Version: 0.2.0
+Date: 2019-05-22
+Author: Juan R Gonzalez
+Maintainer: Juan R Gonzalez <juanr.gonzalez@isglobal.org>
+Description: This manual describes how to estimate DNA methylation age (DNAmAge) using different methylation clocks. 
 License: MIT
-Imports: meffil (>= 1.1.0), impute (>= 1.54.0), Rcpp (>= 0.12.18)
+Imports: meffil, impute, Hmisc, Rcpp
 Suggests: RPMM, Biobase, tidyverse
 LinkingTo: Rcpp
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

@@ -1,4 +1,4 @@
-#' DNAm age estimation using Horvath's, Hannum's and Levine's method.
+#' DNAm age estimation using different DNA methylation clocks.
 #' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet.
 #' @param GestationalAge Is gestational age clock estimated? Default is FALSE.
 #' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
@@ -60,20 +60,32 @@ DNAmAge <- function(x, GestationalAge=FALSE,
     stop("CpGs in Horvat's model are not present in your data.")
   }
   
-  miss <- apply(cpgs[, CpGs.model], 1, function(x) any(is.na(x)))
+  cpgs.all <- c(coefHorvath$CpGmarker,
+                coefHannum$Marker,
+                coefGA$CpGmarker, 
+                coefLevine$CpG, 
+                coefSkin$CpG)
+  cpgs.in <- intersect(cpgs.all, colnames(cpgs))
+  
+  miss <- apply(cpgs[, cpgs.in], 2, function(x) any(is.na(x)))
   
   if (any(miss)){
-    warning(paste("There are missing values. Those have been imputed. \n"))
     if (fastImp){
-      cpgs.imp <- cpgs
-      for (i in which(miss)) {
-        sel <- is.na(cpgs[i, ])
-        cpgs.imp[i, sel] <- probeAnnotation21kdatMethUsed$goldstandard2[sel]
-      }
+      cat(paste("Imputing missing data of", sum(miss), "CpGs .... \n"))
+      mm <- apply(cpgs, 2, median, na.rm=TRUE)
+      cpgs.imp <- sweep(a, 2, STATS=mm, 
+                        FUN = function(x,s) ifelse(is.na(x), s, x))
     }
     else{
-      cpgs.imp <- suppressMessages(t(impute.knn(t(cpgs))$data))
+      quiet <- function(x) { 
+        sink(tempfile()) 
+        on.exit(sink()) 
+        invisible(force(x)) 
+      } 
+      cat(paste("Imputing missing data of the entire matrix .... \n"))
+      cpgs.imp <- quiet(t(impute.knn(t(cpgs))$data))
     }
+    cat("Data imputed. Starting DNAm clock estimation ... \n")
   }
   else{
     cpgs.imp <- cpgs
@@ -83,8 +95,7 @@ DNAmAge <- function(x, GestationalAge=FALSE,
     cpgs.norm <- BMIQcalibration(
       datM = cpgs.imp,
       goldstandard.beta = probeAnnotation21kdatMethUsed$goldstandard2,
-      plots = FALSE
-    )
+      plots = FALSE)
   }
   
   else {
@@ -221,4 +232,4 @@ DNAmAge <- function(x, GestationalAge=FALSE,
   }
   
   out
-  }
+}

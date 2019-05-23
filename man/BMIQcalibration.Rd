@@ -4,11 +4,15 @@
 \alias{BMIQcalibration}
 \title{BMIQ normallization}
 \usage{
-BMIQcalibration(datM, goldstandard.beta, nL = 3, doH = TRUE, nfit = 20000,
-  th1.v = c(0.2, 0.75), th2.v = NULL, niter = 5, tol = 0.001,
-  plots = FALSE, calibrateUnitInterval = TRUE)
+BMIQcalibration(datM, goldstandard.beta, nL = 3, doH = TRUE,
+  nfit = 20000, th1.v = c(0.2, 0.75), th2.v = NULL, niter = 5,
+  tol = 0.001, plots = FALSE, calibrateUnitInterval = TRUE)
 }
 \arguments{
+\item{datM}{data matrix}
+
+\item{goldstandard.beta}{'goldstandard.beta'}
+
 \item{nL}{default value is 3}
 
 \item{doH}{default value is TRUE}

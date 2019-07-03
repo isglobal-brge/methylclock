@@ -21,7 +21,7 @@ DNAmAge <- function(x, GestationalAge=FALSE,
                     normalize=FALSE,
                     cell.count=TRUE,
                     cell.count.reference = "blood gse35069 complete",
-                    age){
+                    age, ...){
   
   if (inherits(x, "data.frame")){
     cpgs.names <- as.character(x[, 1, drop=TRUE]) 
@@ -83,7 +83,7 @@ DNAmAge <- function(x, GestationalAge=FALSE,
         invisible(force(x)) 
       } 
       cat(paste("Imputing missing data of the entire matrix .... \n"))
-      cpgs.imp <- quiet(t(impute.knn(t(cpgs))$data))
+      cpgs.imp <- quiet(t(impute.knn(t(cpgs), ...)$data))
     }
     cat("Data imputed. Starting DNAm clock estimation ... \n")
   }
@@ -228,7 +228,8 @@ DNAmAge <- function(x, GestationalAge=FALSE,
                         BayNet = bn)
     
     out <- tibble::as_tibble(out)
-    attr(out, "cell_proportion") <- cell.counts
+    if (cell.count)
+     attr(out, "cell_proportion") <- cell.counts
   }
   
   out

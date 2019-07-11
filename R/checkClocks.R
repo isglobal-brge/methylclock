@@ -13,11 +13,11 @@ checkClocks <- function(x, ...){
   else if (inherits(x, "GenomicRatioSet"))
     cpgs.names <- Biobase::featureNames(x)
 
-  checkHorvat <- coefHorvath$CpGmarker[!coefHorvath$CpGmarker[-1]%in%cpg.names]
-  checkHannum <- coefHannum$Marker[!coefHannum$Marker[-1]%in%cpg.names]
-  checkGA <- coefGA$CpGmarker[!coefGA$CpGmarker[-1]%in%cpg.names]
-  checkLevine <- coefLevine$CpG[!coefLevine$CpG[-1]%in%cpg.names]
-  checkSkin <- coefSkin$CpG[!coefSkin$CpG[-1]%in%cpg.names]
+  checkHorvat <- coefHorvath$CpGmarker[-1][!coefHorvath$CpGmarker[-1]%in%cpg.names]
+  checkHannum <- coefHannum$Marker[-1][!coefHannum$Marker[-1]%in%cpg.names]
+  checkGA <- coefGA$CpGmarker[-1][!coefGA$CpGmarker[-1]%in%cpg.names]
+  checkLevine <- coefLevine$CpG[-1][!coefLevine$CpG[-1]%in%cpg.names]
+  checkSkin <- coefSkin$CpG[-1][!coefSkin$CpG[-1]%in%cpg.names]
 
   sizes <- c(length(checkHorvat), length(checkHannum),
              length(checkGA), length(checkLevine),

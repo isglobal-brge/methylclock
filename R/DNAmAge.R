@@ -73,7 +73,7 @@ DNAmAge <- function(x, GestationalAge=FALSE,
     if (fastImp){
       cat(paste("Imputing missing data of", sum(miss), "CpGs .... \n"))
       mm <- apply(cpgs, 2, median, na.rm=TRUE)
-      cpgs.imp <- sweep(a, 2, STATS=mm, 
+      cpgs.imp <- sweep(cpgs, 2, STATS=mm, 
                         FUN = function(x,s) ifelse(is.na(x), s, x))
     }
     else{

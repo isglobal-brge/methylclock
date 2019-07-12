@@ -172,7 +172,7 @@ DNAmAge <- function(x, GestationalAge=FALSE,
       warning(
         "The CpGs needed for Levine's method are not in your input data. This method will not be computed"
       )
-      cpgs.levine <- rep(NA, nrow(cpgs.norm))
+      levine <- rep(NA, nrow(cpgs.norm))
     }
     else {
       cpgs.levine <- cpgs.norm[, coefLevine$CpG[-1]]

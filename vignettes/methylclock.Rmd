@@ -1,5 +1,5 @@
 ---
-title: "DNAm age estimation using different methylation clocks"
+title: "Chronological and gestational DNAm age estimation using different methylation-based clocks"
 subtitle: "Gerardo Alfonso, Dolors Pelegri and Juan R Gonzalez"
 author: |
   Institute for Global Health (ISGlobal), Barcelona, Spain
@@ -26,18 +26,32 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE,
 
 # Introduction
 
-This manual describes how to estimate DNA methylation age (DNAmAge) using different methylation clocks. The package includes the following estimators:
+This manual describes how to estimate chronological and gestational DNA methylation (DNAm) age as well as other age-related biomarkers using different methylation clocks. The package includes the following estimators:
 
-- **DNAmAge** (Horvath's method): It uses 353 CpGs described in @horvath2013dna.
-- **AgeAcDiff** (DNAmAge acceleration difference): Difference between DNAmAge and chronological age.
-- **IEAA** (Intrinsic Epigenetic Age Acceleration): Residuals obtained after regressing DNAmAge and chronological age adjusted by cell counts. 
-- **EEAA** (Extrinsic Epigenetic Age Acceleration): Residuals obtained after regressing DNAmAge and chronological age. This measure was also known as DNAmAge acceleration residual in the first Horvath's paper.
-- **Hannum's** method: It uses 71 CpGs described in @hannum2013genome.
-- **AMAR** (Apparent Methylomic Aging Rate): Measure proposed in @hannum2013genome computed as the ratio between DNAm age and the chronological age.
-- **DNAm PhenoAge** (Levine's method): It uses 513 CpGs described in @levine2018epigenetic. 
-- **BNN**: It uses Horvath's CpGs to train a Bayesian Neural Network (BNN) to predict DNAmAge as described in @alfonso2018.
-- **Gestational Age (GA) clock**: It uses 148 CpGs described in @knight2016epigenetic to estimate gestational age (in months).
-- **Skin clock**: Is epigenetic clock for skin and blood cells. It uses 391 CpGs described in @horvath2018epigenetic. It requires 450K and/or EPIC array data.
+
+For chronological DNAm age (in years):
+
+- **Horvath's clock**: It uses 353 CpGs described in @horvath2013dna. It was trained using 27K and 450K arrays in samples from different tissues. Other three different age-related biomarkers are also computed:
+     - **AgeAcDiff** (DNAmAge acceleration difference): Difference between DNAmAge and chronological age.
+     - **IEAA** (Intrinsic Epigenetic Age Acceleration): Residuals obtained after regressing DNAmAge and chronological age adjusted by cell counts.  
+     - **EEAA** (Extrinsic Epigenetic Age Acceleration): Residuals obtained after regressing DNAmAge and chronological age. This measure was also known as DNAmAge acceleration residual in the first Horvath's paper.
+- **Hannum's clock**: It uses 71 CpGs described in @hannum2013genome. It was trained using 450K array in blood samples. Another are-related biomarer is also computed:
+     - **AMAR** (Apparent Methylomic Aging Rate): Measure proposed in @hannum2013genome computed as the ratio between DNAm age and the chronological age.
+- **Levine's clock** (also know as DNAm PhenoAge): It uses 513 CpGs described in @levine2018epigenetic. It was trained using 27K, 450K and EPIC arrays in blood samples.
+- **BNN**: It uses Horvath's CpGs to train a Bayesian Neural Network (BNN) to predict DNAm age as described in @alfonso2018.
+- **Horvath's skin clock**: Epigenetic clock for skin and blood cells. It uses 391 CpGs described in @horvath2018epigenetic. It was trained using 450K EPIC arrays in skin and blood sampels.
+
+
+For chronological DNAm age (in months):
+
+- **Knight's clock**: It uses 148 CpGs described in @knight2016epigenetic. It was trained using 27K and 450K arrays in coord blood samples.
+- **Bohlin's clock**: It uses 96 CpGs described in @bohlin2016prediction. It was trained using 450K array in coord blood samples.
+- **Mayne's clock**: It uses 62 CpGs described in @mayne2017accelerated. It was trained using 27K and 450K.
+- **Lee's clocks**: Three different biological clocks described in @lee2019placental are implemented. It was trained for 450K and EPIC arrays in placenta samples.
+     - **RPC clock**: Robust placental clock (RPC). It uses 558 CpG sites.
+     - **CPC clock**: Control placental clock (CPC). It usses 546 CpG sites.
+     - **Refined RPC clock**: Useful for uncomplicated term pregnancies (e.g. gestational age >36 weeks). It uses 396 CpG sites.
+
 
 The main aim of this package is to facilitate the interconnection with R and Bioconductor's infrastructure and, hence, avoiding submitting data to online calculators. Additionally, `methylclock` also provides an unified way of computing DNAm age to help downstream analyses.
 
@@ -47,7 +61,7 @@ The package depends on some R packages that can be previously installed into you
 
 ```{r install_req_packages, eval=FALSE}
 library(BiocManager)
-install(c("impute", "Rcpp"))
+install(c("tidyverse", "impute", "Rcpp"))
 
 library(devtools)
 install_github("perishky/meffil")
@@ -57,7 +71,6 @@ install_github("perishky/meffil")
 Then `methylclock` package is installed into your computer by executing:
 
 ```{r install_packages, eval=FALSE}
-library(devtools)
 install_github("isglobal-brge/methylclock")
 ``` 
 
@@ -67,7 +80,7 @@ The package is loaded into R as usual:
 library(methylclock)
 ```
 
-Other libraries are required to reproduce this document:
+These libraries are required to reproduce this document:
 
 ```{r load_others}
 library(Biobase)
@@ -77,12 +90,14 @@ library(ggpmisc)
 library(GEOquery)
 ```
 
-# DNAm age estimation
+# XXXXXXX
 
-The main function of the package is called `DNAmAge` that computes all the methylation clocks previously described but Gestational Age that can be computed by setting the argument `GestationalAge=TRUE`. Next subsection describes the main features of this function.
+The main function to estimate chronological DNAm age is called `DNAmAge` while the gestational DNAm age is estimated using `DNAmGA` function. Both functions have similar input arguments. Next subsections detail some of the important issues to be consider before computind DNAm clocks. 
 
 ## Data format
 The methylation data is given in the argument `x`. They can be either beta or M values. The argument `toBetas` should be set to TRUE when M values are provided. The `x` object can be:
+
+- A **matrix** with CpGs in rows and individuals in columns having the name of the CpGs in the rownames.
 
 - A **data frame** or a **tibble** with CpGs in rows and individuals in columns having the name of the CpGs in the first column (e.g.  cg00000292, cg00002426, cg00003994,  ...) as required in the Horvath's DNA Methylation Age Calculator website (https://dnamage.genetics.ucla.edu/home).
 
@@ -91,7 +106,7 @@ The methylation data is given in the argument `x`. They can be either beta or M 
 - An **ExpressionSet** object as obtained, for instance, when downloading methylation data from GEO. 
 
 ## Data nomalization
-In principle, data can be normalized by using any of the existing standard methods such as QN, ASMN, PBC, SWAN, SQN, BMIQ (see a revision of those methods in @wang2015systematic). `DNAmAge` function includes the BMIQ method proposed by @teschendorff2012beta using Horvath's robust implementation that basically consists of an optimal R code implementation and optimization procedures. This normalization is recommended by Horvath since it improves their predictions. This normalization procedure is very time-consuming. In order to overcome these difficulties, we have parallelize this process using `BiocParallel` library. This step is not mandatory, so that, you can use your normalized data and set the argument `normalize` equal to FALSE (default).
+In principle, data can be normalized by using any of the existing standard methods such as QN, ASMN, PBC, SWAN, SQN, BMIQ (see a revision of those methods in @wang2015systematic). `DNAmAge` function includes the BMIQ method proposed by @teschendorff2012beta using Horvath's robust implementation that basically consists of an optimal R code implementation and optimization procedures. This normalization is recommended by Horvath since it improves the predictions for his clock. This normalization procedure is very time-consuming. In order to overcome these difficulties, we have parallelize this process using `BiocParallel` library. This step is not mandatory, so that, you can use your normalized data and set the argument `normalize` equal to FALSE (default).
 
 ## Missing data
 All the implemented methods require complete cases. `DNAmAge` function has an imputation method based on KNN implemented in the function `knn.impute` from `impute` Bioconductor package. This is performed when missing data is present in the CpGs used in any of the computed clocks. There is also another option based on a fast imputation method that imputes missing values by the median of required CpGs as recommended in @bohlin2016prediction. This is recommended when analyzing 450K arrays since `knn.impute` for large datasets may be very time consuming. Fast imputation can be performed by setting `fastImp=TRUE` which is not the default value. 
@@ -108,7 +123,9 @@ The EEAA method requires to estimate cell counts. We use the package `meffil` (@
 - **"saliva gse48472"**: Reference generated from the multi-tissue pannel from @slieker2013identification. It includes Buccal, CD4T, CD8T, Mono, Bcell, NK, Gran.
 
 
-# Illustrative examples
+# Chronological DNAm age estimation
+
+Next we illustrate how to estimate the chronological DNAm age using several datasets which aim to cover different data input formats.
 
 ## Horvath's example (data in `csv` format)
 Let us start by reproducing the results proposed in @horvath2013dna. The file 'MethylationDataExample55.csv" contains an example used in their tutorial (available [here](https://dnamage.genetics.ucla.edu/home)). These data are available through `methylclock` package. Although these data can be loaded into R by using standard functions such as `read.csv` we hihgly recommend to use functions from `tidiverse`, in particular `read_csv` from `readr` package. The main reason is that currently researchers are analyzing Illumina 450K or EPIC arrays that contains a huge number of CpGs that can take a long time to be loaded when using basic importing R function. These functions import `csv` data as tibble which is one of the possible formats of `DNAmAge` function
@@ -116,7 +133,7 @@ Let us start by reproducing the results proposed in @horvath2013dna. The file 'M
 ```{r load_horvath_example}
 library(tidyverse)
 path <- system.file("extdata", package = "methylclock")
-MethylationData <- read_csv(file.path(path,                                      "MethylationDataExample55.csv"))
+MethylationData <- read_csv(file.path(path, "MethylationDataExample55.csv"))
 MethylationData
 ```
 
@@ -163,7 +180,7 @@ In any case, if you use the object `mydata` that contains the CpGs in the second
 Error in DNAmAge(mydata) : First column should contain CpG names
 ```
 
-Covariates (metadata or sample annotation data) are available at 'SampleAnnotationExample55.csv' file that is also available at `methylclock` package:
+Age is required to compute other estimators such as age accelerated differce or EEAA among other. This information is normally provided in a different file including different covariates (metadata or sample annotation data). In this example data are available at 'SampleAnnotationExample55.csv' file that is also available at `methylclock` package:
 
 ```{r covariates_horvath_example}
 covariates <- read_csv(file.path(path, 

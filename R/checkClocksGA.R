@@ -1,12 +1,11 @@
-#' Check wheter input data contains the required CpGs for the implemented clocks.
+#' Check wheter input data contains the required CpGs for the implemented clocks for Gestational Age.
 #' @param x data.frame or tibble (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet. A matrix is also possible having the CpG names in the rownames.
-#'               
 #'
 #' @details To be supplied
 #'
 #' @export
 
-checkClocks <- function(x,  ...){
+checkClocksGA <- function(x,  ...){
   if (inherits(x, "data.frame") & !inherits(x, c("tbl", "tbl_df")))
     cpg.names <- x[,1]
   else if (inherits(x, "matrix"))
@@ -18,21 +17,22 @@ checkClocks <- function(x,  ...){
   else if (inherits(x, "GenomicRatioSet"))
     cpgs.names <- Biobase::featureNames(x)
 
-  checkHorvath <- coefHorvath$CpGmarker[-1][!coefHorvath$CpGmarker[-1]%in%cpg.names]
-  checkHannum <- coefHannum$Marker[-1][!coefHannum$Marker[-1]%in%cpg.names]
-  checkLevine <- coefLevine$CpG[-1][!coefLevine$CpG[-1]%in%cpg.names]
-  checkSkin <- coefSkin$CpG[-1][!coefSkin$CpG[-1]%in%cpg.names]
-
-  sizes <- c(length(checkHorvath), length(checkHannum),
-             length(checkLevine), length(checkSkin))
-  names(sizes) <- c("Horvath", "Hannum", "Levine" , "SkinHorvath")
+  checkKnigth <- coefKnigthGA$CpGmarker[-1][!coefKnigthGA$CpGmarker[-1]%in%cpg.names]
+  checkBohlin <- coefBohlinGA$cpgs[!coefBohlinGA$cpgs%in%cpg.names]
+  checkMayne <- coefMayneGA$cpg[-1][!coefMayneGA$cpg[-1]%in%cpg.names]
+  checkLee <- coefLeeGA$CpGs[-1][!coefLeeGA$CpGs[-1]%in%cpg.names]
+  
+  
+  sizes <- c(length(checkKnigth), length(checkBohlin),
+             length(checkMayne), length(checkLee))
+  names(sizes) <- c("Knigth", "Bohlin", "Mayne", "Lee")
   if (any(sizes!=0)){
     cat("There are some clocks that cannot be computed since your data do not contain the required CpGs. 
         These are the total number of missing CpGs for each clock : \n \n")
     print(sizes)
     
-    out <- list(checkHorvath=checkHorvath, checkHannum=checkHannum,
-                checkLevine=checkLevine, checkSkin=checkSkin)
+    out <- list(checkKnigth=checkKnigth, checkBohlin=checkBohlin,
+                checkMayne=checkMayne, checkLee=checkLee)
   }
   else {
     cat("Your data contain the required CpGs for all clocks")

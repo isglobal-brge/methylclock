@@ -1,6 +1,5 @@
 #' DNAm age estimation using different DNA methylation clocks.
 #' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet.
-#' @param GestationalAge Is gestational age clock estimated? Default is FALSE.
 #' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
 #' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
 #' @param normalize Is Horvath's normalization performed? By default is FALSE
@@ -15,7 +14,7 @@
 #' @export
 
 
-DNAmAge <- function(x, GestationalAge=FALSE,
+DNAmAge <- function(x, 
                     toBetas=FALSE,
                     fastImp=FALSE,
                     normalize=FALSE,
@@ -50,9 +49,6 @@ DNAmAge <- function(x, GestationalAge=FALSE,
   if(any(cpgs < -0.1 | cpgs >1.1, na.rm=TRUE))
     stop("Data seems to do not be beta values. Check your data or set 'toBetas=TRUE'")
   
-  if (GestationalAge) {
-    coefHorvath <- coefGA
-  }
   
   CpGs.model <- as.character(coefHorvath$CpGmarker[-1])
   
@@ -62,7 +58,6 @@ DNAmAge <- function(x, GestationalAge=FALSE,
   
   cpgs.all <- c(coefHorvath$CpGmarker,
                 coefHannum$Marker,
-                coefGA$CpGmarker, 
                 coefLevine$CpG, 
                 coefSkin$CpG)
   cpgs.in <- intersect(cpgs.all, colnames(cpgs))
@@ -102,8 +97,7 @@ DNAmAge <- function(x, GestationalAge=FALSE,
     cpgs.norm <- cpgs.imp
   }
   
-  selectCpGsClock <- is.element(colnames(cpgs.norm),
-                                CpGs.model)
+  selectCpGsClock <- is.element(colnames(cpgs.norm), CpGs.model)
   if (sum(selectCpGsClock) < nrow(coefHorvath) - 1) {
     stop(
       "The CpGs names needed to calculate DNAm age method are not in your input data.
@@ -112,76 +106,54 @@ DNAmAge <- function(x, GestationalAge=FALSE,
     )
   }
   if (sum(selectCpGsClock) > nrow(coefHorvath) - 1) {
-    stop(
-      "There are duplicated CpGs. Each row should report only one unique
-      CpG marker (e.g. cg number)."
-    )
+    stop("There are duplicated CpGs. Each row should report only one unique
+      CpG marker (e.g. cg number)." )
   }
+  
   
   cpgs.norm.s <- cpgs.norm[, coefHorvath$CpGmarker[-1]]
   
-  if(GestationalAge){
-    DNAmAge <- coefHorvath$CoefficientTraining[1] +
-      cpgs.norm.s%*%coefHorvath$CoefficientTraining[-1]
-    if (!missing(age))
-      out <- data.frame(id = rownames(DNAmAge),
-                        GA = DNAmAge,
-                        GAacc = DNAmAge - age,
-                        age = age)
-    else
-      out <- data.frame(id = rownames(DNAmAge),
-                        GA = DNAmAge)
-    
-    out <- tibble::as_tibble(out)
-  }
-  
-  else{
-    DNAmAge <- anti.trafo(coefHorvath$CoefficientTraining[1] +
+  DNAmAge <- anti.trafo(coefHorvath$CoefficientTraining[1] +
                             cpgs.norm.s%*%coefHorvath$CoefficientTraining[-1])
     
-    if(cell.count){
-      if (missing(age)){
-        stop("Chronological age is required. Pass it through the argument 'age'")
-      }
-      cell.counts <- meffil::meffil.estimate.cell.counts.from.betas(t(cpgs),
+  if(cell.count){
+    if (missing(age)){
+      stop("Chronological age is required. Pass it through the argument 'age'")
+    }
+    cell.counts <- meffil::meffil.estimate.cell.counts.from.betas(t(cpgs),
                                                                     cell.count.reference)
-      df <- data.frame(DNAmAge = DNAmAge,
-                       age = age,
-                       cell.counts)
-      ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
-      df <- df[,ok]
+    df <- data.frame(DNAmAge = DNAmAge,
+                     age = age,
+                     cell.counts)
+    ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
+    df <- df[,ok]
       
-      mod.ieaa <- lm(DNAmAge ~ age, data=df,
+    mod.ieaa <- lm(DNAmAge ~ age, data=df,
                      na.action="na.exclude")
-      mod.eeaa <- lm(DNAmAge ~ ., data=df,
+    mod.eeaa <- lm(DNAmAge ~ ., data=df,
                      na.action="na.exclude")
-      IEAA <- resid(mod.ieaa)
-      EEAA <- resid(mod.eeaa)
-      horvath <- data.frame(Horvath = DNAmAge[,1],
-                            AgeAcDiff = DNAmAge[,1] - age,
-                            IEAA = IEAA,
-                            EEAA = EEAA)
+    IEAA <- resid(mod.ieaa)
+    EEAA <- resid(mod.eeaa)
+    horvath <- data.frame(Horvath = DNAmAge[,1],
+                          AgeAcDiff = DNAmAge[,1] - age,
+                          IEAA = IEAA,
+                          EEAA = EEAA)
     }
     else{
-      horvath <- data.frame(Horvath = DNAmAge[,1])
+     horvath <- data.frame(Horvath = DNAmAge[,1])
     }
     
     
-    if (sum(is.element(colnames(cpgs.norm), coefLevine$CpG)) !=
-        (nrow(coefLevine) -1)) {
-      warning(
-        "The CpGs needed for Levine's method are not in your input data. This method will not be computed"
-      )
+   if (sum(is.element(colnames(cpgs.norm), coefLevine$CpG)) != (nrow(coefLevine) -1)) {
+     warning("The CpGs needed for Levine's method are not in your input data. This method will not be computed")
       levine <- rep(NA, nrow(cpgs.norm))
-    }
-    else {
+   }
+   else {
       cpgs.levine <- cpgs.norm[, coefLevine$CpG[-1]]
-      levine <- coefLevine$Weight[1] +
-        cpgs.levine%*%coefLevine$Weight[-1]
+      levine <- coefLevine$Weight[1] +  cpgs.levine%*%coefLevine$Weight[-1]
     }
     
-    if (sum(is.element(colnames(cpgs.norm), coefHannum$Marker)) !=
-        nrow(coefHannum)) {
+    if (sum(is.element(colnames(cpgs.norm), coefHannum$Marker)) !=  nrow(coefHannum)) {
       warning("The CpGs needed for Hannum's method are not in your input data. This method will not be computed")
       hannum <- data.frame(Hannum = rep(NA, nrow(cpgs.norm)))
     }
@@ -195,11 +167,8 @@ DNAmAge <- function(x, GestationalAge=FALSE,
       }
     }
     
-    if (sum(is.element(colnames(cpgs.norm), coefSkin$CpG)) !=
-        (nrow(coefSkin) -1)) {
-      warning(
-        "The CpGs needed for new skin & blood Horvath's method are not in your input data. This method will not be computed"
-      )
+    if (sum(is.element(colnames(cpgs.norm), coefSkin$CpG)) != (nrow(coefSkin) -1)) {
+      warning("The CpGs needed for new skin & blood Horvath's method are not in your input data. This method will not be computed")
       skinHorvath <- rep(NA, nrow(cpgs.norm))
     }
     else {
@@ -215,22 +184,21 @@ DNAmAge <- function(x, GestationalAge=FALSE,
       out <- data.frame(id = rownames(DNAmAge),
                         horvath,
                         hannum,
+                        BNN = bn,
                         Levine = levine,
                         skinHorvath = skinHorvath,
-                        BNN = bn,
                         age = age)
     else
       out <- data.frame(id = rownames(DNAmAge),
                         horvath,
                         hannum,
+                        BNN = bn,
                         Levine = levine,
-                        skinHorvath = skinHorvath,
-                        BayNet = bn)
+                        skinHorvath = skinHorvath)
     
     out <- tibble::as_tibble(out)
     if (cell.count)
      attr(out, "cell_proportion") <- cell.counts
-  }
   
   out
 }

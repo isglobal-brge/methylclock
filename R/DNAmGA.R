@@ -80,91 +80,61 @@ DNAmGA <- function(x, toBetas=FALSE,
     cpgs.imp <- cpgs
   }
   
-  if (normalize) {
-    cpgs.norm <- BMIQcalibration(
-      datM = cpgs.imp,
-      goldstandard.beta = probeAnnotation21kdatMethUsed$goldstandard2,
-      plots = FALSE)
-  }
-  
-  else {
-    cpgs.norm <- cpgs.imp
-  }
   
 
 # --------------> Knigth
   
-  if(all(coefKnigthGA$CpGmarker[-1]%in%colnames(cpgs))) {
-    cpgs.norm.s <- cpgs.norm[, coefKnigthGA$CpGmarker[-1]]
-    Knigth <- coefKnigthGA$CoefficientTraining[1] +
-      cpgs.norm.s%*%coefKnigthGA$CoefficientTraining[-1]
+    Knigth <- predAge(cpgs.imp, coefKnigthGA, intercept = TRUE)
+
     if (!missing(age))
-      Knigth <- data.frame(id = rownames(Knigth),
+      Knigth <- data.frame(id = rownames(cpgs.imp),
                            Knigth = Knigth,
                            KnigthDiff = Knigth - age,
                            age = age)
     else
-      Knigth <- data.frame(id = rownames(Knigth),
+      Knigth <- data.frame(id = rownames(cpgs.imp),
                            Knigth = Knigth)
-  }
-  else{
-    Knigth <- data.frame(id = rownames(cpgs.norm),
-                         Knigth = rep(NA, nrow(cpgs.norm)))
-  }
   
 
 # --------------> Bohlin
   
-  if(all(coefBohlinGA$cpgs%in%colnames(cpgs))) {
-    cpgs.norm.s <- cpgs.norm[, coefBohlinGA$cpgs]
-    Bohlin <- cpgs.norm.s%*%coefBohlinGA$coef
-    if (!missing(age))
-      Bohlin <- data.frame(id = rownames(Bohlin),
+   Bohlin <- predAge(cpgs.imp, coefBohlinGA, intercept = FALSE)
+   if (!missing(age))
+      Bohlin <- data.frame(id = rownames(cpgs.imp),
                          Bohlin = Bohlin,
                          BohlinDiff = Bohlin - age,
                          age = age)
     else
-      Bohlin <- data.frame(id = rownames(Bohlin),
+      Bohlin <- data.frame(id = rownames(cpgs.imp),
                          Bohlin = Bohlin)
-  }
-  else{
-    Bohlin <- data.frame(id = rownames(cpgs.norm),
-                         Bohlin = rep(NA, nrow(cpgs.norm)))
-  }
-
+  
   
 # --------------> Mayne
   
-  if(all(coefMayneGA$cpg[-1]%in%colnames(cpgs))) {
-    cpgs.norm.s <- cpgs.norm[, coefMayneGA$cpg[-1]]
-    Mayne <- coefMayneGA$Coefficient[1] + cpgs.norm.s%*%coefMayneGA$Coefficient[-1]
+    Mayne <- predAge(cpgs.imp, coefMayneGA, intercept = TRUE)
+   
     if (!missing(age))
-      Mayne <- data.frame(id = rownames(Mayne),
+      Mayne <- data.frame(id = rownames(cpgs.imp),
                           Mayne = Mayne,
                           MayneDiff = Mayne - age,
                            age = age)
     else
-      Mayne <- data.frame(id = rownames(Mayne),
+      Mayne <- data.frame(id = rownames(cpgs.imp),
                           Mayne = Mayne)
-  }
-  else{
-    Mayne <- data.frame(id = rownames(cpgs.norm),
-                        Mayne = rep(NA, nrow(cpgs.norm)))
-  }
       
 # --------------> Lee
   
   
-  if(all(coefLeeGA$CpGs[-1]%in%colnames(cpgs))) {
-    cpgs.norm.s <- cpgs.norm[, coefLeeGA$CpGs[-1]]
+  if(mean(coefLeeGA$CpGmarker[-1]%in%colnames(cpgs.imp))>0.8) {
+    cpgs.imp.s <- cpgs.imp[, coefLeeGA$CpGs[-1]]
     Lee.RPC <- coefLeeGA$Coefficient_RPC[1] +
-      cpgs.norm.s%*%coefLeeGA$Coefficient_RPC[-1]
+      cpgs.imp.s%*%coefLeeGA$Coefficient_RPC[-1]
     Lee.CPC <- coefLeeGA$Coefficient_CPC[1] +
-      cpgs.norm.s%*%coefLeeGA$Coefficient_CPC[-1]
+      cpgs.imp.s%*%coefLeeGA$Coefficient_CPC[-1]
     Lee.refRPC <- coefLeeGA$Coefficient_refined_RPC[1] +
-      cpgs.norm.s%*%coefLeeGA$Coefficient_refined_RPC[-1]
+      cpgs.imp.s%*%coefLeeGA$Coefficient_refined_RPC[-1]
     if (!missing(age))
-      Lee <- data.frame(id = rownames(Lee.RPC),
+      Lee <- data.frame(id = rownames(cpgs.imp),
                       Lee.RPC = Lee.RPC,
                       Lee.CPC = Lee.CPC,
                       Lee.refRPC = Lee.refRPC,
@@ -173,17 +143,18 @@ DNAmGA <- function(x, toBetas=FALSE,
                       Lee.refRPCdiff = Lee.refRPC - age,
                       age = age)
     else
-      Lee <- data.frame(id = rownames(Lee.RPC),
+      Lee <- data.frame(id = rownames(cpgs.imp),
                       Lee.RPC = Lee.RPC,
                       Lee.CPC = Lee.CPC,
                       Lee.refRPC = Lee.refRPC)
   }
   else{
-    Lee <- data.frame(id = rownames(cpgs.norm),
-                      Lee = rep(NA, nrow(cpgs.norm)))
+    warning("The number of missing CpGs for Lee clocks exceeds 80%.\n  ---> This DNAm clock will be NA.")
+  
+      Lee <- data.frame(id = rownames(cpgs.imp),
+                      Lee = rep(NA, nrow(cpgs.imp)))
   }
   
-
 # --------------> output
   
   out <- Knigth %>% full_join(Bohlin, by="id") %>% full_join(Mayne, by="id") %>% full_join(Lee, by="id")

@@ -1,20 +1,4 @@
-#' DNAm age estimation using different DNA methylation clocks.
-#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet.
-#' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
-#' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
-#' @param normalize Is Horvath's normalization performed? By default is FALSE
-#' @param cell.count Are IEAA and EEAA computed? Default is TRUE.
-#' @param cell.count.reference Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.
-#' @param age individual's chronological age. Required when 'cell.count' is TRUE.
-#'
-#' @details Imputation is performed when having missing data.
-#'          Fast imputation is performed by ...
-#'          what about imputing only when CpGs for the clock are missing?
-#'
-#' @export
-
-
-DNAmAge <- function(x, 
+DNAmAge.old <- function(x, 
                     toBetas=FALSE,
                     fastImp=FALSE,
                     normalize=FALSE,
@@ -49,11 +33,17 @@ DNAmAge <- function(x,
   if(any(cpgs < -0.1 | cpgs >1.1, na.rm=TRUE))
     stop("Data seems to do not be beta values. Check your data or set 'toBetas=TRUE'")
   
-
+  
+  CpGs.model <- as.character(coefHorvath$CpGmarker[-1])
+  
+  if(any(!CpGs.model%in%colnames(cpgs))){
+    stop("CpGs in Horvat's model are not present in your data.")
+  }
+  
   cpgs.all <- c(coefHorvath$CpGmarker,
-                coefHannum$CpGmarker,
-                coefLevine$CpGmarker, 
-                coefSkin$CpGmarker)
+                coefHannum$Marker,
+                coefLevine$CpG, 
+                coefSkin$CpG)
   cpgs.in <- intersect(cpgs.all, colnames(cpgs))
   
   miss <- apply(cpgs[, cpgs.in], 2, function(x) any(is.na(x)))
@@ -81,9 +71,36 @@ DNAmAge <- function(x,
     cpgs.imp <- cpgs
   }
   
-  DNAmAge <- predAge(cpgs.imp, coefHorvath, intercept=TRUE)
-  DNAmAge <- anti.trafo(DNAmAge)
+  if (normalize) {
+    cpgs.norm <- BMIQcalibration(
+      datM = cpgs.imp,
+      goldstandard.beta = probeAnnotation21kdatMethUsed$goldstandard2,
+      plots = FALSE)
+  }
   
+  else {
+    cpgs.norm <- cpgs.imp
+  }
+  
+  selectCpGsClock <- is.element(colnames(cpgs.norm), CpGs.model)
+  if (sum(selectCpGsClock) < nrow(coefHorvath) - 1) {
+    stop(
+      "The CpGs names needed to calculate DNAm age method are not in your input data.
+      (e.g. column 1 of your data.frame or rownames in your ExpressionSet).
+      Check whether they are cg numbers such as cg00075967."
+    )
+  }
+  if (sum(selectCpGsClock) > nrow(coefHorvath) - 1) {
+    stop("There are duplicated CpGs. Each row should report only one unique
+      CpG marker (e.g. cg number)." )
+  }
+  
+  
+  cpgs.norm.s <- cpgs.norm[, coefHorvath$CpGmarker[-1]]
+  
+  DNAmAge <- anti.trafo(coefHorvath$CoefficientTraining[1] +
+                            cpgs.norm.s%*%coefHorvath$CoefficientTraining[-1])
+    
   if(cell.count){
     if (missing(age)){
       stop("Chronological age is required. Pass it through the argument 'age'")
@@ -111,28 +128,42 @@ DNAmAge <- function(x,
      horvath <- data.frame(Horvath = DNAmAge[,1])
     }
     
-   levine <- predAge(cpgs.imp, coefLevine, intercept=TRUE)
-   
-   hannum <- predAge(cpgs.imp, coefHannum, intercept=FALSE)
-   if (missing(age))
-    Hannum <- data.frame(Hannum=hannum)
+    
+   if (sum(is.element(colnames(cpgs.norm), coefLevine$CpG)) != (nrow(coefLevine) -1)) {
+     warning("The CpGs needed for Levine's method are not in your input data. This method will not be computed")
+      levine <- rep(NA, nrow(cpgs.norm))
+   }
    else {
-    Hannum <- data.frame(Hannum = hannum,
-                           AMAR = hannum/age)
+      cpgs.levine <- cpgs.norm[, coefLevine$CpGmarker[-1]]
+      levine <- coefLevine$CoefficientTraining[1] +  cpgs.levine%*%coefLevine$CoefficientTraining[-1]
     }
     
-   skinHorvath <- predAge(cpgs.imp, coefSkin, intercept=TRUE)
-   skinHorvath <- anti.trafo(skinHorvath)
-   
+    if (sum(is.element(colnames(cpgs.norm), coefHannum$Marker)) !=  nrow(coefHannum)) {
+      warning("The CpGs needed for Hannum's method are not in your input data. This method will not be computed")
+      hannum <- data.frame(Hannum = rep(NA, nrow(cpgs.norm)))
+    }
+    else{
+      cpgs.hannum <- cpgs.norm[, coefHannum$CpGmarker]
+      predAge <- cpgs.hannum%*%coefHannum$CoefficientTraining
+      hannum <- data.frame(Hannum = predAge)
+      if (!missing(age)){
+        hannum <- data.frame(Hannum = predAge,
+                             AMAR = predAge/age)
+      }
+    }
     
-   if(any(!coefHorvath$CpGmarker[-1]%in%colnames(cpgs.imp))){
-     warning("Bayesian method cannot be estimated")
-     bn <- rep(NA, nrow(cpgs.imp))
-   }
-   else {
-     cpgs.bn <- t(cpgs.imp[,coefHorvath$CpGmarker[-1]])
-     bn <- main_NewModel1Clean(cpgs.bn)
-   }
+    if (sum(is.element(colnames(cpgs.norm), coefSkin$CpG)) != (nrow(coefSkin) -1)) {
+      warning("The CpGs needed for new skin & blood Horvath's method are not in your input data. This method will not be computed")
+      skinHorvath <- rep(NA, nrow(cpgs.norm))
+    }
+    else {
+      cpgs.skin <- cpgs.norm[, coefSkin$CpG[-1]]
+      skinHorvath <- anti.trafo(coefSkin$Coef[1] +
+                                  cpgs.skin%*%coefSkin$Coef[-1])
+    }  
+    
+    cpgs.bn <- t(cpgs.norm[,coefHorvath$CpGmarker[-1]])
+    bn <- main_NewModel1Clean(cpgs.bn)
     
     if (!missing(age))
       out <- data.frame(id = rownames(DNAmAge),
@@ -151,7 +182,6 @@ DNAmAge <- function(x,
                         skinHorvath = skinHorvath)
     
     out <- tibble::as_tibble(out)
-    
     if (cell.count)
      attr(out, "cell_proportion") <- cell.counts
   

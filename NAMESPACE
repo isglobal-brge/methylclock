@@ -2,10 +2,10 @@
 
 export(BMIQcalibration)
 export(DNAmAge)
-export(DNAmGestationalAge)
+export(DNAmGA)
 export(checkClocks)
+export(checkClocksGA)
 export(plotDNAmAge)
-
 
 useDynLib(methylclock, .registration=TRUE)
 

@@ -1,3 +1,29 @@
+predAge <- function(x, coefs, intercept=TRUE){
+  cpgs <- colnames(x)
+  if (intercept)
+   mask <- coefs$CpGmarker%in%cpgs
+  else
+    mask <- coefs$CpGmarker[-1]%in%cpgs
+  if (mean(mask)>0.8){
+    if (intercept)
+      obs.cpgs <- coefs$CpGmarker[mask]
+    else
+      obs.cpgs <- coefs$CpGmarker[-1][mask]  
+    X <- x[, obs.cpgs]
+    predAge <- X%*%coefs$CoefficientTraining[coefs$CpGmarker%in%obs.cpgs]
+    if (intercept)
+      predAge <- coefs$CoefficientTraining[1] + predAge
+  }
+  else{
+    tit <- gsub("GA", "", gsub("coef", "", substitute(coefs)))
+    warning(paste("The number of missing CpGs for", tit , "clock exceeds 80%.\n  ---> This DNAm clock will be NA.\n"))
+    predAge <- rep(NA, nrow(x))
+  }
+  predAge
+}
+
+
+
 trafo = function(x, adult.age = 20) {
   x = (x + 1) / (1 + adult.age)
   y = ifelse(x <= 1, log(x), x - 1)

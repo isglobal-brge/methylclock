@@ -18,21 +18,31 @@ checkClocksGA <- function(x,  ...){
     cpgs.names <- Biobase::featureNames(x)
 
   checkKnigth <- coefKnigthGA$CpGmarker[-1][!coefKnigthGA$CpGmarker[-1]%in%cpg.names]
-  checkBohlin <- coefBohlinGA$cpgs[!coefBohlinGA$cpgs%in%cpg.names]
-  checkMayne <- coefMayneGA$cpg[-1][!coefMayneGA$cpg[-1]%in%cpg.names]
-  checkLee <- coefLeeGA$CpGs[-1][!coefLeeGA$CpGs[-1]%in%cpg.names]
+  checkBohlin <- coefBohlinGA$CpGmarker[!coefBohlinGA$CpGmarker%in%cpg.names]
+  checkMayne <- coefMayneGA$CpGmarker[-1][!coefMayneGA$CpGmarker[-1]%in%cpg.names]
+  checkLee <- coefLeeGA$CpGmarker[-1][!coefLeeGA$CpGmarker[-1]%in%cpg.names]
   
   
   sizes <- c(length(checkKnigth), length(checkBohlin),
              length(checkMayne), length(checkLee))
-  names(sizes) <- c("Knigth", "Bohlin", "Mayne", "Lee")
+  
+  n <- c(nrow(coefKnigthGA[-1]), nrow(coefBohlinGA),
+         nrow(coefMayneGA[-1]), nrow(coefLeeGA[-1]))
+  
+  df <- data.frame(clock = c("Knigth", "Bohlin", "Mayne", "Lee"),
+                   Cpgs_in_clock = n,
+                   missing_CpGs = sizes,
+                   percentage = round((sizes/n)*100, 1))
+  
+  print(df)
+  
   if (any(sizes!=0)){
     cat("There are some clocks that cannot be computed since your data do not contain the required CpGs. 
         These are the total number of missing CpGs for each clock : \n \n")
-    print(sizes)
+    print(df)
     
-    out <- list(checkKnigth=checkKnigth, checkBohlin=checkBohlin,
-                checkMayne=checkMayne, checkLee=checkLee)
+    out <- list(Knigth=checkKnigth, Bohlin=checkBohlin,
+                Mayne=checkMayne, Lee=checkLee)
   }
   else {
     cat("Your data contain the required CpGs for all clocks")

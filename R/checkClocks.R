@@ -19,20 +19,28 @@ checkClocks <- function(x,  ...){
     cpgs.names <- Biobase::featureNames(x)
 
   checkHorvath <- coefHorvath$CpGmarker[-1][!coefHorvath$CpGmarker[-1]%in%cpg.names]
-  checkHannum <- coefHannum$Marker[-1][!coefHannum$Marker[-1]%in%cpg.names]
-  checkLevine <- coefLevine$CpG[-1][!coefLevine$CpG[-1]%in%cpg.names]
-  checkSkin <- coefSkin$CpG[-1][!coefSkin$CpG[-1]%in%cpg.names]
+  checkHannum <- coefHannum$CpGmarker[!coefHannum$CpGmarker%in%cpg.names]
+  checkLevine <- coefLevine$CpGmarker[-1][!coefLevine$CpGmarker[-1]%in%cpg.names]
+  checkSkin <- coefSkin$CpGmarker[-1][!coefSkin$CpGmarker[-1]%in%cpg.names]
 
   sizes <- c(length(checkHorvath), length(checkHannum),
              length(checkLevine), length(checkSkin))
-  names(sizes) <- c("Horvath", "Hannum", "Levine" , "SkinHorvath")
+  n <- c(nrow(coefHorvath[-1]), nrow(coefHannum),
+         nrow(coefLevine[-1]), nrow(coefSkin[-1]))
+  
+  df <- data.frame(clock = c("Horvath", "Hannum", "Levine" , "SkinHorvath"),
+                   Cpgs_in_clock = n,
+                   missing_CpGs = sizes,
+                   percentage = round((sizes/n)*100, 1))
+  
+  print(df)
+  
   if (any(sizes!=0)){
     cat("There are some clocks that cannot be computed since your data do not contain the required CpGs. 
         These are the total number of missing CpGs for each clock : \n \n")
-    print(sizes)
     
-    out <- list(checkHorvath=checkHorvath, checkHannum=checkHannum,
-                checkLevine=checkLevine, checkSkin=checkSkin)
+    out <- list(Horvath=checkHorvath, Hannum=checkHannum,
+                Levine=checkLevine, HorvathSkin=checkSkin)
   }
   else {
     cat("Your data contain the required CpGs for all clocks")

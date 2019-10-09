@@ -117,14 +117,14 @@ In principle, data can be normalized by using any of the existing standard metho
 All the implemented methods require complete cases. `DNAmAge` function has an imputation method based on KNN implemented in the function `knn.impute` from `impute` Bioconductor package. This is performed when missing data is present in the CpGs used in any of the computed clocks. There is also another option based on a fast imputation method that imputes missing values by the median of required CpGs as recommended in @bohlin2016prediction. This is recommended when analyzing 450K arrays since `knn.impute` for large datasets may be very time consuming. Fast imputation can be performed by setting `fastImp=TRUE` which is not the default value. 
 
 ## Missing CpGs of DNAm clocks
-By default the package computes the different clocks when there are more than 80% of the required CpGs of each method. Nothing is required when having missing CpGs since the main functions will return NA for those estimators when this criteria is not meet. Let us use a test dataset (`MethylationData`) which is available within the package to illustrate the type of information we are obtaining:
+By default the package computes the different clocks when there are more than 80% of the required CpGs of each method. Nothing is required when having missing CpGs since the main functions will return NA for those estimators when this criteria is not meet. Let us use a test dataset (`TestDataset`) which is available within the package to illustrate the type of information we are obtaining:
 
 ```{r check}
-cpgs.missing <- checkClocks(MethylationData)
+cpgs.missing <- checkClocks(TestDataset)
 ```
 
 ```{r checkGA}
-cpgs.missing.GA <- checkClocksGA(MethylationData)
+cpgs.missing.GA <- checkClocksGA(TestDataset)
 ```
 
 The objects `cpgs.missing` and `cpgs.missing.GA` are lists havint the missing CpGs of each clock

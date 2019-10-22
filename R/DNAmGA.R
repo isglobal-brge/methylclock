@@ -4,6 +4,8 @@
 #' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
 #' @param normalize Is Horvath's normalization performed? By default is FALSE
 #' @param age individual's chronological age. Required to compute gestational age difference output
+#' @param cell.count Are cell counts estimated? Default is TRUE.
+#' @param cell.count.reference Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.
 #'
 #' @details Imputation is performed when having missing data.
 #'          Fast imputation is performed by ...
@@ -15,7 +17,10 @@
 DNAmGA <- function(x, toBetas=FALSE,
                    fastImp=FALSE,
                    normalize=FALSE,
-                   age, ...){
+                   age, 
+                   cell.count=TRUE, 
+                   cell.count.reference = "andrews and bakulski cord blood",
+                   ...){
   
   if (inherits(x, "data.frame")){
     cpgs.names <- as.character(x[, 1, drop=TRUE]) 
@@ -84,43 +89,21 @@ DNAmGA <- function(x, toBetas=FALSE,
 
 # --------------> Knigth
   
-    Knigth <- predAge(cpgs.imp, coefKnigthGA, intercept = TRUE)
-
-    if (!missing(age))
-      Knigth <- data.frame(id = rownames(cpgs.imp),
-                           Knigth = Knigth,
-                           KnigthDiff = Knigth - age,
-                           age = age)
-    else
-      Knigth <- data.frame(id = rownames(cpgs.imp),
-                           Knigth = Knigth)
+    knigth <- predAge(cpgs.imp, coefKnigthGA, intercept = TRUE)
+    Knigth <- data.frame(id = rownames(cpgs.imp),
+                           Knigth = knigth)
   
-
 # --------------> Bohlin
   
-   Bohlin <- predAge(cpgs.imp, coefBohlinGA, intercept = FALSE)
-   if (!missing(age))
-      Bohlin <- data.frame(id = rownames(cpgs.imp),
-                         Bohlin = Bohlin,
-                         BohlinDiff = Bohlin - age,
-                         age = age)
-    else
-      Bohlin <- data.frame(id = rownames(cpgs.imp),
-                         Bohlin = Bohlin)
-  
+   bohlin <- predAge(cpgs.imp, coefBohlinGA, intercept = FALSE)
+   Bohlin <- data.frame(id = rownames(cpgs.imp),
+                         Bohlin = bohlin)
   
 # --------------> Mayne
   
-    Mayne <- predAge(cpgs.imp, coefMayneGA, intercept = TRUE)
-   
-    if (!missing(age))
-      Mayne <- data.frame(id = rownames(cpgs.imp),
-                          Mayne = Mayne,
-                          MayneDiff = Mayne - age,
-                           age = age)
-    else
-      Mayne <- data.frame(id = rownames(cpgs.imp),
-                          Mayne = Mayne)
+    mayne <- predAge(cpgs.imp, coefMayneGA, intercept = TRUE)
+    Mayne <- data.frame(id = rownames(cpgs.imp),
+                          Mayne = mayne)
       
 # --------------> Lee
   
@@ -156,8 +139,35 @@ DNAmGA <- function(x, toBetas=FALSE,
   }
   
 # --------------> output
-  
-  out <- Knigth %>% full_join(Bohlin, by="id") %>% full_join(Mayne, by="id") %>% full_join(Lee, by="id")
+    
+    if (!missing(age)){
+      if (!cell.count) {
+        Knigth <- ageAcc1(Knigth, age, lab="Knigth")
+        Bohlin <- ageAcc1(Bohlin, age, lab="Bohlin")
+        Mayne <- ageAcc1(Mayne, age, lab="Mayne")
+      }
+      else {
+        cell.counts <- meffil::meffil.estimate.cell.counts.from.betas(t(cpgs),
+                                                                      cell.count.reference)
+        ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
+        cell.counts <- cell.counts[,ok]
+        df <- data.frame(age=age, cell.counts)
+        
+        Knigth <- ageAcc2(Knigth, df, lab="Knigth")
+        Bohlin <- ageAcc2(Bohlin, df, lab="Bohlin")
+        Mayne <- ageAcc2(Mayne, df, lab="Mayne")
+      }
+    }
+    else {
+      cell.count <- FALSE
+    }
+    
+  out <- Knigth %>% full_join(Bohlin, by="id") %>% 
+    full_join(Mayne, by="id") %>% full_join(Lee, by="id")
   out <- tibble::as_tibble(out)
+  
+  if (cell.count)
+    attr(out, "cell_proportion") <- cell.counts
+  
   out
 }

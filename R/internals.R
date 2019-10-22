@@ -1,3 +1,34 @@
+ageAcc1 <- function(x, age, lab){
+  y <- x[,2]
+  if (all(is.na(y)))
+    ans <- x
+  else {
+    mod.ieaa <- lm(y ~ age, na.action="na.exclude")
+    ans <- data.frame(x,
+                    ageAcc = y-age,
+                    ageAcc2 = resid(mod.ieaa))
+    names(ans)[3:4] <- paste(names(ans)[3:4], lab, sep=".")
+  }
+  ans
+}
+
+ageAcc2 <- function(x, df, lab){
+  y <- x[,2]
+  if (all(is.na(y)))
+    ans <- x
+  else{
+    mod.ieaa <- lm(y ~ age, na.action="na.exclude")
+    mod.eeaa <- lm(y ~ ., data=df, na.action="na.exclude")
+    ans <- data.frame(x,
+                    ageAcc = y-age,
+                    ageAcc2 = resid(mod.ieaa),
+                    ageAcc3 = resid(mod.eeaa))
+    names(ans)[3:5] <- paste(names(ans)[3:5], lab, sep=".")
+    }
+  ans
+}
+
+
 predAge <- function(x, coefs, intercept=TRUE){
   cpgs <- colnames(x)
   if (intercept)

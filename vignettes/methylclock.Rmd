@@ -204,7 +204,22 @@ In any case, if you use the object `mydata` that contains the CpGs in the second
 Error in DNAmAge(mydata) : First column should contain CpG names
 ```
 
-Age is required to compute other estimators such as age accelerated differce or EEAA among other. This information is normally provided in a different file including different covariates (metadata or sample annotation data). In this example data are available at 'SampleAnnotationExample55.csv' file that is also available at `methylclock` package:
+DNAmAge can be estimated by simply:
+
+```{r DNAmAge_horvath}
+age.example55 <- DNAmAge(MethylationData)
+age.example55
+```
+
+
+
+However, in epidemiological studies one is intereste in assessing whether age acceleration is associated with a given trait or condition. Three different measures can be computed:
+
+- **ageAcc**: Difference between DNAmAge and chronological age.
+- **ageAcc2**: Residuals obtained after regressing chronological age and DNAmAge (similar to IEAA).
+- **ageAcc3**: Residuals obtained after regressing chronological age and DNAmAge adjusted for cell counts (similar to EEAA).
+
+All this estimates can be obtained for each clock when providing chronological age through `age` argument. This information is normally provided in a different file including different covariates (metadata or sample annotation data). In this example data are available at 'SampleAnnotationExample55.csv' file that is also available at `methylclock` package:
 
 ```{r covariates_horvath_example}
 covariates <- read_csv(file.path(path, 
@@ -212,31 +227,36 @@ covariates <- read_csv(file.path(path,
 covariates
 ```
 
-Cronological age is required to compute some of the age estimators. In this example, the variable `Age` is encoding such information:
+In this case, cronological age is available at  `Age` column:
 
 ```{r age_horvath_example}
 age <- covariates$Age
 head(age)
 ``` 
 
-The different methylation ages can be simply computed by:
+The different methylation clocks along with their age accelerated estimates can be simply computed by:
 
 ```{r DNAmAge_horvath}
-age.example55 <- DNAmAge(MethylationData, age=age)
+age.example55 <- DNAmAge(MethylationData, age=age, 
+                         cell.count=TRUE)
 age.example55
 ```
 
-Then, we can compare, for instance, the DNAmAge estimates between Autistic and control individuals by using a non-parametric test (NOTE: use t-test for large sample sizes)
+By default, the argument `cell.count` is set equal to TRUE and, hence, can be omitted. This implies that `ageAcc3` will be computed for all clocks. In some occassions this can be very time consuming. In such cases one can simply estimate DNAmAge, accAge and accAge2 by setting `cell.count=FALSE`. NOTE: see section 3.5 to see the reference panels available to estimate cell counts.
+
+
+Then, we can investigate, for instance, whether the accelerated age is associated with Autism. In that example we will use a non-parametric test (NOTE: use t-test or linear regression for large sample sizes)
 
 ```{r compare_autistic}
 autism <- covariates$diseaseStatus
-kruskal.test(age.example55$Horvath ~ autism)
-kruskal.test(age.example55$BNN ~ autism)
+kruskal.test(age.example55$ageAcc.Horvath ~ autism)
+kruskal.test(age.example55$ageAcc2.Horvath ~ autism)
+kruskal.test(age.example55$ageAcc3.Horvath ~ autism)
 ```
 
-## Chronological age prediction usiong `ExpressionSet` data
+## Chronological age prediction using `ExpressionSet` data
 
-One may be interested in assessing association between chronologial age and DNA methylation age or evaluating how well chronological age is predicted by DNAmAge. In other to illustrate this analysis we downloaded data from GEO corresponding to a set of healthy individuals (GEO accession number GSE58045). Data can be retrieved into R by using `GEOquery` package as an `ExpressionSet` object that can be the input of our main function. 
+One may be interested in assessing association between chronologial age and DNA methylation age or evaluating how well chronological age is predicted by DNAmAge. In order to illustrate this analysis we downloaded data from GEO corresponding to a set of healthy individuals (GEO accession number GSE58045). Data can be retrieved into R by using `GEOquery` package as an `ExpressionSet` object that can be the input of our main function. 
 
 ```{r get_gse58045, echo=FALSE}
 ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
@@ -293,12 +313,13 @@ The object `gse19711`is an `ExpressionSet` that can contains CpGs and phenotypic
 gse19711
 ```
 
-Let us imagine we are interested in comparing the DNAmAge between cases and controls. Age and case/control status information can be obtained by:
+Let us imagine we are interested in comparing the accelerated age between cases and controls. Age and case/control status information can be obtained by:
 
 ```{r get_case_control}
 pheno <- pData(gse19711)
 age <- as.numeric(pheno$`ageatrecruitment:ch1`)
 disease <- pheno$`sample type:ch1`
+table(disease)
 disease[grep("Control", disease)] <- "Control"
 disease[grep("Case", disease)] <- "Case"
 disease <- factor(disease, levels=c("Control", "Case"))
@@ -321,31 +342,51 @@ age.gse19711
 The association between disease status and DNAmAge estimated using Horvath's method can be computed by
 
 ```{r assoc_hpv}
-mod.horvath <- glm(disease ~ Horvath , data=age.gse19711,
-           family="binomial")
+mod.horvath1 <- glm(disease ~ ageAcc.Horvath , 
+                   data=age.gse19711,
+                   family="binomial")
 summary(mod.horvath)
+
+mod.horvath2 <- glm(disease ~ ageAcc2.Horvath , 
+                   data=age.gse19711,
+                   family="binomial")
+summary(mod.horvath2)
+
+mod.horvath3 <- glm(disease ~ ageAcc3.Horvath , 
+                   data=age.gse19711,
+                   family="binomial")
+summary(mod.horvath3)
 ```
 
-We do not observe statistical significant association between DNAmAge estimated using Horvath method and the risk of developing lung cancer. The point here is that cases and controls were matched by age, so that, it is difficult to find differences when using a methylation clock that was designed to predict chronological age. On the other hand,  Levine's clock aimed to distinguish risk between same-aged individuals. Let us evaluate whether this DNAmAge estimates can be associated with lung cancer
+We do not observe statistical significant association between age acceleration estimated using Horvath method and the risk of developing lung cancer. It is worth to notice that Horvath's clock was created to predict chronological age and the impact of age acceleration of this clock on disease may be limited. On the other hand, Levine's clock aimed to distinguish risk between same-aged individuals. Let us evaluate whether this age acceleration usin Levine's clock is associated with lung cancer
 
 ```{r mod_levine}
-mod.levine <- glm(disease ~ Levine , data=age.gse19711,
+mod.levine1 <- glm(disease ~ ageAcc.Levine , data=age.gse19711,
            family="binomial")
-summary(mod.levine)
+summary(mod.levine1)
+
+mod.levine2 <- glm(disease ~ ageAcc2.Levine , data=age.gse19711,
+           family="binomial")
+summary(mod.levine2)
+
+mod.levine3 <- glm(disease ~ ageAcc3.Levine , data=age.gse19711,
+           family="binomial")
+summary(mod.levine3)
 ```
 
-Here we observe as the risk of developing lung cancer increases `r round((exp(coef(mod.levine)[2]) - 1)*100,2)` percent per each increase in the Levine methylation age. 
+Here we observe as the risk of developing lung cancer increases `r round((exp(coef(mod.levine1)[2]) - 1)*100,2)` percent per each unit in the age accelerated variable (`ageAcc`). Similar conclusion is obtained when using `ageAcc2` and `ageAcc3` variables.
 
 In some occasions cell composition should be used to assess association. This information is calculated in `DNAmAge` function and it can be incorporated in the model by:
 
 ```{r assoc_cell}
 cell <- attr(age.gse19711, "cell_proportion")
-mod.cell <- glm(disease ~ Levine + cell, data=age.gse19711,
+mod.cell <- glm(disease ~ ageAcc.Levine + cell, data=age.gse19711,
            family="binomial")
 summary(mod.cell)
 ```
 
-Here we observe as the positive association disapears after adjustinc for cell counts.
+Here we observe as the positive association disapears after adjusting for cell counts.
+
 
 ## Gestational Age
 
@@ -385,7 +426,7 @@ The Gestational Age (in months) is simply computed by
 
 ```{r age_progress}
 ga.progress <- DNAmGA(progress_data)
-head(ga.progress)
+ga.progress
 ```
 
 
@@ -397,7 +438,7 @@ plotDNAmAge(ga.progress$Knigth, progress_vars$EGA,
             clock="GA")
 ```
 
-Figure 3b (only for PROGRESS dataset) in @knight2016epigenetic representing the correlation between GA acceleration and birthweight.can be reproduced by
+Figure 3b (only for PROGRESS dataset) in @knight2016epigenetic representing the correlation between GA acceleration and birthweight can be reproduced by
 
 ```{r plotAcc}
 library(ggplot2)
@@ -408,6 +449,18 @@ p <- ggplot(data=progress_vars, aes(x = acc, y = birthweight)) +
   xlab("GA acceleration") +
   ylab("Birthweight (kgs.)") 
 p
+```
+
+
+Finally, we can also estimate the "accelerated gestational age" using two of the the three different estimates previously described (`accAge`, `accAge2`) by provinding information of gestational age through `age` argument. Notice that in that case `accAge3` cannot be estimates since we do not have all the CpGs required by the default reference panel to estimate cell counts for gestational age which is "andrews and bakulski cord blood". 
+
+
+```{r acccelerated_ga}
+accga.progress <- DNAmGA(progress_data, 
+                         age = progress_vars$EGA, 
+                         cell.count=FALSE)
+accga.progress
+
 ```
 
 

@@ -1,13 +1,13 @@
 Package: methylclock
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.3.0
-Date: 2019-09-19
+Version: 0.4.0
+Date: 2019-10-23
 Author: Juan R Gonzalez
 Maintainer: Juan R Gonzalez <juanr.gonzalez@isglobal.org>
 Description: This manual describes how to estimate DNA methylation age (DNAmAge) using different methylation clocks. 
 License: MIT
-Imports: meffil, impute, Hmisc, Rcpp, tidyverse
+Imports: meffil, impute, Hmisc, Rcpp, tidyverse, PerformanceAnalytics
 Suggests: RPMM, Biobase
 LinkingTo: Rcpp
 Encoding: UTF-8

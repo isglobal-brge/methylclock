@@ -24,12 +24,11 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE,
                       cache=TRUE, comment = " ")
 ```
 
-# Introduction
+#  Description of implemented clocks
 
-This manual describes how to estimate chronological and gestational DNA methylation (DNAm) age as well as biological age using different methylation clocks. The package includes the following estimators:
+This manual describes how to estimate chronological and gestational DNA methylation (DNAm) age as well as biological age using different methylation clocks.The package includes the following estimators:
 
-
-For chronological DNAm age (in years):
+## Chronological DNAm age (in years)
 
 - **Horvath's clock**: It uses 353 CpGs described in @horvath2013dna. It was trained using 27K and 450K arrays in samples from different tissues. Other three different age-related biomarkers are also computed:
      - **AgeAcDiff** (DNAmAge acceleration difference): Difference between DNAmAge and chronological age.
@@ -38,10 +37,10 @@ For chronological DNAm age (in years):
 - **Hannum's clock**: It uses 71 CpGs described in @hannum2013genome. It was trained using 450K array in blood samples. Another are-related biomarer is also computed:
      - **AMAR** (Apparent Methylomic Aging Rate): Measure proposed in @hannum2013genome computed as the ratio between DNAm age and the chronological age.
 - **BNN**: It uses Horvath's CpGs to train a Bayesian Neural Network (BNN) to predict DNAm age as described in @alfonso2018.
-- **Horvath's skin clock**: Epigenetic clock for skin and blood cells. It uses 391 CpGs described in @horvath2018epigenetic. It was trained using 450K EPIC arrays in skin and blood sampels.
+- **Horvath's skin+blood clock (Horvath2)**: Epigenetic clock for skin and blood cells. It uses 391 CpGs described in @horvath2018epigenetic. It was trained using 450K EPIC arrays in skin and blood sampels.
 
 
-For gestational DNAm age (in months):
+## Gestational DNAm age (in months)
 
 - **Knight's clock**: It uses 148 CpGs described in @knight2016epigenetic. It was trained using 27K and 450K arrays in coord blood samples.
 - **Bohlin's clock**: It uses 96 CpGs described in @bohlin2016prediction. It was trained using 450K array in coord blood samples.
@@ -113,7 +112,7 @@ The methylation data is given in the argument `x`. They can be either beta or M 
 ## Data nomalization
 In principle, data can be normalized by using any of the existing standard methods such as QN, ASMN, PBC, SWAN, SQN, BMIQ (see a revision of those methods in @wang2015systematic). `DNAmAge` function includes the BMIQ method proposed by @teschendorff2012beta using Horvath's robust implementation that basically consists of an optimal R code implementation and optimization procedures. This normalization is recommended by Horvath since it improves the predictions for his clock. This normalization procedure is very time-consuming. In order to overcome these difficulties, we have parallelize this process using `BiocParallel` library. This step is not mandatory, so that, you can use your normalized data and set the argument `normalize` equal to FALSE (default).
 
-## Missing data
+## Missing individual's data
 All the implemented methods require complete cases. `DNAmAge` function has an imputation method based on KNN implemented in the function `knn.impute` from `impute` Bioconductor package. This is performed when missing data is present in the CpGs used in any of the computed clocks. There is also another option based on a fast imputation method that imputes missing values by the median of required CpGs as recommended in @bohlin2016prediction. This is recommended when analyzing 450K arrays since `knn.impute` for large datasets may be very time consuming. Fast imputation can be performed by setting `fastImp=TRUE` which is not the default value. 
 
 ## Missing CpGs of DNAm clocks
@@ -212,6 +211,7 @@ age.example55
 ```
 
 
+## Age acceleration
 
 However, in epidemiological studies one is intereste in assessing whether age acceleration is associated with a given trait or condition. Three different measures can be computed:
 
@@ -227,7 +227,7 @@ covariates <- read_csv(file.path(path,
 covariates
 ```
 
-In this case, cronological age is available at  `Age` column:
+In this case, chronological age is available at  `Age` column:
 
 ```{r age_horvath_example}
 age <- covariates$Age
@@ -236,7 +236,7 @@ head(age)
 
 The different methylation clocks along with their age accelerated estimates can be simply computed by:
 
-```{r DNAmAge_horvath}
+```{r DNAmAge_horvath_cell}
 age.example55 <- DNAmAge(MethylationData, age=age, 
                          cell.count=TRUE)
 age.example55
@@ -294,7 +294,7 @@ plotDNAmAge(age.gse58045$Horvath, age)
 plotDNAmAge(age.gse58045$BNN, age, tit="Bayesian Neural Network")
 ```
 
-## DNAmAge in association studies
+## Use of DNAmAge in association studies
 
 Let us illustrate how to use DNAmAge information in association studies (e.g case/control, smokers/non-smokers, responders/non-responders, ...). GEO number GSE58045 contains transcriptomic and epigenomic data of a study in lung cancer. Data can be retrieved into R by
 
@@ -345,7 +345,7 @@ The association between disease status and DNAmAge estimated using Horvath's met
 mod.horvath1 <- glm(disease ~ ageAcc.Horvath , 
                    data=age.gse19711,
                    family="binomial")
-summary(mod.horvath)
+summary(mod.horvath1)
 
 mod.horvath2 <- glm(disease ~ ageAcc2.Horvath , 
                    data=age.gse19711,
@@ -388,7 +388,7 @@ summary(mod.cell)
 Here we observe as the positive association disapears after adjusting for cell counts.
 
 
-## Gestational Age
+# Gestational DNAm Age estimation
 
 Let us start by reproducing the example provided in @knight2016epigenetic as a test data set (file 'TestDataset.csv'). It consists on 3 individuals whose methylation data are available as supplementary data of their paper. The data is also available at `methylclock` package as a data frame.
 
@@ -462,6 +462,19 @@ accga.progress <- DNAmGA(progress_data,
 accga.progress
 
 ```
+
+# Correlation among DNAm clocks
+
+We can compute the correlation among biological clocks using the function `plotCorClocks` that requires the package `PerformanceAnalytics` to be installed in your computer. 
+
+We can obtain, for instance, the correlation among the clocks estimated for the healthy individuals study previosuly analyze (GEO accession number GSE58045) by simply executing:
+
+```{r plotCorClockHealthy}
+plotCorClocks(age.gse58045)
+```
+
+
+
 
 
 # References

@@ -166,6 +166,9 @@ DNAmGA <- function(x, toBetas=FALSE,
     full_join(Mayne, by="id") %>% full_join(Lee, by="id")
   out <- tibble::as_tibble(out)
   
+  if (!missing(age))
+      out <- add_column(out, age=age)
+  
   if (cell.count)
     attr(out, "cell_proportion") <- cell.counts
   

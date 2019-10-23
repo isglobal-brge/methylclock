@@ -135,7 +135,7 @@ DNAmAge <- function(x,
       Hannum <- ageAcc2(Hannum, df, lab="Hannum")
       BNN <- ageAcc2(BNN, df, lab="BNN")
       Levine <- ageAcc2(Levine, df, lab="Levine")
-      skinHorvath <- ageAcc2(skinHorvath, df, lab="skin")
+      skinHorvath <- ageAcc2(skinHorvath, df, lab="Hovarth2")
     }
   }
   else {
@@ -148,6 +148,9 @@ DNAmAge <- function(x,
     full_join(BNN, by="id") %>% 
     full_join(skinHorvath, by="id")   
   out <- tibble::as_tibble(out)
+  
+  if (!missing(age))
+    out <- add_column(out, age=age)
   
   if (cell.count)
    attr(out, "cell_proportion") <- cell.counts

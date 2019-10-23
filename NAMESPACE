@@ -6,6 +6,7 @@ export(DNAmGA)
 export(checkClocks)
 export(checkClocksGA)
 export(plotDNAmAge)
+export(plotCorClocks)
 
 useDynLib(methylclock, .registration=TRUE)
 
@@ -13,3 +14,4 @@ importFrom(meffil, meffil.estimate.cell.counts.from.betas)
 importFrom(impute, impute.knn)
 importFrom(Rcpp, evalCpp, sourceCpp)
 importFrom(dplyr, full_join, as_tibble)
+importFrom(PerformanceAnalytics, chart.Correlation)

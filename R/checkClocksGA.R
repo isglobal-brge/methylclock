@@ -18,7 +18,8 @@ checkClocksGA <- function(x,  ...){
     cpgs.names <- Biobase::featureNames(x)
 
   checkKnigth <- coefKnigthGA$CpGmarker[-1][!coefKnigthGA$CpGmarker[-1]%in%cpg.names]
-  checkBohlin <- coefBohlinGA$CpGmarker[!coefBohlinGA$CpGmarker%in%cpg.names]
+  coefBoh <- GAprediction::extractSites()
+  checkBohlin <- coefBoh[!coefBoh%in%cpg.names]
   checkMayne <- coefMayneGA$CpGmarker[-1][!coefMayneGA$CpGmarker[-1]%in%cpg.names]
   checkLee <- coefLeeGA$CpGmarker[-1][!coefLeeGA$CpGmarker[-1]%in%cpg.names]
   
@@ -26,7 +27,7 @@ checkClocksGA <- function(x,  ...){
   sizes <- c(length(checkKnigth), length(checkBohlin),
              length(checkMayne), length(checkLee))
   
-  n <- c(nrow(coefKnigthGA[-1]), nrow(coefBohlinGA),
+  n <- c(nrow(coefKnigthGA[-1]), length(coefBoh),
          nrow(coefMayneGA[-1]), nrow(coefLeeGA[-1]))
   
   df <- data.frame(clock = c("Knigth", "Bohlin", "Mayne", "Lee"),

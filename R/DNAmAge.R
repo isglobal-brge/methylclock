@@ -54,7 +54,9 @@ DNAmAge <- function(x,
   cpgs.all <- c(coefHorvath$CpGmarker,
                 coefHannum$CpGmarker,
                 coefLevine$CpGmarker, 
-                coefSkin$CpGmarker)
+                coefSkin$CpGmarker,
+                coefPedBE$CpGmarker)
+  
   cpgs.in <- intersect(cpgs.all, colnames(cpgs))
   
   miss <- apply(cpgs[, cpgs.in], 2, function(x) any(is.na(x)))
@@ -103,6 +105,12 @@ DNAmAge <- function(x,
   skinHorvath <- data.frame(id = rownames(cpgs.imp),
                         skinHorvath = skinHorvath)
   
+  pedBE <- predAge(cpgs.imp, coefPedBE, intercept=TRUE)
+  pedBE <- anti.trafo(pedBE)
+  PedBE <- data.frame(id = rownames(cpgs.imp),
+                        PedBE = pedBE)
+  
+  
     
   if(any(!coefHorvath$CpGmarker[-1]%in%colnames(cpgs.imp))){
    warning("Bayesian method cannot be estimated")
@@ -110,7 +118,9 @@ DNAmAge <- function(x,
   }
   else {
    cpgs.bn <- t(cpgs.imp[,coefHorvath$CpGmarker[-1]])
-   bn <- main_NewModel1Clean(cpgs.bn)
+   bn <- try(main_NewModel1Clean(cpgs.bn), TRUE)
+   if(inherits(x, "try-error"))
+     bn <- rep(NA, nrow(cpgs.imp))
   }
   
   BNN <- data.frame(id = rownames(cpgs.imp),
@@ -122,7 +132,8 @@ DNAmAge <- function(x,
       Hannum <- ageAcc1(Hannum, age, lab="Hannum")
       BNN <- ageAcc1(BNN, age, lab="BNN")
       Levine <- ageAcc1(Levine, age, lab="Levine")
-      skinHorvath <- ageAcc1(skinHorvath, age, lab="skin")
+      skinHorvath <- ageAcc1(skinHorvath, age, lab="Horvath2")
+      PedBE <- ageAcc1(PedBE, age, lab="PedBE")
     }
     else {
       cell.counts <- meffil::meffil.estimate.cell.counts.from.betas(t(cpgs),
@@ -136,6 +147,7 @@ DNAmAge <- function(x,
       BNN <- ageAcc2(BNN, df, lab="BNN")
       Levine <- ageAcc2(Levine, df, lab="Levine")
       skinHorvath <- ageAcc2(skinHorvath, df, lab="Hovarth2")
+      PedBE <- ageAcc2(PedBE, df, lab="PedBE")
     }
   }
   else {
@@ -146,7 +158,9 @@ DNAmAge <- function(x,
     full_join(Hannum, by="id") %>% 
     full_join(Levine, by="id") %>%
     full_join(BNN, by="id") %>% 
-    full_join(skinHorvath, by="id")   
+    full_join(skinHorvath, by="id") %>%
+    full_join(PedBE, by="id")
+  
   out <- tibble::as_tibble(out)
   
   if (!missing(age))

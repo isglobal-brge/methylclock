@@ -50,9 +50,9 @@ DNAmGA <- function(x, toBetas=FALSE,
     stop("Data seems to do not be beta values. Check your data or set 'toBetas=TRUE'")
   
   cpgs.all <- c(as.character(coefKnigthGA$CpGmarker[-1]),
-                  as.character(coefBohlinGA$cpgs),
-                as.character(coefMayneGA$cpg),
-                  as.character(coefLeeGA$CpGs[-1]))
+                GAprediction::extractSites(),
+                as.character(coefMayneGA$CpGmarker),
+                as.character(coefLeeGA$CpGmarker[-1]))
   
   if(any(!cpgs.all%in%colnames(cpgs))){
     warning("CpGs in all Gestational Age clocks are not present in your data. Try 'checkClocksGA' function
@@ -95,7 +95,9 @@ DNAmGA <- function(x, toBetas=FALSE,
   
 # --------------> Bohlin
   
-   bohlin <- predAge(cpgs.imp, coefBohlinGA, intercept = FALSE)
+   bohlin <- try(GAprediction::predictGA(cpgs.imp)[,1]/52, TRUE)
+   if (inherits(bohlin, "try-error"))
+     bohlin <- rep(NA, nrow(cpgs.imp))
    Bohlin <- data.frame(id = rownames(cpgs.imp),
                          Bohlin = bohlin)
   

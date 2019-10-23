@@ -22,13 +22,15 @@ checkClocks <- function(x,  ...){
   checkHannum <- coefHannum$CpGmarker[!coefHannum$CpGmarker%in%cpg.names]
   checkLevine <- coefLevine$CpGmarker[-1][!coefLevine$CpGmarker[-1]%in%cpg.names]
   checkSkin <- coefSkin$CpGmarker[-1][!coefSkin$CpGmarker[-1]%in%cpg.names]
+  checkPedBE <- coefPedBE$CpGmarker[-1][!coefPedBE$CpGmarker[-1]%in%cpg.names] 
 
   sizes <- c(length(checkHorvath), length(checkHannum),
-             length(checkLevine), length(checkSkin))
+             length(checkLevine), length(checkSkin), length(checkPedBE))
   n <- c(nrow(coefHorvath[-1]), nrow(coefHannum),
-         nrow(coefLevine[-1]), nrow(coefSkin[-1]))
+         nrow(coefLevine[-1]), nrow(coefSkin[-1]), nrow(coefPedBE[-1]))
   
-  df <- data.frame(clock = c("Horvath", "Hannum", "Levine" , "SkinHorvath"),
+  df <- data.frame(clock = c("Horvath", "Hannum", "Levine" , "SkinHorvath",
+                             "PedBE"),
                    Cpgs_in_clock = n,
                    missing_CpGs = sizes,
                    percentage = round((sizes/n)*100, 1))
@@ -40,7 +42,8 @@ checkClocks <- function(x,  ...){
         These are the total number of missing CpGs for each clock : \n \n")
     
     out <- list(Horvath=checkHorvath, Hannum=checkHannum,
-                Levine=checkLevine, HorvathSkin=checkSkin)
+                Levine=checkLevine, Horvath2=checkSkin,
+                PedBE=checkPedBE)
   }
   else {
     cat("Your data contain the required CpGs for all clocks")

@@ -7,7 +7,8 @@ Author: Juan R Gonzalez
 Maintainer: Juan R Gonzalez <juanr.gonzalez@isglobal.org>
 Description: This manual describes how to estimate DNA methylation age (DNAmAge) using different methylation clocks. 
 License: MIT
-Imports: meffil, impute, Hmisc, Rcpp, tidyverse, PerformanceAnalytics
+Depends: tidyverse, GAprediction
+Imports: meffil, impute, Hmisc, Rcpp, PerformanceAnalytics
 Suggests: RPMM, Biobase
 LinkingTo: Rcpp
 Encoding: UTF-8

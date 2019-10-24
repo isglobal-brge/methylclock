@@ -1,12 +1,14 @@
 #' DNAm age estimation using different DNA methylation clocks.
 #' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet.
+#' @param clocks the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" are available. Default is "all" and all clocks are estimated.
 #' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
 #' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
 #' @param normalize Is Horvath's normalization performed? By default is FALSE
 #' @param age individual's chronological age. 
 #' @param cell.count Are cell counts estimated? Default is TRUE.
 #' @param cell.count.reference Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.
-#'
+#' 
+#' 
 #' @details Imputation is performed when having missing data.
 #'          Fast imputation is performed by ...
 #'          what about imputing only when CpGs for the clock are missing?
@@ -15,6 +17,7 @@
 
 
 DNAmAge <- function(x, 
+                    clocks = "all",
                     toBetas=FALSE,
                     fastImp=FALSE,
                     normalize=FALSE,
@@ -22,8 +25,15 @@ DNAmAge <- function(x,
                     cell.count=TRUE,
                     cell.count.reference = "blood gse35069 complete",
                     ...){
+  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE", "all")
+  method <- match(clocks, available.clocks)
+  if (any(is.na(method)))
+    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, Horvath2, PedBE")
+  if (7%in%method)
+    method <- c(1:6)
   
-  if (inherits(x, "data.frame")){
+  
+    if (inherits(x, "data.frame")){
     cpgs.names <- as.character(x[, 1, drop=TRUE]) 
     if (length(grep("cg", cpgs.names))==0)
       stop("First column should contain CpG names")
@@ -84,82 +94,111 @@ DNAmAge <- function(x,
     cpgs.imp <- cpgs
   }
   
-  DNAmAge <- predAge(cpgs.imp, coefHorvath, intercept=TRUE)
-  horvath <- anti.trafo(DNAmAge)
-  Horvath <- data.frame(id = rownames(cpgs.imp),
+  if (1%in%method){
+    DNAmAge <- predAge(cpgs.imp, coefHorvath, intercept=TRUE)
+    horvath <- anti.trafo(DNAmAge)
+    Horvath <- data.frame(id = rownames(cpgs.imp),
                         Horvath = horvath)
+  }
   
   
-  levine <- predAge(cpgs.imp, coefLevine, intercept=TRUE)
-  Levine <- data.frame(id = rownames(cpgs.imp),
-                        Levine = levine)
-  
-   
+  if (2%in%method){ 
   hannum <- predAge(cpgs.imp, coefHannum, intercept=FALSE)
   Hannum <- data.frame(id = rownames(cpgs.imp),
                         Hannum = hannum)
+  }
+  
+  if (3%in%method){ 
+    levine <- predAge(cpgs.imp, coefLevine, intercept=TRUE)
+    Levine <- data.frame(id = rownames(cpgs.imp),
+                       Levine = levine)
+  }
   
   
-  skinHorvath <- predAge(cpgs.imp, coefSkin, intercept=TRUE)
-  skinHorvath <- anti.trafo(skinHorvath)
-  skinHorvath <- data.frame(id = rownames(cpgs.imp),
+  if (4%in%method){ 
+    if(any(!coefHorvath$CpGmarker[-1]%in%colnames(cpgs.imp))){
+      warning("Bayesian method cannot be estimated")
+      bn <- rep(NA, nrow(cpgs.imp))
+    }
+    else {
+      cpgs.bn <- t(cpgs.imp[,coefHorvath$CpGmarker[-1]])
+      bn <- main_NewModel1Clean(cpgs.bn)
+    }
+    BNN <- data.frame(id = rownames(cpgs.imp),
+                      BNN = bn)
+  }
+  
+  if (5%in%method){ 
+    skinHorvath <- predAge(cpgs.imp, coefSkin, intercept=TRUE)
+    skinHorvath <- anti.trafo(skinHorvath)
+    skinHorvath <- data.frame(id = rownames(cpgs.imp),
                         skinHorvath = skinHorvath)
+  }
   
-  pedBE <- predAge(cpgs.imp, coefPedBE, intercept=TRUE)
-  pedBE <- anti.trafo(pedBE)
-  PedBE <- data.frame(id = rownames(cpgs.imp),
+  if (6%in%method){ 
+    pedBE <- predAge(cpgs.imp, coefPedBE, intercept=TRUE)
+    pedBE <- anti.trafo(pedBE)
+    PedBE <- data.frame(id = rownames(cpgs.imp),
                         PedBE = pedBE)
-  
-  
-    
-  if(any(!coefHorvath$CpGmarker[-1]%in%colnames(cpgs.imp))){
-   warning("Bayesian method cannot be estimated")
-   bn <- rep(NA, nrow(cpgs.imp))
   }
-  else {
-   cpgs.bn <- t(cpgs.imp[,coefHorvath$CpGmarker[-1]])
-   bn <- try(main_NewModel1Clean(cpgs.bn), TRUE)
-   if(inherits(x, "try-error"))
-     bn <- rep(NA, nrow(cpgs.imp))
-  }
-  
-  BNN <- data.frame(id = rownames(cpgs.imp),
-                            BNN = bn)
   
   if (!missing(age)){
     if (!cell.count) {
-      Horvath <- ageAcc1(Horvath, age, lab="Horvath")
-      Hannum <- ageAcc1(Hannum, age, lab="Hannum")
-      BNN <- ageAcc1(BNN, age, lab="BNN")
-      Levine <- ageAcc1(Levine, age, lab="Levine")
-      skinHorvath <- ageAcc1(skinHorvath, age, lab="Horvath2")
-      PedBE <- ageAcc1(PedBE, age, lab="PedBE")
+      if (1%in%method) 
+        Horvath <- ageAcc1(Horvath, age, lab="Horvath")
+      if (2%in%method) 
+        Hannum <- ageAcc1(Hannum, age, lab="Hannum")
+      if (3%in%method) 
+        Levine <- ageAcc1(Levine, age, lab="Levine")
+      if (4%in%method)
+        BNN <- ageAcc1(BNN, age, lab="BNN")
+      if (5%in%method)
+        skinHorvath <- ageAcc1(skinHorvath, age, lab="Horvath2")
+      if (6%in%method)
+        PedBE <- ageAcc1(PedBE, age, lab="PedBE")
     }
     else {
-      cell.counts <- meffil::meffil.estimate.cell.counts.from.betas(t(cpgs),
-                                                                    cell.count.reference)
-      ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
-      cell.counts <- cell.counts[,ok]
-      df <- data.frame(age=age, cell.counts)
+      cell.counts <- try(meffil::meffil.estimate.cell.counts.from.betas(t(cpgs),
+                                                                        cell.count.reference), TRUE)
+      if (inherits(cell.counts, "try-error"))
+        stop("cell counts cannot be estimated since your data have missing CpGs for meffil")
+      else {
+        ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
+        cell.counts <- cell.counts[,ok]
+        df <- data.frame(age=age, cell.counts)
       
-      Horvath <- ageAcc2(Horvath, df, lab="Horvath")
-      Hannum <- ageAcc2(Hannum, df, lab="Hannum")
-      BNN <- ageAcc2(BNN, df, lab="BNN")
-      Levine <- ageAcc2(Levine, df, lab="Levine")
-      skinHorvath <- ageAcc2(skinHorvath, df, lab="Hovarth2")
-      PedBE <- ageAcc2(PedBE, df, lab="PedBE")
+        if (1%in%method)
+          Horvath <- ageAcc2(Horvath, df, lab="Horvath")
+        if (2%in%method)
+          Hannum <- ageAcc2(Hannum, df, lab="Hannum")
+        if (3%in%method)
+         Levine <- ageAcc2(Levine, df, lab="Levine")
+        if (4%in%method)
+         BNN <- ageAcc2(BNN, df, lab="BNN")
+        if (5%in%method)
+         skinHorvath <- ageAcc2(skinHorvath, df, lab="Hovarth2")
+        if (6%in%method)
+         PedBE <- ageAcc2(PedBE, df, lab="PedBE")
+      }
     }
   }
   else {
     cell.count <- FALSE
   }
   
-  out <- Horvath %>% 
-    full_join(Hannum, by="id") %>% 
-    full_join(Levine, by="id") %>%
-    full_join(BNN, by="id") %>% 
-    full_join(skinHorvath, by="id") %>%
-    full_join(PedBE, by="id")
+  out <- NULL
+  if (1%in%method)
+    out <- Horvath
+  if (2%in%method)
+    out <- out %>% full_join(Hannum, by="id")
+  if (3%in%method)
+    out <- out %>% full_join(Levine, by="id")
+  if (4%in%method)
+    out <- out %>% full_join(BNN, by="id")
+  if (5%in%method)
+    out <- out %>% full_join(skinHorvath, by="id")
+  if (6%in%method)
+    out <- out %>%  full_join(PedBE, by="id")
   
   out <- tibble::as_tibble(out)
   

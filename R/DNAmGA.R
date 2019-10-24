@@ -149,15 +149,19 @@ DNAmGA <- function(x, toBetas=FALSE,
         Mayne <- ageAcc1(Mayne, age, lab="Mayne")
       }
       else {
-        cell.counts <- meffil::meffil.estimate.cell.counts.from.betas(t(cpgs),
-                                                                      cell.count.reference)
-        ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
-        cell.counts <- cell.counts[,ok]
-        df <- data.frame(age=age, cell.counts)
+        cell.counts <- try(meffil::meffil.estimate.cell.counts.from.betas(t(cpgs),
+                                                                      cell.count.reference), TRUE)
+        if (inherits(cell.counts, "try-error"))
+          stop("cell counts cannot be estimated since your data have missing CpGs for meffil")
+        else {
+          ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
+          cell.counts <- cell.counts[,ok]
+          df <- data.frame(age=age, cell.counts)
         
-        Knigth <- ageAcc2(Knigth, df, lab="Knigth")
-        Bohlin <- ageAcc2(Bohlin, df, lab="Bohlin")
-        Mayne <- ageAcc2(Mayne, df, lab="Mayne")
+          Knigth <- ageAcc2(Knigth, df, lab="Knigth")
+          Bohlin <- ageAcc2(Bohlin, df, lab="Bohlin")
+          Mayne <- ageAcc2(Mayne, df, lab="Mayne")
+        }
       }
     }
     else {

@@ -15,7 +15,6 @@ output:
 vignette: >
   %\VignetteIndexEntry{DNAm age using diffrent methylation clocks}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
 bibliography: methylclock.bib  
 ---
 
@@ -214,7 +213,7 @@ age.example55
 By default all available clocks (Hovarth, Hannum, Levine, BNN, Hovart2 and PedBE) are estimated. One may select a set of clocks by using the argument `clocks` as following:
 
 
-```{r DNAmAge_horvath}
+```{r DNAmAge_horvath_sel}
 age.example55.sel <- DNAmAge(MethylationData, 
                              clocks=c("Horvath", "BNN"))
 age.example55.sel

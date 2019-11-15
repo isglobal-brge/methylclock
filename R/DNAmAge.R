@@ -7,6 +7,7 @@
 #' @param age individual's chronological age. 
 #' @param cell.count Are cell counts estimated? Default is TRUE.
 #' @param cell.count.reference Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.
+#' @param ... Other arguments to be passed through impute package
 #' 
 #' 
 #' @details Imputation is performed when having missing data.
@@ -73,10 +74,9 @@ DNAmAge <- function(x,
   
   if (any(miss)){
     if (fastImp){
-      cpgs <- cpgs[,cpgs.in]
       cat(paste("Imputing missing data of", sum(miss), "CpGs .... \n"))
-      mm <- apply(cpgs, 2, median, na.rm=TRUE)
-      cpgs.imp <- sweep(cpgs, 2, STATS=mm, 
+      mm <- apply(cpgs[,cpgs.in], 2, median, na.rm=TRUE)
+      cpgs.imp <- sweep(cpgs[,cpgs.in], 2, STATS=mm, 
                         FUN = function(x,s) ifelse(is.na(x), s, x))
     }
     else{

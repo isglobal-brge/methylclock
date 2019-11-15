@@ -49,5 +49,5 @@ checkClocksGA <- function(x,  ...){
     cat("Your data contain the required CpGs for all clocks")
     out <- NULL
   }
-  return(out)
+  return(invisible(out))
 }

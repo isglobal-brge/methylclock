@@ -24,7 +24,7 @@ checkClocksGA <- function(x,  ...){
   checkLee <- coefLeeGA$CpGmarker[-1][!coefLeeGA$CpGmarker[-1]%in%cpg.names]
   
   
-  sizes <- c(length(checkKnigth), length(checkBohlin),
+  sizes <- c(length(checkKnight), length(checkBohlin),
              length(checkMayne), length(checkLee))
   
   n <- c(nrow(coefKnigthGA[-1]), length(coefBoh),

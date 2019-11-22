@@ -1,5 +1,5 @@
 #' Gestational DNAm age estimation using different DNA methylation clocks.
-#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet.
+#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
 #' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
 #' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
 #' @param normalize Is Horvath's normalization performed? By default is FALSE
@@ -30,6 +30,9 @@ DNAmGA <- function(x, toBetas=FALSE,
     cpgs <- t(as.matrix(x[, -1]))
     colnames(cpgs) <- cpgs.names
   }
+  else if (inherits(x, "matrix")){
+    cpgs <- t(x)
+  }
   else if (inherits(x, "ExpressionSet")){
     cpgs <- t(Biobase::exprs(x))
   }
@@ -37,7 +40,7 @@ DNAmGA <- function(x, toBetas=FALSE,
     cpgs <- t(minfi::getBeta(x))
   }
   else {
-    stop("x must be a data.frame or a 'GenomicRatioSet' or a 'ExpressionSet' object")
+    stop("x must be a data.frame, matrix, 'GenomicRatioSet' or an 'ExpressionSet' object")
   }
   
   if (toBetas){
@@ -112,13 +115,19 @@ DNAmGA <- function(x, toBetas=FALSE,
   
   
   if(mean(coefLeeGA$CpGmarker[-1]%in%colnames(cpgs.imp))>0.8) {
-    cpgs.imp.s <- cpgs.imp[, coefLeeGA$CpGs[-1]]
-    Lee.RPC <- coefLeeGA$Coefficient_RPC[1] +
-      cpgs.imp.s%*%coefLeeGA$Coefficient_RPC[-1]
-    Lee.CPC <- coefLeeGA$Coefficient_CPC[1] +
-      cpgs.imp.s%*%coefLeeGA$Coefficient_CPC[-1]
-    Lee.refRPC <- coefLeeGA$Coefficient_refined_RPC[1] +
-      cpgs.imp.s%*%coefLeeGA$Coefficient_refined_RPC[-1]
+#    cpgs.imp.s <- cpgs.imp[, coefLeeGA$CpGs[-1]]
+#    Lee.RPC <- coefLeeGA$Coefficient_RPC[1] +
+#      cpgs.imp.s%*%coefLeeGA$Coefficient_RPC[-1]
+    coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, CoefficientTraining = coefLeeGA$Coefficient_RPC)
+    Lee.RPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE)
+    
+    coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, CoefficientTraining = coefLeeGA$Coefficient_CPC)
+    Lee.CPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE)
+    
+    coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, CoefficientTraining = coefLeeGA$Coefficient_refined_RPC)
+    Lee.refRPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE)
+    
+    
     if (!missing(age))
       Lee <- data.frame(id = rownames(cpgs.imp),
                       Lee.RPC = Lee.RPC,

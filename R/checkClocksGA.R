@@ -17,7 +17,7 @@ checkClocksGA <- function(x,  ...){
   else if (inherits(x, "GenomicRatioSet"))
     cpgs.names <- Biobase::featureNames(x)
 
-  checkKnigth <- coefKnigthGA$CpGmarker[-1][!coefKnigthGA$CpGmarker[-1]%in%cpg.names]
+  checkKnight <- coefKnightGA$CpGmarker[-1][!coefKnightGA$CpGmarker[-1]%in%cpg.names]
   coefBoh <- GAprediction::extractSites()
   checkBohlin <- coefBoh[!coefBoh%in%cpg.names]
   checkMayne <- coefMayneGA$CpGmarker[-1][!coefMayneGA$CpGmarker[-1]%in%cpg.names]
@@ -27,10 +27,10 @@ checkClocksGA <- function(x,  ...){
   sizes <- c(length(checkKnight), length(checkBohlin),
              length(checkMayne), length(checkLee))
   
-  n <- c(nrow(coefKnigthGA[-1]), length(coefBoh),
+  n <- c(nrow(coefKnightGA[-1]), length(coefBoh),
          nrow(coefMayneGA[-1]), nrow(coefLeeGA[-1]))
   
-  df <- data.frame(clock = c("Knigth", "Bohlin", "Mayne", "Lee"),
+  df <- data.frame(clock = c("Knight", "Bohlin", "Mayne", "Lee"),
                    Cpgs_in_clock = n,
                    missing_CpGs = sizes,
                    percentage = round((sizes/n)*100, 1))
@@ -42,7 +42,7 @@ checkClocksGA <- function(x,  ...){
         These are the total number of missing CpGs for each clock : \n \n")
     print(df)
     
-    out <- list(Knigth=checkKnigth, Bohlin=checkBohlin,
+    out <- list(Knight=checkKnight, Bohlin=checkBohlin,
                 Mayne=checkMayne, Lee=checkLee)
   }
   else {

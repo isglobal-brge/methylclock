@@ -1,5 +1,5 @@
 #' DNAm age estimation using different DNA methylation clocks.
-#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet.
+#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
 #' @param clocks the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" are available. Default is "all" and all clocks are estimated.
 #' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
 #' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
@@ -33,13 +33,15 @@ DNAmAge <- function(x,
   if (7%in%method)
     method <- c(1:6)
   
-  
-    if (inherits(x, "data.frame")){
+  if (inherits(x, "data.frame")){
     cpgs.names <- as.character(x[, 1, drop=TRUE]) 
     if (length(grep("cg", cpgs.names))==0)
       stop("First column should contain CpG names")
     cpgs <- t(as.matrix(x[, -1]))
     colnames(cpgs) <- cpgs.names
+  }
+  else if (inherits(x, "matrix")){
+    cpgs <- t(x)
   }
   else if (inherits(x, "ExpressionSet")){
     cpgs <- t(Biobase::exprs(x))

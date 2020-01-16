@@ -8,11 +8,17 @@
 #' @export
 
 plotCorClocks <- function(x, ...) {
-  clocks <- c("age", "Horvath", "Levine", "BNN", "Horvath2",
+  clocks <- c("Horvath", "Levine", "BNN", "Horvath2", "Hannum", "PedBE", "skinHorvath",
             "Knigth", "Bohlin", "Mayne", "Lee")
   sel <- intersect(clocks, colnames(x))
   x.sel <- x[, sel]
   no.na <- apply(x.sel, 2, function(x) !all(is.na(x)))
   x.nona <- x.sel[, no.na]
-  PerformanceAnalytics::chart.Correlation(x.nona, histogram=TRUE, pch=19, ...)
+  nclocks <- ncol(x.nona)
+  ee <- gather(x.nona, key=method, value=clock) %>% add_column(age=rep(x$age, nclocks))
+  
+  ggplot(ee, aes(x=clock, y=age)) + geom_point() + geom_smooth(method=lm, se=FALSE) + xlab("DNAm clock") + ylab("Chronological Age") + 
+    ggpubr::stat_cor() + facet_grid(~method)
+  
+  
 }

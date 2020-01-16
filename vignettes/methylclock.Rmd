@@ -12,6 +12,10 @@ output:
     number_sections: true
     toc: yes
     fig_caption: yes
+  BiocStyle::pdf_document:
+    number_sections: true
+    toc: yes
+    fig_caption: yes
 vignette: >
   %\VignetteIndexEntry{DNAm age using diffrent methylation clocks}
   %\VignetteEngine{knitr::rmarkdown}
@@ -275,6 +279,9 @@ load(file.path(ff, "data/GSE58045.Rdata"))
 ```{r get_geo_gse58045, eval=FALSE}
 dd <- GEOquery::getGEO("GSE58045")
 gse58045 <- dd[[1]]
+```
+
+```{r show_gse58045}
 gse58045
 ```
 
@@ -305,7 +312,7 @@ plotDNAmAge(age.gse58045$BNN, age, tit="Bayesian Neural Network")
 
 ## Use of DNAmAge in association studies
 
-Let us illustrate how to use DNAmAge information in association studies (e.g case/control, smokers/non-smokers, responders/non-responders, ...). GEO number GSE58045 contains transcriptomic and epigenomic data of a study in lung cancer. Data can be retrieved into R by
+Let us illustrate how to use DNAmAge information in association studies (e.g case/control, smokers/non-smokers, responders/non-responders, ...). GEO number GSE19711 contains transcriptomic and epigenomic data of a study in lung cancer. Data can be retrieved into R by
 
 ```{r get_gse19711, eval=FALSE}
 dd <- GEOquery::getGEO("GSE19711")
@@ -396,9 +403,35 @@ summary(mod.cell)
 
 Here we observe as the positive association disapears after adjusting for cell counts.
 
+## Use of DNAm age in children
 
-# Gestational DNAm Age estimation
 
+```{r get_gse8586, eval=FALSE}
+dd <- GEOquery::getGEO("GSE109446")
+gse109446 <- dd[[1]]
+```
+
+```{r get_gse8586_ok, echo=FALSE}
+load(file.path(ff, "data/GSE109446.Rdata"))
+```
+
+
+
+```{r age_gse109446}
+controls <- pData(gse109446)$`diagnosis:ch1`=="control"
+gse <- gse109446[,controls]
+age <- as.numeric(pData(gse)$`age:ch1`)
+age.gse <- DNAmAge(gse, age=age)
+```
+
+```{r mod_gse109446_horvath}
+plotCorClocks(age.gse)
+```
+
+
+# Gestational DNAm age estimation
+
+## Model predicion
 Let us start by reproducing the example provided in @knight2016epigenetic as a test data set (file 'TestDataset.csv'). It consists on 3 individuals whose methylation data are available as supplementary data of their paper. The data is also available at `methylclock` package as a data frame.
 
 ```{r load_3_inds}
@@ -442,7 +475,7 @@ ga.progress
 We can compare these results with the clinical GA available in the variable EGA
 
 ```{r plot_progress}
-plotDNAmAge(ga.progress$Knigth, progress_vars$EGA, 
+plotDNAmAge(ga.progress$Knight, progress_vars$EGA, 
             tit="GA Knight's method", 
             clock="GA")
 ```
@@ -451,7 +484,7 @@ Figure 3b (only for PROGRESS dataset) in @knight2016epigenetic representing the 
 
 ```{r plotAcc}
 library(ggplot2)
-progress_vars$acc <- ga.progress$Knigth - progress_vars$EGA
+progress_vars$acc <- ga.progress$Knight - progress_vars$EGA
 p <- ggplot(data=progress_vars, aes(x = acc, y = birthweight)) +
   geom_point() +
   geom_smooth(method = "lm", se=FALSE, color="black") +
@@ -472,15 +505,20 @@ accga.progress
 
 ```
 
+
+
+
+
 # Correlation among DNAm clocks
 
-We can compute the correlation among biological clocks using the function `plotCorClocks` that requires the package `PerformanceAnalytics` to be installed in your computer. 
+We can compute the correlation among biological clocks using the function `plotCorClocks` that requires the package `ggplot2` and `ggpubr` to be installed in your computer. 
 
 We can obtain, for instance, the correlation among the clocks estimated for the healthy individuals study previosuly analyze (GEO accession number GSE58045) by simply executing:
 
-```{r plotCorClockHealthy}
+```{r plotCorClockHealth}
 plotCorClocks(age.gse58045)
 ```
+
 
 
 

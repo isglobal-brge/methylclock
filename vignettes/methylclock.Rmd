@@ -8,11 +8,11 @@ author: |
 date: "`r Sys.Date()`"
 package: "`r pkg_ver('methylclock')`"
 output: 
-  BiocStyle::html_document:
+  BiocStyle::pdf_document:
     number_sections: true
     toc: yes
     fig_caption: yes
-  BiocStyle::pdf_document:
+  BiocStyle::html_document:
     number_sections: true
     toc: yes
     fig_caption: yes

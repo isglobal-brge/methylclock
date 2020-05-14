@@ -99,7 +99,7 @@ DNAmGA <- function(x, toBetas=FALSE,
   
 # --------------> Bohlin
   
-   bohlin <- try(GAprediction::predictGA(cpgs.imp, transp=FALSE)[,1]/52, TRUE)
+   bohlin <- try(GAprediction::predictGA(cpgs.imp, transp=FALSE, se=FALSE)[,1]/52, TRUE)
    if (inherits(bohlin, "try-error"))
      bohlin <- rep(NA, nrow(cpgs.imp))
    Bohlin <- data.frame(id = rownames(cpgs.imp),

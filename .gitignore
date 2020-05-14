@@ -43,3 +43,9 @@
 # Mac
 *.DS_Store
 
+# LaTex
+*.out
+*.toc
+*.tex
+*.aux
+*.gz

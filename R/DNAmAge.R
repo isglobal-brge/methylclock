@@ -124,7 +124,11 @@ DNAmAge <- function(x,
     }
     else {
       cpgs.bn <- t(cpgs.imp[,coefHorvath$CpGmarker[-1]])
-      bn <- main_NewModel1Clean(cpgs.bn)
+      bn <- try(main_NewModel1Clean(cpgs.bn), TRUE)
+      if (inherits(bn, "try-error")){
+        warning("Bayesian method produced an error")
+        bn <- rep(NA, nrow(cpgs.imp))
+      }
     }
     BNN <- data.frame(id = rownames(cpgs.imp),
                       BNN = bn)

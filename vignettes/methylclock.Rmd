@@ -205,7 +205,7 @@ Error in DNAmAge(mydata) : First column should contain CpG names
 
 DNAmAge can be estimated by simply:
 
-```{r DNAmAge_horvath}
+```{r DNAmAge_horvath, warning=TRUE}
 age.example55 <- DNAmAge(MethylationData)
 age.example55
 ```
@@ -213,12 +213,18 @@ age.example55
 By default all available clocks (Hovarth, Hannum, Levine, BNN, Hovart2 and PedBE) are estimated. One may select a set of clocks by using the argument `clocks` as following:
 
 
-```{r DNAmAge_horvath_sel}
+```{r DNAmAge_horvath_sel, warning=TRUE}
 age.example55.sel <- DNAmAge(MethylationData, 
                              clocks=c("Horvath", "BNN"))
 age.example55.sel
 ```
 
+
+One can also check which clocks can be estimated given the CpGs available in the methylation data by
+
+```{r check_clocks}
+checkClocks(MethylationData)
+```
 
 ## Age acceleration
 
@@ -245,7 +251,7 @@ head(age)
 
 The different methylation clocks along with their age accelerated estimates can be simply computed by:
 
-```{r DNAmAge_horvath_cell}
+```{r DNAmAge_horvath_cell, warning=TRUE}
 age.example55 <- DNAmAge(MethylationData, age=age, 
                          cell.count=TRUE)
 age.example55
@@ -291,7 +297,7 @@ age <- as.numeric(pheno$`age:ch1`)
 
 And the different DNA methylation age estimates are obtained by using `DNAmAge` function (NOTE: as there are missing values, the program automatically runs `impute.knn` function to get complete cases):
 
-```{r DNAmAge_gse58045}
+```{r DNAmAge_gse58045, warning=TRUE}
 age.gse58045 <- DNAmAge(gse58045, age=age)
 age.gse58045
 ```
@@ -340,7 +346,7 @@ table(disease)
 
 The DNAmAge estimates of different methods is computed by 
 
-```{r DNAmAge_gse19711}
+```{r DNAmAge_gse19711, warning=TRUE}
 age.gse19711 <- DNAmAge(gse19711, age=age)
 ```
 
@@ -413,7 +419,7 @@ load(file.path(ff, "data/GSE109446.Rdata"))
 
 
 
-```{r age_gse109446}
+```{r age_gse109446, warning=TRUE}
 controls <- pData(gse109446)$`diagnosis:ch1`=="control"
 gse <- gse109446[,controls]
 age <- as.numeric(pData(gse)$`age:ch1`)
@@ -436,7 +442,7 @@ TestDataset[1:5,]
 
 The Gestational Age (in months) is simply computed by
 
-```{r age_test}
+```{r age_test, warning=TRUE}
 ga.test <- DNAmGA(TestDataset)
 ga.test
 ```
@@ -462,7 +468,7 @@ progress_vars
 
 The Gestational Age (in months) is simply computed by
 
-```{r age_progress}
+```{r age_progress, warning=TRUE}
 ga.progress <- DNAmGA(progress_data)
 ga.progress
 ```
@@ -493,7 +499,7 @@ p
 Finally, we can also estimate the "accelerated gestational age" using two of the the three different estimates previously described (`accAge`, `accAge2`) by provinding information of gestational age through `age` argument. Notice that in that case `accAge3` cannot be estimates since we do not have all the CpGs required by the default reference panel to estimate cell counts for gestational age which is "andrews and bakulski cord blood". 
 
 
-```{r acccelerated_ga}
+```{r acccelerated_ga, warning=TRUE}
 accga.progress <- DNAmGA(progress_data, 
                          age = progress_vars$EGA, 
                          cell.count=FALSE)
@@ -502,7 +508,11 @@ accga.progress
 ```
 
 
+One can also check which clocks can be estimated given the CpGs available in the methylation data by
 
+```{r check_clocks_2}
+checkClocksGA(progress_data)
+```
 
 
 # Correlation among DNAm clocks

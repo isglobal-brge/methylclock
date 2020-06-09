@@ -35,8 +35,6 @@ checkClocksGA <- function(x,  ...){
                    missing_CpGs = sizes,
                    percentage = round((sizes/n)*100, 1))
   
-  print(df)
-  
   if (any(sizes!=0)){
     cat("There are some clocks that cannot be computed since your data do not contain the required CpGs. 
         These are the total number of missing CpGs for each clock : \n \n")

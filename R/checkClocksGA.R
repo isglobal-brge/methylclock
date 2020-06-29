@@ -27,8 +27,8 @@ checkClocksGA <- function(x,  ...){
   sizes <- c(length(checkKnight), length(checkBohlin),
              length(checkMayne), length(checkLee))
   
-  n <- c(nrow(coefKnightGA[-1]), length(coefBoh),
-         nrow(coefMayneGA[-1]), nrow(coefLeeGA[-1]))
+  n <- c(nrow(coefKnightGA) - 1, length(coefBoh),
+         nrow(coefMayneGA) - 1, nrow(coefLeeGA) - 1)
   
   df <- data.frame(clock = c("Knight", "Bohlin", "Mayne", "Lee"),
                    Cpgs_in_clock = n,

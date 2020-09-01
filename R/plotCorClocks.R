@@ -18,7 +18,7 @@ plotCorClocks <- function(x, ...) {
   ee <- gather(x.nona, key=method, value=clock) %>% add_column(age=rep(x$age, nclocks))
   
   ggplot(ee, aes(x=clock, y=age)) + geom_point() + geom_smooth(method=lm, se=FALSE) + xlab("DNAm clock") + ylab("Chronological Age") + 
-    ggpubr::stat_cor() + facet_grid(~method)
+    ggpubr::stat_cor( aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~"))) + facet_grid(~method)
   
   
 }

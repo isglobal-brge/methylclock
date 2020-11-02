@@ -4,11 +4,19 @@
 \alias{DNAmGA}
 \title{Gestational DNAm age estimation using different DNA methylation clocks.}
 \usage{
-DNAmGA(x, toBetas = FALSE, fastImp = FALSE, normalize = FALSE, age,
-  ...)
+DNAmGA(
+  x,
+  toBetas = FALSE,
+  fastImp = FALSE,
+  normalize = FALSE,
+  age,
+  cell.count = TRUE,
+  cell.count.reference = "andrews and bakulski cord blood",
+  ...
+)
 }
 \arguments{
-\item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet.}
+\item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.}
 
 \item{toBetas}{Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.}
 
@@ -17,6 +25,12 @@ DNAmGA(x, toBetas = FALSE, fastImp = FALSE, normalize = FALSE, age,
 \item{normalize}{Is Horvath's normalization performed? By default is FALSE}
 
 \item{age}{individual's chronological age. Required to compute gestational age difference output}
+
+\item{cell.count}{Are cell counts estimated? Default is TRUE.}
+
+\item{cell.count.reference}{Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.}
+
+\item{...}{Other arguments to be passed through impute package}
 }
 \description{
 Gestational DNAm age estimation using different DNA methylation clocks.

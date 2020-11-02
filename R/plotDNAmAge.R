@@ -6,22 +6,27 @@
 #'
 #' @export
 
-plotDNAmAge <- function(x, y, tit = "Horvath's method", clock="chronological", ...){
-  df <- data.frame(x=x, y=y)
+plotDNAmAge <- function(x, y, tit = "Horvath's method", clock = "chronological", ...) {
+  df <- data.frame(x = x, y = y)
   my.formula <- y ~ x
-  if (missing(clock))
+  if (missing(clock)) {
     yy <- "Chronological Age"
-  else if(clock=="GA")
+  } else if (clock == "GA") {
     yy <- "Gestational Age"
+  }
   p <- ggplot2::ggplot(data = df, ggplot2::aes(x = x, y = y)) +
-    ggplot2::geom_smooth(method = "lm", se=FALSE, color="black",
-                         formula = my.formula) +
+    ggplot2::geom_smooth(
+      method = "lm", se = FALSE, color = "black",
+      formula = my.formula
+    ) +
     ggplot2::xlab("DNA Methylation Age") +
     ggplot2::ylab(yy) +
     ggplot2::ggtitle(tit) +
-    ggpmisc::stat_poly_eq(formula = my.formula,
-                          ggplot2::aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")),
-                          parse = TRUE) +
+    ggpmisc::stat_poly_eq(
+      formula = my.formula,
+      ggplot2::aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")),
+      parse = TRUE
+    ) +
     ggplot2::geom_point()
   p
 }

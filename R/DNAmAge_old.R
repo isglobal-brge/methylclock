@@ -1,87 +1,93 @@
-DNAmAge.old <- function(x, 
-                    toBetas=FALSE,
-                    fastImp=FALSE,
-                    normalize=FALSE,
-                    cell.count=TRUE,
-                    cell.count.reference = "blood gse35069 complete",
-                    age, ...){
-  
-  if (inherits(x, "data.frame")){
-    cpgs.names <- as.character(x[, 1, drop=TRUE]) 
-    if (length(grep("cg", cpgs.names))==0)
+DNAmAge.old <- function(x,
+                        toBetas = FALSE,
+                        fastImp = FALSE,
+                        normalize = FALSE,
+                        cell.count = TRUE,
+                        cell.count.reference = "blood gse35069 complete",
+                        age, ...) {
+  if (inherits(x, "data.frame")) {
+    cpgs.names <- as.character(x[, 1, drop = TRUE])
+    if (length(grep("cg", cpgs.names)) == 0) {
       stop("First column should contain CpG names")
+    }
     cpgs <- t(as.matrix(x[, -1]))
     colnames(cpgs) <- cpgs.names
   }
-  else if (inherits(x, "ExpressionSet")){
+  else if (inherits(x, "ExpressionSet")) {
     cpgs <- t(Biobase::exprs(x))
   }
-  else if (inherits(x, "GenomicRatioSet")){
+  else if (inherits(x, "GenomicRatioSet")) {
     cpgs <- t(minfi::getBeta(x))
   }
   else {
     stop("x must be a data.frame or a 'GenomicRatioSet' or a 'ExpressionSet' object")
   }
-  
-  if (toBetas){
-    toBeta <- function (m) {
-      2^m/(2^m + 1)
+
+  if (toBetas) {
+    toBeta <- function(m) {
+      2^m / (2^m + 1)
     }
     cpgs <- toBeta(cpgs)
   }
-  
-  if(any(cpgs < -0.1 | cpgs >1.1, na.rm=TRUE))
+
+  if (any(cpgs < -0.1 | cpgs > 1.1, na.rm = TRUE)) {
     stop("Data seems to do not be beta values. Check your data or set 'toBetas=TRUE'")
-  
-  
+  }
+
+
   CpGs.model <- as.character(coefHorvath$CpGmarker[-1])
-  
-  if(any(!CpGs.model%in%colnames(cpgs))){
+
+  if (any(!CpGs.model %in% colnames(cpgs))) {
     stop("CpGs in Horvat's model are not present in your data.")
   }
-  
-  cpgs.all <- c(coefHorvath$CpGmarker,
-                coefHannum$Marker,
-                coefLevine$CpG, 
-                coefSkin$CpG)
+
+  cpgs.all <- c(
+    coefHorvath$CpGmarker,
+    coefHannum$Marker,
+    coefLevine$CpG,
+    coefSkin$CpG
+  )
   cpgs.in <- intersect(cpgs.all, colnames(cpgs))
-  
+
   miss <- apply(cpgs[, cpgs.in], 2, function(x) any(is.na(x)))
-  
-  if (any(miss)){
-    if (fastImp){
-      cpgs <- cpgs[,cpgs.in]
+
+  if (any(miss)) {
+    if (fastImp) {
+      cpgs <- cpgs[, cpgs.in]
       cat(paste("Imputing missing data of", sum(miss), "CpGs .... \n"))
-      mm <- apply(cpgs, 2, median, na.rm=TRUE)
-      cpgs.imp <- sweep(cpgs, 2, STATS=mm, 
-                        FUN = function(x,s) ifelse(is.na(x), s, x))
+      mm <- apply(cpgs, 2, median, na.rm = TRUE)
+      cpgs.imp <- sweep(cpgs, 2,
+        STATS = mm,
+        FUN = function(x, s) ifelse(is.na(x), s, x)
+      )
     }
-    else{
-      quiet <- function(x) { 
-        sink(tempfile()) 
-        on.exit(sink()) 
-        invisible(force(x)) 
-      } 
+    else {
+      quiet <- function(x) {
+        sink(tempfile())
+        on.exit(sink())
+        invisible(force(x))
+      }
       cat(paste("Imputing missing data of the entire matrix .... \n"))
       cpgs.imp <- quiet(t(impute.knn(t(cpgs), ...)$data))
     }
     cat("Data imputed. Starting DNAm clock estimation ... \n")
   }
-  else{
+  else {
     cpgs.imp <- cpgs
   }
-  
+
   if (normalize) {
     cpgs.norm <- BMIQcalibration(
       datM = cpgs.imp,
       goldstandard.beta = probeAnnotation21kdatMethUsed$goldstandard2,
-      plots = FALSE)
+      plots = FALSE
+    )
   }
-  
+
   else {
     cpgs.norm <- cpgs.imp
   }
-  
+
   selectCpGsClock <- is.element(colnames(cpgs.norm), CpGs.model)
   if (sum(selectCpGsClock) < nrow(coefHorvath) - 1) {
     stop(
@@ -92,98 +98,116 @@ DNAmAge.old <- function(x,
   }
   if (sum(selectCpGsClock) > nrow(coefHorvath) - 1) {
     stop("There are duplicated CpGs. Each row should report only one unique
-      CpG marker (e.g. cg number)." )
+      CpG marker (e.g. cg number).")
   }
-  
-  
+
+
   cpgs.norm.s <- cpgs.norm[, coefHorvath$CpGmarker[-1]]
-  
+
   DNAmAge <- anti.trafo(coefHorvath$CoefficientTraining[1] +
-                            cpgs.norm.s%*%coefHorvath$CoefficientTraining[-1])
-    
-  if(cell.count){
-    if (missing(age)){
+    cpgs.norm.s %*% coefHorvath$CoefficientTraining[-1])
+
+  if (cell.count) {
+    if (missing(age)) {
       stop("Chronological age is required. Pass it through the argument 'age'")
     }
-    cell.counts <- meffil::meffil.estimate.cell.counts.from.betas(t(cpgs),
-                                                                    cell.count.reference)
-    df <- data.frame(DNAmAge = DNAmAge,
-                     age = age,
-                     cell.counts)
+    cell.counts <- meffil::meffil.estimate.cell.counts.from.betas(
+      t(cpgs),
+      cell.count.reference
+    )
+    df <- data.frame(
+      DNAmAge = DNAmAge,
+      age = age,
+      cell.counts
+    )
     ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
-    df <- df[,ok]
-      
-    mod.ieaa <- lm(DNAmAge ~ age, data=df,
-                     na.action="na.exclude")
-    mod.eeaa <- lm(DNAmAge ~ ., data=df,
-                     na.action="na.exclude")
+    df <- df[, ok]
+
+    mod.ieaa <- lm(DNAmAge ~ age,
+      data = df,
+      na.action = "na.exclude"
+    )
+    mod.eeaa <- lm(DNAmAge ~ .,
+      data = df,
+      na.action = "na.exclude"
+    )
     IEAA <- resid(mod.ieaa)
     EEAA <- resid(mod.eeaa)
-    horvath <- data.frame(Horvath = DNAmAge[,1],
-                          AgeAcDiff = DNAmAge[,1] - age,
-                          IEAA = IEAA,
-                          EEAA = EEAA)
+    horvath <- data.frame(
+      Horvath = DNAmAge[, 1],
+      AgeAcDiff = DNAmAge[, 1] - age,
+      IEAA = IEAA,
+      EEAA = EEAA
+    )
+  }
+  else {
+    horvath <- data.frame(Horvath = DNAmAge[, 1])
+  }
+
+
+  if (sum(is.element(colnames(cpgs.norm), coefLevine$CpG)) != (nrow(coefLevine) - 1)) {
+    warning("The CpGs needed for Levine's method are not in your input data. This method will not be computed")
+    levine <- rep(NA, nrow(cpgs.norm))
+  }
+  else {
+    cpgs.levine <- cpgs.norm[, coefLevine$CpGmarker[-1]]
+    levine <- coefLevine$CoefficientTraining[1] + cpgs.levine %*% coefLevine$CoefficientTraining[-1]
+  }
+
+  if (sum(is.element(colnames(cpgs.norm), coefHannum$Marker)) != nrow(coefHannum)) {
+    warning("The CpGs needed for Hannum's method are not in your input data. This method will not be computed")
+    hannum <- data.frame(Hannum = rep(NA, nrow(cpgs.norm)))
+  }
+  else {
+    cpgs.hannum <- cpgs.norm[, coefHannum$CpGmarker]
+    predAge <- cpgs.hannum %*% coefHannum$CoefficientTraining
+    hannum <- data.frame(Hannum = predAge)
+    if (!missing(age)) {
+      hannum <- data.frame(
+        Hannum = predAge,
+        AMAR = predAge / age
+      )
     }
-    else{
-     horvath <- data.frame(Horvath = DNAmAge[,1])
-    }
-    
-    
-   if (sum(is.element(colnames(cpgs.norm), coefLevine$CpG)) != (nrow(coefLevine) -1)) {
-     warning("The CpGs needed for Levine's method are not in your input data. This method will not be computed")
-      levine <- rep(NA, nrow(cpgs.norm))
-   }
-   else {
-      cpgs.levine <- cpgs.norm[, coefLevine$CpGmarker[-1]]
-      levine <- coefLevine$CoefficientTraining[1] +  cpgs.levine%*%coefLevine$CoefficientTraining[-1]
-    }
-    
-    if (sum(is.element(colnames(cpgs.norm), coefHannum$Marker)) !=  nrow(coefHannum)) {
-      warning("The CpGs needed for Hannum's method are not in your input data. This method will not be computed")
-      hannum <- data.frame(Hannum = rep(NA, nrow(cpgs.norm)))
-    }
-    else{
-      cpgs.hannum <- cpgs.norm[, coefHannum$CpGmarker]
-      predAge <- cpgs.hannum%*%coefHannum$CoefficientTraining
-      hannum <- data.frame(Hannum = predAge)
-      if (!missing(age)){
-        hannum <- data.frame(Hannum = predAge,
-                             AMAR = predAge/age)
-      }
-    }
-    
-    if (sum(is.element(colnames(cpgs.norm), coefSkin$CpG)) != (nrow(coefSkin) -1)) {
-      warning("The CpGs needed for new skin & blood Horvath's method are not in your input data. This method will not be computed")
-      skinHorvath <- rep(NA, nrow(cpgs.norm))
-    }
-    else {
-      cpgs.skin <- cpgs.norm[, coefSkin$CpG[-1]]
-      skinHorvath <- anti.trafo(coefSkin$Coef[1] +
-                                  cpgs.skin%*%coefSkin$Coef[-1])
-    }  
-    
-    cpgs.bn <- t(cpgs.norm[,coefHorvath$CpGmarker[-1]])
-    bn <- main_NewModel1Clean(cpgs.bn)
-    
-    if (!missing(age))
-      out <- data.frame(id = rownames(DNAmAge),
-                        horvath,
-                        hannum,
-                        BNN = bn,
-                        Levine = levine,
-                        skinHorvath = skinHorvath,
-                        age = age)
-    else
-      out <- data.frame(id = rownames(DNAmAge),
-                        horvath,
-                        hannum,
-                        BNN = bn,
-                        Levine = levine,
-                        skinHorvath = skinHorvath)
-    
-    out <- tibble::as_tibble(out)
-    if (cell.count)
-     attr(out, "cell_proportion") <- cell.counts
-  
+  }
+
+  if (sum(is.element(colnames(cpgs.norm), coefSkin$CpG)) != (nrow(coefSkin) - 1)) {
+    warning("The CpGs needed for new skin & blood Horvath's method are not in your input data. This method will not be computed")
+    skinHorvath <- rep(NA, nrow(cpgs.norm))
+  }
+  else {
+    cpgs.skin <- cpgs.norm[, coefSkin$CpG[-1]]
+    skinHorvath <- anti.trafo(coefSkin$Coef[1] +
+      cpgs.skin %*% coefSkin$Coef[-1])
+  }
+
+  cpgs.bn <- t(cpgs.norm[, coefHorvath$CpGmarker[-1]])
+  bn <- main_NewModel1Clean(cpgs.bn)
+
+  if (!missing(age)) {
+    out <- data.frame(
+      id = rownames(DNAmAge),
+      horvath,
+      hannum,
+      BNN = bn,
+      Levine = levine,
+      skinHorvath = skinHorvath,
+      age = age
+    )
+  } else {
+    out <- data.frame(
+      id = rownames(DNAmAge),
+      horvath,
+      hannum,
+      BNN = bn,
+      Levine = levine,
+      skinHorvath = skinHorvath
+    )
+  }
+
+  out <- tibble::as_tibble(out)
+  if (cell.count) {
+    attr(out, "cell_proportion") <- cell.counts
+  }
+
   out
 }

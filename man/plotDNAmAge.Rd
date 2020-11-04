@@ -4,8 +4,7 @@
 \alias{plotDNAmAge}
 \title{Plot DNAm age estimation vs chronological age.}
 \usage{
-plotDNAmAge(x, y, tit = "Horvath's method", clock = "chronological",
-  ...)
+plotDNAmAge(x, y, tit = "Horvath's method", clock = "chronological", ...)
 }
 \arguments{
 \item{x}{DNAm age estimation}

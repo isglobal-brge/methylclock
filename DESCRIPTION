@@ -1,16 +1,26 @@
 Package: methylclock
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Chronological and gestational DNAm age estimation using different methylation-based clocks
 Version: 0.5.0
 Date: 2019-10-23
 Author: Juan R Gonzalez
 Maintainer: Juan R Gonzalez <juanr.gonzalez@isglobal.org>
 Description: This manual describes how to estimate DNA methylation age (DNAmAge) using different methylation clocks. 
-License: MIT
-Depends: tidyverse, GAprediction
-Imports: meffil, impute, Hmisc, Rcpp, PerformanceAnalytics
-Suggests: RPMM, Biobase
+License: MIT + file LICENSE
+Depends: 
+  tidyverse, 
+  GAprediction
+Imports: 
+  dplyr, 
+  meffil, 
+  impute, 
+  Hmisc, 
+  Rcpp, 
+  PerformanceAnalytics,
+  Biobase
+Suggests: 
+  RPMM
 LinkingTo: Rcpp
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1

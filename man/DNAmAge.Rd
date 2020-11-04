@@ -4,12 +4,22 @@
 \alias{DNAmAge}
 \title{DNAm age estimation using different DNA methylation clocks.}
 \usage{
-DNAmAge(x, toBetas = FALSE, fastImp = FALSE, normalize = FALSE,
-  cell.count = TRUE, cell.count.reference = "blood gse35069 complete",
-  age, ...)
+DNAmAge(
+  x,
+  clocks = "all",
+  toBetas = FALSE,
+  fastImp = FALSE,
+  normalize = FALSE,
+  age,
+  cell.count = TRUE,
+  cell.count.reference = "blood gse35069 complete",
+  ...
+)
 }
 \arguments{
-\item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet.}
+\item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.}
+
+\item{clocks}{the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" are available. Default is "all" and all clocks are estimated.}
 
 \item{toBetas}{Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.}
 
@@ -17,11 +27,13 @@ DNAmAge(x, toBetas = FALSE, fastImp = FALSE, normalize = FALSE,
 
 \item{normalize}{Is Horvath's normalization performed? By default is FALSE}
 
-\item{cell.count}{Are IEAA and EEAA computed? Default is TRUE.}
+\item{age}{individual's chronological age.}
+
+\item{cell.count}{Are cell counts estimated? Default is TRUE.}
 
 \item{cell.count.reference}{Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.}
 
-\item{age}{individual's chronological age. Required when 'cell.count' is TRUE.}
+\item{...}{Other arguments to be passed through impute package}
 }
 \description{
 DNAm age estimation using different DNA methylation clocks.

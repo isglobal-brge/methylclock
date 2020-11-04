@@ -25,13 +25,13 @@ DNAmAge <- function(x,
                     cell.count = TRUE,
                     cell.count.reference = "blood gse35069 complete",
                     ...) {
-  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE", "all")
+  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE", "TL" , "all")
   method <- match(clocks, available.clocks)
   if (any(is.na(method))) {
-    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, Horvath2, PedBE")
+    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, Horvath2, PedBE, TL")
   }
-  if (7 %in% method) {
-    method <- c(1:6)
+  if (length(available.clocks) %in% method) {
+    method <- c(1 : length(available.clocks) - 1)
   }
 
   if (inherits(x, "data.frame")) {
@@ -72,7 +72,8 @@ DNAmAge <- function(x,
     coefHannum$CpGmarker,
     coefLevine$CpGmarker,
     coefSkin$CpGmarker,
-    coefPedBE$CpGmarker
+    coefPedBE$CpGmarker,
+    coefTL$CpGmarker
   )
 
   cpgs.in <- intersect(cpgs.all, colnames(cpgs))
@@ -166,6 +167,15 @@ DNAmAge <- function(x,
       PedBE = pedBE
     )
   }
+  
+  if (7 %in% method) { 
+    tl <- predAge(cpgs.imp, coefTL, intercept = TRUE)
+    tl <- anti.trafo(tl)
+    TL <- data.frame(
+      id = rownames(cpgs.imp),
+      TL = tl
+    )
+  }
 
   if (!missing(age)) {
     if (!cell.count) {
@@ -186,6 +196,9 @@ DNAmAge <- function(x,
       }
       if (6 %in% method) {
         PedBE <- ageAcc1(PedBE, age, lab = "PedBE")
+      }
+      if (7%in%method) {
+        TL <- ageAcc1(TL, age, lab = "TL")
       }
     }
     else {
@@ -218,6 +231,9 @@ DNAmAge <- function(x,
         if (6 %in% method) {
           PedBE <- ageAcc2(PedBE, df, lab = "PedBE")
         }
+        if (7 %in% method) {
+          TL <- ageAcc2(TL, df, lab = "TL")
+        }
       }
     }
   }
@@ -243,6 +259,10 @@ DNAmAge <- function(x,
   }
   if (6 %in% method) {
     out <- out %>% full_join(PedBE, by = "id")
+  }
+  if (7 %in% method)
+  {
+    out <- out %>% full_join(TL, by = "id")
   }
 
   out <- tibble::as_tibble(out)

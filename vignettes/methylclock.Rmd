@@ -54,6 +54,7 @@ This manual describes how to estimate chronological and gestational DNA methylat
 The biological DNAm clocks implemented in our package are:
 
 - **Levine's clock** (also know as PhenoAge): It uses 513 CpGs described in @levine2018epigenetic. It was trained using 27K, 450K and EPIC arrays in blood samples.
+- **Telomere Length's clock** (also know as PhenoAge): It uses 354 CpGs described in @lu2019dna It was trained using 450K and EPIC arrays in blood samples.
 
 
 

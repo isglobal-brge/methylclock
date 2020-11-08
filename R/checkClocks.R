@@ -1,6 +1,6 @@
 #' Check wheter input data contains the required CpGs for the implemented clocks.
 #' @param x data.frame or tibble (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet. A matrix is also possible having the CpG names in the rownames.
-#'
+#' @param ... other parameters
 #'
 #' @details To be supplied
 #'
@@ -24,7 +24,7 @@ checkClocks <- function(x, ...) {
   checkLevine <- coefLevine$CpGmarker[-1][!coefLevine$CpGmarker[-1] %in% cpg.names]
   checkSkin <- coefSkin$CpGmarker[-1][!coefSkin$CpGmarker[-1] %in% cpg.names]
   checkPedBE <- coefPedBE$CpGmarker[-1][!coefPedBE$CpGmarker[-1] %in% cpg.names]
-  checkTL <- coefTL$CpGmarker[-1][!coefTL$CpGmarker[-1] %in% cpg.names] 
+  checkTL <- coefTL$CpGmarker[-1][!coefTL$CpGmarker[-1] %in% cpg.names]
 
   sizes <- c(
     length(checkHorvath), length(checkHannum),

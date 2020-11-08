@@ -9,8 +9,8 @@
 #' @param th2.v default valued is NULL
 #' @param niter default value is 5
 #' @param tol defalt value is 0.001
-#' @param plot default value is FALE
-#' @param calibrateUnitInverval default value is TRuE
+#' @param plots default value is FALE
+#' @param calibrateUnitInterval default value is TRUE
 #' @return the normalized table and a plot when plot is equal to TRUE
 #' @details ORIGINAL AUTHOR: Andrew Teschendorff
 #' The original BMIQ function from Teschendorff 2013 adjusts for the

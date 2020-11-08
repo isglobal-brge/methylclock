@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 main_NewModel1Clean <- function(odata) {
-    .Call(`_methylclock_main_NewModel1Clean`, odata)
+    .Call('_methylclock_main_NewModel1Clean', PACKAGE = 'methylclock', odata)
 }
 

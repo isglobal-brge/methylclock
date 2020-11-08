@@ -3,6 +3,7 @@
 #' @param y Chronological age
 #' @param clock Type of clock 'chronological' or 'GA'. Default is 'chronological'.
 #' @param tit Plot title. Default is "Horvath's method".
+#' @param ... Other plot parameters for ggplot
 #'
 #' @export
 

@@ -15,6 +15,7 @@ output:
 vignette: >
   %\VignetteIndexEntry{DNAm age using diffrent methylation clocks}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 bibliography: methylclock.bib  
 ---
 
@@ -90,6 +91,7 @@ These libraries are required to reproduce this document:
 ```{r load_others}
 library(Biobase)
 library(tibble)
+library(impute)
 library(ggplot2)
 library(ggpmisc)
 library(GEOquery)
@@ -274,12 +276,14 @@ kruskal.test(age.example55$ageAcc3.Horvath ~ autism)
 
 One may be interested in assessing association between chronologial age and DNA methylation age or evaluating how well chronological age is predicted by DNAmAge. In order to illustrate this analysis we downloaded data from GEO corresponding to a set of healthy individuals (GEO accession number GSE58045). Data can be retrieved into R by using `GEOquery` package as an `ExpressionSet` object that can be the input of our main function. 
 
-```{r get_gse58045, echo=FALSE}
-ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
-load(file.path(ff, "data/GSE58045.Rdata"))
-``` 
 
-```{r get_geo_gse58045, eval=FALSE}
+<!-- ```{r get_gse58045, echo=FALSE} -->
+<!-- # ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper" -->
+<!-- #load(file.path(ff, "data/GSE58045.Rdata")) -->
+<!-- ```  -->
+
+
+```{r get_geo_gse58045}
 dd <- GEOquery::getGEO("GSE58045")
 gse58045 <- dd[[1]]
 ```
@@ -317,14 +321,16 @@ plotDNAmAge(age.gse58045$BNN, age, tit="Bayesian Neural Network")
 
 Let us illustrate how to use DNAmAge information in association studies (e.g case/control, smokers/non-smokers, responders/non-responders, ...). GEO number GSE19711 contains transcriptomic and epigenomic data of a study in lung cancer. Data can be retrieved into R by
 
-```{r get_gse19711, eval=FALSE}
+```{r get_gse19711, eval=TRUE}
 dd <- GEOquery::getGEO("GSE19711")
 gse19711 <- dd[[1]]
 ```
 
-```{r get_gse19711_ok, echo=FALSE}
-load(file.path(ff, "data/GSE19711.Rdata"))
-```
+
+<!-- ```{r get_gse19711_ok, echo=FALSE} -->
+<!-- load(file.path(ff, "data/GSE19711.Rdata")) -->
+<!-- ``` -->
+
 
 The object `gse19711`is an `ExpressionSet` that can contains CpGs and phenotypic (e.g clinical) information
 
@@ -409,14 +415,15 @@ Here we observe as the positive association disapears after adjusting for cell c
 ## Use of DNAm age in children
 
 
-```{r get_gse8586, eval=FALSE}
+```{r get_gse8586}
 dd <- GEOquery::getGEO("GSE109446")
 gse109446 <- dd[[1]]
 ```
 
-```{r get_gse8586_ok, echo=FALSE}
-load(file.path(ff, "data/GSE109446.Rdata"))
-```
+
+<!-- ```{r get_gse8586_ok, echo=FALSE} -->
+<!-- load(file.path(ff, "data/GSE109446.Rdata")) -->
+<!-- ``` -->
 
 
 
@@ -455,17 +462,13 @@ Let us continue by illustrating how to compute GA of real examples. The PROGRESS
 progress_data
 ```
 
-This file also contains different variables that are available in this `tibble`. The 
-
-```{r show_progress}
-progress_vars
-```
-
-Clinical Variables including clinical assesment of gestational age (EGA) are available at this `tibble`
+This file also contains different variables that are available in this `tibble`. 
 
 ```{r progressClin}
 progress_vars
 ```
+
+The Clinical Variables including clinical assesment of gestational age (EGA) are available at this `tibble`.
 
 The Gestational Age (in months) is simply computed by
 
@@ -526,10 +529,6 @@ We can obtain, for instance, the correlation among the clocks estimated for the 
 plotCorClocks(age.gse58045)
 ```
 
-
-
-
-
-
 # References
 
+SessionInfo()

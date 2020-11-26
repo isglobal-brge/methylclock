@@ -32,9 +32,9 @@ checkClocks <- function(x, ...) {
     length(checkTL)
   )
   n <- c(
-    nrow(coefHorvath[-1]), nrow(coefHannum),
-    nrow(coefLevine[-1]), nrow(coefSkin[-1]), nrow(coefPedBE[-1]),
-    nrow(coefTL[-1])
+    nrow(coefHorvath[-1, ]), nrow(coefHannum),
+    nrow(coefLevine[-1, ]), nrow(coefSkin[-1, ]), nrow(coefPedBE[-1, ]),
+    nrow(coefTL[-1, ])
   )
 
   df <- data.frame(

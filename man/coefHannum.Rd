@@ -13,14 +13,17 @@ data(coefHannum)
 \description{
 A dataset containing the coefficients and CpGs information from Hannum clock
 }
+\examples{
+data(coefHannum)
+}
 \references{
 \url{https://doi.org/10.1016/j.molcel.2012.10.016}
 \describe{
   \item{CpGMarker}{CpGs id}
-  \item{Chrom}{Chromosome }
-  \item{Pos}{Position }
+  \item{Chrom}{Chromosome}
+  \item{Pos}{Position}
   \item{Genes}{Genes}
-  \item{CpGIsland }{ Is CpG Island }
+  \item{CpGIsland }{Is CpG Island}
   \item{CoefficientTraining}{Coefficient from training }
 }
 }

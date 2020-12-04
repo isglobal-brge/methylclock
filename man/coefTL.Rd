@@ -13,31 +13,34 @@ data(coefTL)
 \description{
 A dataset containing the coefficients and CpGs information from Telomere Length clock
 }
+\examples{
+data(coefTL)
+}
 \references{
 \url{https://dx.doi.org/10.18632\%2Faging.102173}
 \describe{
   \item{CpGMarker}{CpGs id}
   \item{CoefficientTraining}{Training Coefficient}
   \item{CHR}{Chromosome}
-  \item{bp19}{}
-  \item{SourceSeq}{}
-  \item{Strand}{}
-  \item{Probe.SNP.based.on.Illumina.annotation}{}
-  \item{Gene}{}
-  \item{location}{}
-  \item{Relation.to..CpGIsland}{}
-  \item{Probe.SNP.based.on.1000.Genome}{}
-  \item{SNP}{}
-  \item{CHR.SNP}{}
-  \item{bp.SNP}{}
-  \item{ALLELE}{}
-  \item{BSGS.P}{}
-  \item{BSGS.EFFECT}{}
-  \item{BSGS.H2}{}
-  \item{LBC.P}{}
-  \item{LBC.EFFECT}{}
-  \item{LBC.R2}{}
-  \item{mQTL}{}
+  \item{bp19}{bp19}
+  \item{SourceSeq}{SourceSeq}
+  \item{Strand}{Strand}
+  \item{Probe.SNP.based.on.Illumina.annotation}{Probe.SNP.based.on.Illumina.annotation}
+  \item{Gene}{Gene}
+  \item{location}{location}
+  \item{Relation.to..CpGIsland}{Relation.to..CpGIsland}
+  \item{Probe.SNP.based.on.1000.Genome}{Probe.SNP.based.on.1000.Genome}
+  \item{SNP}{SNP}
+  \item{CHR.SNP}{CHR.SNP}
+  \item{bp.SNP}{bp.SNP}
+  \item{ALLELE}{ALLELE}
+  \item{BSGS.P}{BSGS.P}
+  \item{BSGS.EFFECT}{BSGS.EFFECT}
+  \item{BSGS.H2}{BSGS.H2}
+  \item{LBC.P}{LBC.P}
+  \item{LBC.EFFECT}{LBC.EFFECT}
+  \item{LBC.R2}{LBC.R2}
+  \item{mQTL}{mQTL}
 }
 }
 \keyword{datasets}

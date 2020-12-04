@@ -32,6 +32,9 @@ DNAmGA(
 
 \item{...}{Other arguments to be passed through impute package}
 }
+\value{
+the estimated gestational DNAm age
+}
 \description{
 Gestational DNAm age estimation using different DNA methylation clocks.
 }
@@ -39,4 +42,9 @@ Gestational DNAm age estimation using different DNA methylation clocks.
 Imputation is performed when having missing data.
          Fast imputation is performed by ...
          what about imputing only when CpGs for the clock are missing?
+}
+\examples{
+TestDataset[1:5, ]
+ga.test <- DNAmGA(TestDataset)
+
 }

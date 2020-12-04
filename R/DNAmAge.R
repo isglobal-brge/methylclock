@@ -13,6 +13,9 @@
 #'          Fast imputation is performed by ...
 #'          what about imputing only when CpGs for the clock are missing?
 #'
+#' @importFrom dplyr %>% full_join 
+#' @importFrom tibble as_tibble add_column
+#'
 #' @export
 
 
@@ -264,7 +267,7 @@ DNAmAge <- function(x,
     out <- out %>% full_join(TL, by = "id")
   }
 
-  out <- tibble::as_tibble(out)
+  out <- as_tibble(out)
 
   if (!missing(age)) {
     out <- add_column(out, age = age)

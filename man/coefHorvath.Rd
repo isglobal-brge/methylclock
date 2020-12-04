@@ -5,7 +5,32 @@
 \alias{coefHorvath}
 \title{Horvath clock coefficients}
 \format{
-A data frame with 354 CpGs and 23 variables
+A data frame with 354 CpGs and 23 variables :
+\describe{
+  \item{CpGmarker}{CpGs id}
+  \item{CoefficientTraining}{Coefficient from training }
+  \item{CoefficientTrainingShrunk}{Coefficient Training Shrunk}
+  \item{varByCpG}{var by CpG}
+  \item{minByCpG}{min by CpG}
+  \item{maxByCpG}{max by CpG}
+  \item{medianByCpG}{median by CpG}
+  \item{medianByCpGYoung}{median by CpG young}
+  \item{medianByCpGOld}{median by CpG old}
+  \item{Gene_ID}{Gene_ID}
+  \item{GenomeBuild}{Genome Build}
+  \item{Chr}{Chromosome}
+  \item{MapInfo}{Map Info}
+  \item{SourceVersion}{Source Version}
+  \item{TSS_Coordinate}{TSS_Coordinate}
+  \item{Gene_Strand}{Gene_Strand}
+  \item{Symbol}{Symbol}
+  \item{Synonym}{Synonym}
+  \item{Accession}{Accession}
+  \item{GID}{GID}
+  \item{Annotation}{Annotation}
+  \item{Product}{Product}
+  \item{Marginal.Age.Relationship}{Marginal age relationship}
+}
 }
 \usage{
 data(coefHorvath)
@@ -13,32 +38,10 @@ data(coefHorvath)
 \description{
 A dataset containing the coefficients and CpGs information from Horvath clock
 }
+\examples{
+data(coefHorvath)
+}
 \references{
 \url{https://doi.org/10.1371/journal.pone.0014821}
-\describe{
-  \item{CpGMarker}{CpGs id}
-  \item{CoefficientTraining}{Coefficient from training }
-  \item{CoefficientTrainingShrunk}
-  \item{varByCpG}
-  \item{minByCpG}
-  \item{maxByCpG}
-  \item{medianByCpG}
-  \item{medianByCpGYoung}
-  \item{medianByCpGOld}
-  \item{Gene_ID}
-  \item{GenomeBuild}
-  \item{Chr}{Chromosome }
-  \item{MapInfo}
-  \item{SourceVersion}
-  \item{TSS_Coordinate}
-  \item{Gene_Strand}
-  \item{Symbol}
-  \item{Synonym}
-  \item{Accession}
-  \item{GID}
-  \item{Annotation}
-  \item{Product}
-  \item{Marginal.Age.Relationship}
-}
 }
 \keyword{datasets}

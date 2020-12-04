@@ -7,7 +7,7 @@
 \format{
 A data frame with 149 CpGs and 2 variables
 \describe{
-  \item{CpGMarker}{CpGs id}
+  \item{CpGmarker}{CpGs id}
   \item{CoefficientTraining}{Training Coefficient}
 }
 }
@@ -16,6 +16,9 @@ data(coefKnightGA)
 }
 \description{
 A dataset containing the coefficients and CpGs information from Knight GA clock
+}
+\examples{
+data(coefKnightGA)
 }
 \references{
 \url{https://dx.doi.org/10.1186\%2Fs13059-016-1068-z}

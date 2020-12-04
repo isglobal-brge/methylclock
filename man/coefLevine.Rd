@@ -13,18 +13,21 @@ data(coefLevine)
 \description{
 A dataset containing the coefficients and CpGs information from Levine clock
 }
+\examples{
+data(coefLevine)
+}
 \references{
 \url{https://dx.doi.org/10.18632\%2Faging.101414}
 \describe{
   \item{CpGMarker}{CpGs id}
   \item{CoefficientTraining}{Training Coefficient}
   \item{Chromosome}{Chromosome}
-  \item{Map.Info}{}
+  \item{Map.Info}{Map.Info}
   \item{Gene.Symbol}{Gene symbol}
   \item{Entrez.ID}{Entrez ID}
   \item{Univariate.Age.Correlation}{}
-  \item{Horvath.Overlap}{}
-  \item{Hannum.Overlap}{}
+  \item{Horvath.Overlap}{Horvath.Overlap}
+  \item{Hannum.Overlap}{Hannum.Overlap}
 }
 }
 \keyword{datasets}

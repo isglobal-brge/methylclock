@@ -7,11 +7,11 @@
 \format{
 A data frame with 1126 CpGs and 5 variables
 \describe{
-  \item{CpGMarker}{CpGs id}
-  \item{CoefficientTraining}{RPC Coefficient }
-  \item{Coefficient_CPC}{}
-  \item{Coefficient_refined_RPC}{ }
-  \item{Coefficient_sex_classifier}{}
+  \item{Coefficient_CPC}{Coefficient_CPC}
+  \item{Coefficient_RPC}{RPC Coefficient }
+  \item{Coefficient_refined_RPC}{Coefficient refined RPC}
+  \item{Coefficient_sex_classifier}{Coefficient sex classifier}
+  \item{CpGmarker}{CpGmarker}
 }
 }
 \usage{
@@ -19,6 +19,9 @@ data(coefLeeGA)
 }
 \description{
 A dataset containing the coefficients and CpGs information from Lee GA clock
+}
+\examples{
+data(coefLeeGA)
 }
 \references{
 \url{https://dx.doi.org/10.18632\%2Faging.102049}

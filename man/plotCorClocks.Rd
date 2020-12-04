@@ -11,22 +11,9 @@ plotCorClocks(x, ...)
 
 \item{...}{other arguments to be passs through function 'chart.Correlation' from 'PerformanceAnalytics' package}
 }
-\value{
-Plot with Correlation Clocks
-}
 \description{
 Plot correlation among DNAm clockx
 }
 \details{
 To be supplied
-}
-\examples{
-dd <- GEOquery::getGEO("GSE109446")
-gse109446 <- dd[[1]]
-controls <- pData(gse109446)$`diagnosis:ch1` == "control"
-gse <- gse109446[, controls]
-age <- as.numeric(pData(gse)$`age:ch1`)
-age.gse <- DNAmAge(gse, age = age)
-plotCorClocks(age.gse)
-
 }

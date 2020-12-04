@@ -35,9 +35,6 @@ DNAmAge(
 
 \item{...}{Other arguments to be passed through impute package}
 }
-\value{
-The estimated chronological and biological mDNA age
-}
 \description{
 DNAm age estimation using different DNA methylation clocks.
 }
@@ -45,9 +42,4 @@ DNAm age estimation using different DNA methylation clocks.
 Imputation is performed when having missing data.
          Fast imputation is performed by ...
          what about imputing only when CpGs for the clock are missing?
-}
-\examples{
-MethylationData <- read_csv(file.path(path, "MethylationDataExample55.csv"))
-age.example55 <- DNAmAge(MethylationData)
-
 }

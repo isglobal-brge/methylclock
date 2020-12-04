@@ -7,12 +7,12 @@
 \format{
 A data frame with 1126 CpGs and 5 variables
 \describe{
-  \item{CpGmarker}{CpGs id}
+  \item{CpGMarker}{CpGs id}
   \item{CoefficientTraining}{Training Coefficient }
   \item{Gene}{Gene}
   \item{Chromosome}{Chromosome }
   \item{Position}{Position}
-  \item{Correlation.with.GA}{Correlation with GA}
+  \item{Correlation.with.GA}{}
 }
 }
 \usage{
@@ -20,9 +20,6 @@ data(coefMayneGA)
 }
 \description{
 A dataset containing the coefficients and CpGs information from Mayne GA clock
-}
-\examples{
-data(coefMayneGA)
 }
 \references{
 \url{https://dx.doi.org/10.2217\%2Fepi-2016-0103}

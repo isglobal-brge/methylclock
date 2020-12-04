@@ -7,7 +7,7 @@
 \format{
 A data frame with 392 CpGs and 2 variables
 \describe{
-  \item{CpGmarker}{CpGs id}
+  \item{CpGMarker}{CpGs id}
   \item{CoefficientTraining}{Training Coefficient }
 }
 }
@@ -16,8 +16,5 @@ data(coefSkin)
 }
 \description{
 A dataset containing the coefficients and CpGs information from Skin clock
-}
-\examples{
-data(coefSkin)
 }
 \keyword{datasets}

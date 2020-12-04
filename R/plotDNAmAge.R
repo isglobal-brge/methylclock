@@ -5,6 +5,14 @@
 #' @param tit Plot title. Default is "Horvath's method".
 #' @param ... Other plot parameters for ggplot
 #'
+#' @return Plot with estimated DNAmAge
+#'
+#' @examples
+#' MethylationData <- read_csv(file.path(path, "MethylationDataExample55.csv"))
+#' age.example55 <- DNAmAge(MethylationData)
+#' plotDNAmAge(age.example55$Horvath, age)
+#' @import ggplot2
+#' @importFrom ggpmisc stat_poly_eq
 #' @export
 
 plotDNAmAge <- function(x, y, tit = "Horvath's method", clock = "chronological", ...) {

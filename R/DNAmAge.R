@@ -13,6 +13,15 @@
 #'          Fast imputation is performed by ...
 #'          what about imputing only when CpGs for the clock are missing?
 #'
+#' @examples
+#' MethylationData <- read_csv(file.path(path, "MethylationDataExample55.csv"))
+#' age.example55 <- DNAmAge(MethylationData)
+#' 
+#' @return The estimated chronological and biological mDNA age 
+#' 
+#' @import impute dplyr tidyverse tibble Rcpp
+#' @importFrom Biobase featureNames exprs
+#' @importFrom minfi getBeta
 #' @export
 
 
@@ -202,7 +211,7 @@ DNAmAge <- function(x,
       }
     }
     else {
-      cell.counts <- try(meffil::meffil.estimate.cell.counts.from.betas(
+      cell.counts <- try(meffil.estimate.cell.counts.from.betas(
         t(cpgs),
         cell.count.reference
       ), TRUE)

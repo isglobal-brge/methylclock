@@ -4,6 +4,11 @@
 #'
 #' @details To be supplied
 #'
+#' @examples
+#' checkClocksGA(TestDataset)
+#' @import GAprediction
+#' @importFrom Biobase featureNames exprs
+#' @return a list with the different GA clocks when there are more than 80% of the required CpGs
 #' @export
 
 checkClocksGA <- function(x, ...) {

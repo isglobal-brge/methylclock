@@ -16,6 +16,8 @@
 #'   \item{CpGIsland }{Is CpG Island}
 #'   \item{CoefficientTraining}{Coefficient from training }
 #' }
+#' @examples
+#' data(coefHannum)
 "coefHannum"
 
 
@@ -54,6 +56,8 @@
 #'   \item{Product}{Product}
 #'   \item{Marginal.Age.Relationship}{Marginal age relationship}
 #' }
+#' @examples
+#' data(coefHorvath)
 "coefHorvath"
 
 
@@ -71,6 +75,8 @@
 #'   \item{CpGmarker}{CpGs id}
 #'   \item{CoefficientTraining}{Training Coefficient}
 #' }
+#' @examples
+#' data(coefKnightGA)
 "coefKnightGA"
 
 
@@ -90,6 +96,9 @@
 #'   \item{Coefficient_sex_classifier}{Coefficient sex classifier}
 #'   \item{CpGmarker}{CpGmarker}
 #' }
+#'
+#' @examples
+#' data(coefLeeGA)
 "coefLeeGA"
 
 
@@ -114,6 +123,8 @@
 #'   \item{Horvath.Overlap}{Horvath.Overlap}
 #'   \item{Hannum.Overlap}{Hannum.Overlap}
 #' }
+#' @examples
+#' data(coefLevine)
 "coefLevine"
 
 
@@ -134,6 +145,8 @@
 #'   \item{Position}{Position}
 #'   \item{Correlation.with.GA}{Correlation with GA}
 #' }
+#' @examples
+#' data(coefMayneGA)
 "coefMayneGA"
 
 
@@ -152,6 +165,9 @@
 #'   \item{corAgeTraining}{Correlation age training}
 #'   \item{corAgeTest}{Correlation age test}
 #' }
+#'
+#' @examples
+#' data(coefPedBE)
 "coefPedBE"
 
 
@@ -167,6 +183,9 @@
 #'   \item{CpGmarker}{CpGs id}
 #'   \item{CoefficientTraining}{Training Coefficient }
 #' }
+#'
+#' @examples
+#' data(coefSkin)
 "coefSkin"
 
 
@@ -204,6 +223,9 @@
 #'   \item{LBC.R2}{LBC.R2}
 #'   \item{mQTL}{mQTL}
 #' }
+#'
+#' @examples
+#' data(coefTL)
 "coefTL"
 
 #' probeAnnotation21kdatMethUsed
@@ -213,6 +235,9 @@
 #' @docType data
 #' @usage data(probeAnnotation21kdatMethUsed)
 #' @format A data frame with 21368 CpGs and 7 variables
+#'
+#' @examples
+#' data(probeAnnotation21kdatMethUsed)
 "probeAnnotation21kdatMethUsed"
 
 #' TestDataset
@@ -222,6 +247,9 @@
 #' @docType data
 #' @usage data(TestDataset)
 #' @format A data frame with 27236 CpGs and 4 variables
+#'
+#' @examples
+#' data(TestDataset)
 "TestDataset"
 
 #' progress_data
@@ -231,6 +259,9 @@
 #' @docType data
 #' @usage data(progress_data)
 #' @format A data frame with 148 obs. and 151 variables
+#'
+#' @examples
+#' data(progress_data)
 "progress_data"
 
 #' progress_vars
@@ -240,5 +271,33 @@
 #' @docType data
 #' @usage data(progress_vars)
 #' @format A data frame with 150 obs. and 3 variables
+#'
+#' @examples
+#' data(progress_vars)
 "progress_vars"
+
+
+#' MethylationDataExample55
+#'
+#' A dataset containing data for vignette examples
+#'
+#' @docType data
+#' @usage data(MethylationDataExample55)
+#' @format A data frame with 27578 cpgs and 17 samples
+#'
+#' @examples
+#' data(MethylationDataExample55)
+"MethylationDataExample55"
+
+#' references
+#'
+#' A dataset containing data for references data for blood
+#'
+#' @docType data
+#' @usage data(references)
+#' @format A data frame with 27578 cpgs and 17 samples
+#'
+#' @examples
+#' data(references)
+"references"
 NULL

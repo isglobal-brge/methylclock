@@ -1,9 +1,16 @@
 #' Check wheter input data contains the required CpGs for the implemented clocks.
-#' @param x data.frame or tibble (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet. A matrix is also possible having the CpG names in the rownames.
+#' @param x data.frame or tibble (Individual in columns, CpGs in rows, CpG names 
+#' in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet. 
+#' A matrix is also possible having the CpG names in the rownames.
 #' @param ... other parameters
 #'
 #' @details To be supplied
 #'
+#' @examples
+#' checkClocks(TestDataset)
+#' @return a list with the different clocks when there are more than 80% of 
+#' the required CpGs
+#' @importFrom Biobase featureNames exprs
 #' @export
 
 checkClocks <- function(x, ...) {
@@ -32,9 +39,9 @@ checkClocks <- function(x, ...) {
     length(checkTL)
   )
   n <- c(
-    nrow(coefHorvath[-1]), nrow(coefHannum),
-    nrow(coefLevine[-1]), nrow(coefSkin[-1]), nrow(coefPedBE[-1]),
-    nrow(coefTL[-1])
+    nrow(coefHorvath[-1, ]), nrow(coefHannum),
+    nrow(coefLevine[-1, ]), nrow(coefSkin[-1, ]), nrow(coefPedBE[-1, ]),
+    nrow(coefTL[-1, ])
   )
 
   df <- data.frame(

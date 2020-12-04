@@ -12,8 +12,18 @@
 #'          Fast imputation is performed by ...
 #'          what about imputing only when CpGs for the clock are missing?
 #'
+#' @examples
+#' TestDataset[1:5, ]
+#' ga.test <- DNAmGA(TestDataset)
+#' 
+#' @return the estimated gestational DNAm age
+#' 
+#' @import impute dplyr tidyverse tibble
+#' @importFrom minfi getBeta
+#' @importFrom Biobase featureNames exprs
+#' @importFrom minfi getBeta
+#' 
 #' @export
-
 
 DNAmGA <- function(x, toBetas = FALSE,
                    fastImp = FALSE,
@@ -177,7 +187,7 @@ DNAmGA <- function(x, toBetas = FALSE,
       Mayne <- ageAcc1(Mayne, age, lab = "Mayne")
     }
     else {
-      cell.counts <- try(meffil::meffil.estimate.cell.counts.from.betas(
+      cell.counts <- try(meffil.estimate.cell.counts.from.betas(
         t(cpgs),
         cell.count.reference
       ), TRUE)

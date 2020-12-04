@@ -5,16 +5,20 @@ Version: 0.5.0
 Date: 2019-10-23
 Author: Juan R Gonzalez
 Maintainer: Juan R Gonzalez <juanr.gonzalez@isglobal.org>
-Description: This manual describes how to estimate DNA methylation age (DNAmAge) using different methylation clocks. 
-biocViews: methylation clocks methylation-based clocks 
+Description: Package to estimate DNA methylation age (DNAmAge) using different methylation clocks. 
+biocViews: 
+  DNAMethylation,
+  BiologicalQuestion,
+  Preprocessing,
+  StatisticalMethod
 License: MIT + file LICENSE
 Depends: 
-  R (>= 3.6.0)
+  R (>= 3.6.0),
+  devtools,
+  quadprog
 Imports: 
   dplyr, 
-  meffil, 
   impute, 
-  Hmisc, 
   Rcpp, 
   PerformanceAnalytics,
   Biobase,
@@ -24,7 +28,8 @@ Imports:
   ggpmisc, 
   ggpubr, 
   minfi, 
-  tibble
+  tibble,
+  preprocessCore
 Suggests: 
   RPMM,
   BiocStyle, 
@@ -35,4 +40,3 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
-Remotes: github::perishky/meffil

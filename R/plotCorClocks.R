@@ -2,9 +2,21 @@
 #' @param x a tible or data.frame with the different DNAm clocks
 #' @param ... other arguments to be passs through function 'chart.Correlation' from 'PerformanceAnalytics' package
 #'
-#'
 #' @details To be supplied
+#' 
+#' @return Plot with Correlation Clocks
 #'
+#' @examples
+#' dd <- GEOquery::getGEO("GSE109446")
+#' gse109446 <- dd[[1]]
+#' controls <- pData(gse109446)$`diagnosis:ch1` == "control"
+#' gse <- gse109446[, controls]
+#' age <- as.numeric(pData(gse)$`age:ch1`)
+#' age.gse <- DNAmAge(gse, age = age)
+#' plotCorClocks(age.gse)
+#' 
+#' @import ggplot2 ggpubr PerformanceAnalytics
+#' 
 #' @export
 
 plotCorClocks <- function(x, ...) {

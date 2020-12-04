@@ -1,6 +1,6 @@
 ---
 title: "Chronological and gestational DNAm age estimation using different methylation-based clocks"
-subtitle: "Gerardo Alfonso, Dolors Pelegri and Juan R Gonzalez"
+subtitle: "Dolors Pelegri, Gerardo Alfonso and Juan R Gonzalez"
 author: |
   Institute for Global Health (ISGlobal), Barcelona, Spain
   Bioinformatics Research Group in Epidemiolgy (BRGE)
@@ -55,7 +55,7 @@ This manual describes how to estimate chronological and gestational DNA methylat
 The biological DNAm clocks implemented in our package are:
 
 - **Levine's clock** (also know as PhenoAge): It uses 513 CpGs described in @levine2018epigenetic. It was trained using 27K, 450K and EPIC arrays in blood samples.
-- **Telomere Length's clock** (also know as PhenoAge): It uses 354 CpGs described in @lu2019dna It was trained using 450K and EPIC arrays in blood samples.
+- **Telomere Length's clock** (TL): It uses 354 CpGs described in @lu2019dna It was trained using 450K and EPIC arrays in blood samples.
 
 
 

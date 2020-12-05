@@ -61,6 +61,22 @@
 "coefHorvath"
 
 
+#' @title BN clock CpGs
+#'
+#' @description An array containing the CpGs list from BN clock
+#'
+#' @name cpgs.bn
+#' @docType data
+#'
+#' @usage data(cpgs.bn)
+#' @format A data frame with 354 CpGs and 23 variables :
+#' \describe{
+#'   \item{cpgs.bn}{CpGs id}
+#' }
+#' @examples
+#' data(cpgs.bn)
+"cpgs.bn"
+
 
 #' Knight Gestational Age clock coefficients
 #'
@@ -289,15 +305,15 @@
 #' data(MethylationDataExample55)
 "MethylationDataExample55"
 
-#' references
-#'
-#' A dataset containing data for references data for blood
-#'
-#' @docType data
-#' @usage data(references)
-#' @format A data frame with 27578 cpgs and 17 samples
-#'
-#' @examples
-#' data(references)
-"references"
+# #' references
+# #'
+# #' A dataset containing data for references data for blood
+# #'
+# #' @docType data
+# #' @usage data(references)
+# #' @format A data frame with 27578 cpgs and 17 samples
+# #'
+# #' @examples
+# #' data(references)
+# "references"
 NULL

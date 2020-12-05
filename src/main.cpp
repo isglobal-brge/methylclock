@@ -97,19 +97,19 @@ Rcpp::NumericVector main_NewModel1Clean(Rcpp::RObject odata )
 {
 
   Rcpp::NumericMatrix data = Rcpp:: as<Rcpp::NumericMatrix>(odata);
-
+  
   emxArray_real_T *x1;
   int idat = 353;
   int icount= (data.length() / idat);
   double b_y1[icount];
 
   x1 = argInit_1xUnbounded_real_T(2, idat, icount, data);
-
+  
   // Call the entry-point 'NewModel1Clean'.
   NewModel1Clean(x1, b_y1);
 
   emxDestroyArray_real_T(x1);
-
+  
   Rcpp::NumericVector age( sizeof(b_y1)/sizeof(double) );
 
   for (int idq = 0; idq < sizeof(b_y1)/sizeof(double); idq++) {

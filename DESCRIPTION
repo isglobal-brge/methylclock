@@ -17,9 +17,9 @@ Depends:
   devtools,
   quadprog
 Imports: 
+  Rcpp,
   dplyr, 
   impute, 
-  Rcpp, 
   PerformanceAnalytics,
   Biobase,
   GAprediction,

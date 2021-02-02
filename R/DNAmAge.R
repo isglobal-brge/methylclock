@@ -216,7 +216,7 @@ DNAmAge <- function(x,
         cell.count.reference
       ), TRUE)
       if (inherits(cell.counts, "try-error")) {
-        stop("cell counts cannot be estimated since your data have missing CpGs for meffil")
+        stop("cell counts cannot be estimated since meffil.estimate.cell.counts.from.betas function from meffil package is giving an error. There are missing values?")
       } else {
         ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
         cell.counts <- cell.counts[, ok]

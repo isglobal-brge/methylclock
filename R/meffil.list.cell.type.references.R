@@ -8,7 +8,16 @@
 #'
 #' @export
 meffil.list.cell.type.references <- function() {
-  ls(reference.globals)
+  # ls(reference.globals)
+  c("andrews and bakulski cord blood",
+    "blood gse35069",
+    "blood gse35069 chen",
+    "blood gse35069 complete",
+    "combined cord blood",
+    "cord blood gse68456",
+    "gervin and lyle cord blood",
+    "guintivano dlpfc",
+    "saliva gse48472")
 }
 
 #' Get cell type reference
@@ -24,5 +33,5 @@ meffil.list.cell.type.references <- function() {
 #'
 get.cell.type.reference <- function(name) {
   stopifnot(is.character(name) && name %in% meffil.list.cell.type.references())
-  get(name, reference.globals)
+  get(name)
 }

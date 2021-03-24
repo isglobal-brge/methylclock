@@ -66,7 +66,7 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   cpgs.all <- c(
     as.character(coefKnightGA$CpGmarker[-1]),
-    GAprediction::extractSites(),
+    coefBohlin$CpGmarker[-1],
     as.character(coefMayneGA$CpGmarker[-1]),
     as.character(coefLeeGA$CpGmarker[-1])
   )
@@ -116,13 +116,14 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   # --------------> Bohlin
 
-  bohlin <- try(GAprediction::predictGA(cpgs.imp, transp = FALSE, se = FALSE)[, 1] / 52, TRUE)
-  if (inherits(bohlin, "try-error")) {
-    bohlin <- rep(NA, nrow(cpgs.imp))
-  }
+#  bohlin <- try(GAprediction::predictGA(cpgs.imp, transp = FALSE, se = FALSE)[, 1] / 52, TRUE)
+#  if (inherits(bohlin, "try-error")) {
+#    bohlin <- rep(NA, nrow(cpgs.imp))
+#  }
+  bohlin <- predAge(cpgs.imp, coefBohlin, intercept = TRUE)
   Bohlin <- data.frame(
     id = rownames(cpgs.imp),
-    Bohlin = bohlin
+    Bohlin = bohlin / 52
   )
 
   # --------------> Mayne

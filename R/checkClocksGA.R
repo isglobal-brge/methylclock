@@ -6,7 +6,6 @@
 #'
 #' @examples
 #' checkClocksGA(TestDataset)
-#' @import GAprediction
 #' @importFrom Biobase featureNames exprs
 #' @return a list with the different GA clocks when there are more than 80% of the required CpGs
 #' @export
@@ -25,7 +24,7 @@ checkClocksGA <- function(x, ...) {
   }
 
   checkKnight <- coefKnightGA$CpGmarker[-1][!coefKnightGA$CpGmarker[-1] %in% cpg.names]
-  coefBoh <- GAprediction::extractSites()
+  coefBoh <- coefBohlin$CpGmarker[-1][!coefBohlin$CpGmarker[-1] %in% cpg.names]
   checkBohlin <- coefBoh[!coefBoh %in% cpg.names]
   checkMayne <- coefMayneGA$CpGmarker[-1][!coefMayneGA$CpGmarker[-1] %in% cpg.names]
   checkLee <- coefLeeGA$CpGmarker[-1][!coefLeeGA$CpGmarker[-1] %in% cpg.names]

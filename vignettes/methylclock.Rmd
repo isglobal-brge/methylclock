@@ -68,7 +68,7 @@ The package depends on some R packages that can be previously installed into you
 
 ```{r install_req_packages, eval=FALSE}
 library(BiocManager)
-install(c("tidyverse", "impute", "Rcpp", "GAprediction"))
+install(c("tidyverse", "impute", "Rcpp"))
 
 library(devtools)
 # install_github("perishky/meffil")

@@ -1,8 +1,8 @@
 Package: methylclock
 Type: Package
 Title: Chronological and gestational DNAm age estimation using different methylation-based clocks
-Version: 0.6.0
-Date: 2021-03-23
+Version: 0.7.0
+Date: 2021-03-24
 Author: Juan R Gonzalez
 Maintainer: Juan R Gonzalez <juanr.gonzalez@isglobal.org>
 Description: Package to estimate DNA methylation age (DNAmAge) using different methylation clocks. 
@@ -22,7 +22,6 @@ Imports:
   impute, 
   PerformanceAnalytics,
   Biobase,
-  GAprediction,
   tidyverse,
   ggplot2, 
   ggpmisc, 

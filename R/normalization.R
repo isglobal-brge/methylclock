@@ -28,7 +28,7 @@
 #' SH used method="Nelder-Mead" in optim() since the other optimization method
 #' sometimes gets stuck. Toward this end, the function blc was replaced by blc2.
 #' 
-#' @example 
+#' @examples
 #' goldstandard.beta <- c(2.4,0.1,0.01,0.001)
 #' BMIQcalibration(TestDataset, goldstandard.beta)
 #' 

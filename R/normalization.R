@@ -27,7 +27,11 @@
 #' Importantly, SH changed the optimization algorithm to make it more robust.
 #' SH used method="Nelder-Mead" in optim() since the other optimization method
 #' sometimes gets stuck. Toward this end, the function blc was replaced by blc2.
-#'
+#' 
+#' @example 
+#' goldstandard.beta <- c(2.4,0.1,0.01,0.001)
+#' BMIQcalibration(TestDataset, goldstandard.beta)
+#' 
 #' @export
 
 BMIQcalibration <- function(datM,
@@ -69,7 +73,8 @@ BMIQcalibration <- function(datM,
   ### fit type1
   print("Fitting EM beta mixture to goldstandard probes")
 
-  set.seed(1)
+  ## Disabled to accomplish BioC check() 
+  ## set.seed(1)
   rand.idx <- sample(1:length(beta1.v), min(c(nfit, length(beta1.v))),
     replace =
       FALSE
@@ -174,7 +179,8 @@ BMIQcalibration <- function(datM,
     # incProgress(1/dim(datM)[[1]])
 
     # I fixed an error in the following line (replaced beta1 by beta2)
-    set.seed(1)
+    ## Disabled to accomplish BioC check() 
+    ## set.seed(1)
     rand.idx <- sample(1:length(beta2.v), min(c(nfit, length(beta2.v)),
       na.rm =
         TRUE

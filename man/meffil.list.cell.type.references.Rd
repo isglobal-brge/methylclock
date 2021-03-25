@@ -17,3 +17,7 @@ ORIGINAL AUTHOR: Matthew Suderman
 The original meffil.list.cell.type.references and get.cell.type.reference function from meffil v1.0.0
 at githug : https://github.com/perishky/meffil
 }
+\examples{
+meffil.list.cell.type.references()
+
+}

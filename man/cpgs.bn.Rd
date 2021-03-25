@@ -3,14 +3,20 @@
 \docType{data}
 \name{cpgs.bn}
 \alias{cpgs.bn}
-\title{CpGs list}
+\title{BN clock CpGs}
 \format{
-Character array with 431 CpGs
+A data frame with 354 CpGs and 23 variables :
+\describe{
+  \item{cpgs.bn}{CpGs id}
+}
 }
 \usage{
 data(cpgs.bn)
 }
 \description{
-CpGs list
+An array containing the CpGs list from BN clock
+}
+\examples{
+data(cpgs.bn)
 }
 \keyword{datasets}

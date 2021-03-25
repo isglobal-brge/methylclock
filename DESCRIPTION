@@ -3,14 +3,15 @@ Type: Package
 Title: Chronological and gestational DNAm age estimation using different methylation-based clocks
 Version: 0.7.0
 Date: 2021-03-24
-Author: Juan R Gonzalez
-Maintainer: Juan R Gonzalez <juanr.gonzalez@isglobal.org>
+Authors@R: c( person("Dolors", "Pelegri-Siso", , "dolors.pelegri@isglobal.org", role = "aut"),
+              person("Juan R.", "Gonzalez", ,"juanr.gonzalez@isglobal.org", role = c("aut", "cre")))
 Description: Package to estimate DNA methylation age (DNAmAge) using different methylation clocks. 
 biocViews: 
   DNAMethylation,
   BiologicalQuestion,
   Preprocessing,
-  StatisticalMethod
+  StatisticalMethod,
+  Normalization
 License: MIT + file LICENSE
 Depends: 
   R (>= 3.6.0),

@@ -37,9 +37,9 @@ BMIQcalibration(
 
 \item{tol}{defalt value is 0.001}
 
-\item{plot}{default value is FALE}
+\item{plots}{default value is FALE}
 
-\item{calibrateUnitInverval}{default value is TRuE}
+\item{calibrateUnitInterval}{default value is TRUE}
 }
 \value{
 the normalized table and a plot when plot is equal to TRUE

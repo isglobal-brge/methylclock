@@ -179,7 +179,6 @@ DNAmAge <- function(x,
 
   if (7 %in% method) {
     tl <- predAge(cpgs.imp, coefTL, intercept = TRUE)
-    tl <- anti.trafo(tl)
     TL <- data.frame(
       id = rownames(cpgs.imp),
       TL = tl

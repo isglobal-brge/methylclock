@@ -18,7 +18,7 @@ ageAcc2 <- function(x, df, lab) {
   if (all(is.na(y))) {
     ans <- x
   } else {
-    mod.ieaa <- lm(y ~ age, na.action = "na.exclude")
+    mod.ieaa <- lm(y ~ age, data = df, na.action = "na.exclude")
     mod.eeaa <- lm(y ~ ., data = df, na.action = "na.exclude")
     ans <- data.frame(x,
       ageAcc = y - age,

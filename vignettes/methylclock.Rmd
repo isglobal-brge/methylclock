@@ -330,11 +330,6 @@ gse19711 <- dd[[1]]
 ```
 
 
-<!-- ```{r get_gse19711_ok, echo=FALSE} -->
-<!-- load(file.path(ff, "data/GSE19711.Rdata")) -->
-<!-- ``` -->
-
-
 The object `gse19711`is an `ExpressionSet` that can contains CpGs and phenotypic (e.g clinical) information
 
 ```{r show_gse19711}

@@ -21,7 +21,7 @@ ageAcc2 <- function(x, df, lab) {
     mod.ieaa <- lm(y ~ age, data = df, na.action = "na.exclude")
     mod.eeaa <- lm(y ~ ., data = df, na.action = "na.exclude")
     ans <- data.frame(x,
-      ageAcc = y - age,
+      ageAcc = y - df$age,
       ageAcc2 = resid(mod.ieaa),
       ageAcc3 = resid(mod.eeaa)
     )

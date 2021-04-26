@@ -420,11 +420,6 @@ gse109446 <- dd[[1]]
 ```
 
 
-<!-- ```{r get_gse8586_ok, echo=FALSE} -->
-<!-- load(file.path(ff, "data/GSE109446.Rdata")) -->
-<!-- ``` -->
-
-
 
 ```{r age_gse109446, warning=TRUE}
 controls <- pData(gse109446)$`diagnosis:ch1`=="control"
@@ -455,7 +450,7 @@ ga.test
 ```
 The results are the same as those described in the additional file 7 of @knight2016epigenetic (link [here](https://static-content.springer.com/esm/art%3A10.1186%2Fs13059-016-1068-z/MediaObjects/13059_2016_1068_MOESM7_ESM.docx))
 
-Let us continue by illustrating how to compute GA of real examples. The PROGRESS cohort data is available in the additional file 8 of  @knight2016epigenetic. It is availabel at `methylclock` as a `tibble`:
+Let us continue by illustrating how to compute GA of real examples. The PROGRESS cohort data is available in the additional file 8 of  @knight2016epigenetic. It is available at `methylclock` as a `tibble`:
 
 ```{r get_progress}
 progress_data

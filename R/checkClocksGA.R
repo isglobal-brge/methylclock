@@ -27,24 +27,22 @@ checkClocksGA <- function(x, ...) {
   coefBoh <- coefBohlin$CpGmarker[-1][!coefBohlin$CpGmarker[-1] %in% cpg.names]
   checkBohlin <- coefBoh[!coefBoh %in% cpg.names]
   checkMayne <- coefMayneGA$CpGmarker[-1][!coefMayneGA$CpGmarker[-1] %in% cpg.names]
-  checkWu <- coefWuGA$CpGmarker[-1][!coefWuGA$CpGmarker[-1] %in% cpg.names]
   checkLee <- coefLeeGA$CpGmarker[-1][!coefLeeGA$CpGmarker[-1] %in% cpg.names]
 
 
   sizes <- c(
     length(checkKnight), length(checkBohlin),
-    length(checkMayne), length(checkWu), 
-    length(checkLee)
+    length(checkMayne), length(checkLee)
   )
 
   n <- c(
     nrow(coefKnightGA) - 1, length(coefBoh),
-    nrow(coefMayneGA) - 1, nrow(coefWuGA) - 1.
+    nrow(coefMayneGA) - 1, 
     nrow(coefLeeGA) - 1
   )
 
   df <- data.frame(
-    clock = c("Knight", "Bohlin", "Mayne", "Wu", "Lee"),
+    clock = c("Knight", "Bohlin", "Mayne", "Lee"),
     Cpgs_in_clock = n,
     missing_CpGs = sizes,
     percentage = round((sizes / n) * 100, 1)
@@ -57,7 +55,7 @@ checkClocksGA <- function(x, ...) {
 
     out <- list(
       Knight = checkKnight, Bohlin = checkBohlin,
-      Mayne = checkMayne, Wu = checkWy, Lee = checkLee
+      Mayne = checkMayne, Lee = checkLee
     )
   }
   else {

@@ -31,23 +31,24 @@ checkClocks <- function(x, ...) {
   checkLevine <- coefLevine$CpGmarker[-1][!coefLevine$CpGmarker[-1] %in% cpg.names]
   checkSkin <- coefSkin$CpGmarker[-1][!coefSkin$CpGmarker[-1] %in% cpg.names]
   checkPedBE <- coefPedBE$CpGmarker[-1][!coefPedBE$CpGmarker[-1] %in% cpg.names]
+  checkWu <- coefWu$CpGmarker[-1][!coefWu$CpGmarker[-1] %in% cpg.names]
   checkTL <- coefTL$CpGmarker[-1][!coefTL$CpGmarker[-1] %in% cpg.names]
 
   sizes <- c(
     length(checkHorvath), length(checkHannum),
     length(checkLevine), length(checkSkin), length(checkPedBE),
-    length(checkTL)
+    length(checkWu), length(checkTL)
   )
   n <- c(
     nrow(coefHorvath[-1, ]), nrow(coefHannum),
     nrow(coefLevine[-1, ]), nrow(coefSkin[-1, ]), nrow(coefPedBE[-1, ]),
-    nrow(coefTL[-1, ])
+    nrow(coefWu[-1, ]), nrow(coefTL[-1, ])
   )
 
   df <- data.frame(
     clock = c(
       "Horvath", "Hannum", "Levine", "SkinHorvath",
-      "PedBE", "TL"
+      "PedBE", "Wu", "TL"
     ),
     Cpgs_in_clock = n,
     missing_CpGs = sizes,
@@ -65,7 +66,7 @@ checkClocks <- function(x, ...) {
     out <- list(
       Horvath = checkHorvath, Hannum = checkHannum,
       Levine = checkLevine, Horvath2 = checkSkin,
-      PedBE = checkPedBE, TL = checkTL
+      PedBE = checkPedBE, Wu = checkWu, TL = checkTL
     )
   }
   else {

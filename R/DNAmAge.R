@@ -34,13 +34,13 @@ DNAmAge <- function(x,
                     cell.count = TRUE,
                     cell.count.reference = "blood gse35069 complete",
                     ...) {
-  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE", "TL", "all")
+  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE", "Wu", "TL", "all")
   method <- match(clocks, available.clocks)
   if (any(is.na(method))) {
-    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, Horvath2, PedBE, TL")
+    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, Horvath2, PedBE, Wu, TL")
   }
   if (length(available.clocks) %in% method) {
-    method <- c(1:length(available.clocks) - 1)
+    method <- c(1:(length(available.clocks) - 1))
   }
 
   if (inherits(x, "data.frame")) {
@@ -82,6 +82,7 @@ DNAmAge <- function(x,
     coefLevine$CpGmarker,
     coefSkin$CpGmarker,
     coefPedBE$CpGmarker,
+    coefWu$CpGmarker,
     coefTL$CpGmarker
   )
 
@@ -178,6 +179,16 @@ DNAmAge <- function(x,
   }
 
   if (7 %in% method) {
+    wu <- predAge(cpgs.imp, coefWu, intercept = TRUE)
+    wu <- anti.trafo(wu)
+    Wu <- data.frame(
+      id = rownames(cpgs.imp),
+      Wu = wu
+    )
+  }
+  
+  
+  if (8 %in% method) {
     tl <- predAge(cpgs.imp, coefTL, intercept = TRUE)
     TL <- data.frame(
       id = rownames(cpgs.imp),
@@ -206,6 +217,9 @@ DNAmAge <- function(x,
         PedBE <- ageAcc1(PedBE, age, lab = "PedBE")
       }
       if (7 %in% method) {
+        Wu <- ageAcc1(Wu, age, lab = "Wu")
+      }
+      if (8 %in% method) {
         TL <- ageAcc1(TL, age, lab = "TL")
       }
     }
@@ -240,6 +254,9 @@ DNAmAge <- function(x,
           PedBE <- ageAcc2(PedBE, df, lab = "PedBE")
         }
         if (7 %in% method) {
+          Wu <- ageAcc2(Wu, df, lab = "Wu")
+        }
+        if (8 %in% method) {
           TL <- ageAcc2(TL, df, lab = "TL")
         }
       }
@@ -269,6 +286,9 @@ DNAmAge <- function(x,
     out <- out %>% full_join(PedBE, by = "id")
   }
   if (7 %in% method) {
+    out <- out %>% full_join(Wu, by = "id")
+  }
+  if (8 %in% method) {
     out <- out %>% full_join(TL, by = "id")
   }
 

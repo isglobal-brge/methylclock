@@ -66,10 +66,9 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   cpgs.all <- c(
     as.character(coefKnightGA$CpGmarker[-1]),
-    coefBohlin$CpGmarker[-1],
+    as.character(coefBohlin$CpGmarker[-1]),
     as.character(coefMayneGA$CpGmarker[-1]),
-    as.character(coefLeeGA$CpGmarker[-1]),
-    as.character(coefWuGA$CpGmarker[-1])
+    as.character(coefLeeGA$CpGmarker[-1])
   )
 
   if (any(!cpgs.all %in% colnames(cpgs))) {
@@ -136,15 +135,6 @@ DNAmGA <- function(x, toBetas = FALSE,
   )
 
   
-  # --------------> Wu
-  
-  wu <- predAge(cpgs.imp, coefWuGA, intercept = TRUE)
-  Wu <- data.frame(
-    id = rownames(cpgs.imp),
-    Wu = wu
-  )
-  
-  
   # --------------> Lee
 
 
@@ -197,7 +187,6 @@ DNAmGA <- function(x, toBetas = FALSE,
       Knight <- ageAcc1(Knight, age, lab = "Knight")
       Bohlin <- ageAcc1(Bohlin, age, lab = "Bohlin")
       Mayne <- ageAcc1(Mayne, age, lab = "Mayne")
-      Wu <- ageAcc1(Wu, age, lab = "Wu")
     }
     else {
       cell.counts <- try(meffil.estimate.cell.counts.from.betas(
@@ -214,7 +203,6 @@ DNAmGA <- function(x, toBetas = FALSE,
         Knight <- ageAcc2(Knight, df, lab = "Knight")
         Bohlin <- ageAcc2(Bohlin, df, lab = "Bohlin")
         Mayne <- ageAcc2(Mayne, df, lab = "Mayne")
-        Wu <- ageAcc2(Wu, df, lab = "Wu")
       }
     }
   }
@@ -225,7 +213,6 @@ DNAmGA <- function(x, toBetas = FALSE,
   out <- Knight %>%
     full_join(Bohlin, by = "id") %>%
     full_join(Mayne, by = "id") %>%
-    full_join(Wu, by = "id") %>%
     full_join(Lee, by = "id")
   out <- tibble::as_tibble(out)
 

@@ -21,9 +21,10 @@
 #'
 #' @return betas
 #' @examples
+#' 
 #' cell.count.reference <- "andrews and bakulski cord blood"
 #' cpgs <- t(as.matrix(TestDataset[, -1]))
-#' colnames(cpgs) <- cpgs.names
+#' colnames(cpgs) <- TestDataset$CpGName
 #' meffil.estimate.cell.counts.from.betas(t(cpgs), cell.count.reference)
 #' 
 #' @import preprocessCore quadprog devtools

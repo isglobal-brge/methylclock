@@ -39,9 +39,10 @@ The original meffil.list.cell.type.references and get.cell.type.reference functi
 downloaded from  githug : https://github.com/perishky/meffil
 }
 \examples{
+
 cell.count.reference <- "andrews and bakulski cord blood"
 cpgs <- t(as.matrix(TestDataset[, -1]))
-colnames(cpgs) <- cpgs.names
+colnames(cpgs) <- TestDataset$CpGName
 meffil.estimate.cell.counts.from.betas(t(cpgs), cell.count.reference)
 
 }

@@ -216,6 +216,15 @@ age.example55 <- DNAmAge(MethylationData)
 age.example55
 ```
 
+We can set `min.perc` to allow estimations with less than 80% of conicidence between CpGs in our data and CpGs in clock coefficients,
+
+```{r DNAmAgemp_horvath, warning=TRUE}
+age.example55 <- DNAmAge(MethylationData, min.perc = 0.25)
+age.example55
+```
+
+Setting `min.perc = 0.25` we can estimate DNAmAge with Skin clock.
+
 By default all available clocks (Hovarth, Hannum, Levine, BNN, Hovart2 and PedBE) are estimated. One may select a set of clocks by using the argument `clocks` as following:
 
 
@@ -447,6 +456,9 @@ The Gestational Age (in months) is simply computed by
 ga.test <- DNAmGA(TestDataset)
 ga.test
 ```
+
+like in DNAmAge we can use the parameter `min.perc` to set the minimum missing percentage.
+
 The results are the same as those described in the additional file 7 of @knight2016epigenetic (link [here](https://static-content.springer.com/esm/art%3A10.1186%2Fs13059-016-1068-z/MediaObjects/13059_2016_1068_MOESM7_ESM.docx))
 
 Let us continue by illustrating how to compute GA of real examples. The PROGRESS cohort data is available in the additional file 8 of  @knight2016epigenetic. It is available at `methylclock` as a `tibble`:

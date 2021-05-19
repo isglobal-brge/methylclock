@@ -7,6 +7,7 @@
 #' @param age individual's chronological age.
 #' @param cell.count Are cell counts estimated? Default is TRUE.
 #' @param cell.count.reference Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.
+#' @param min.perc Indicates the minimum conicidence percentage required between CpGs in or dataframee x and CpGs in clock coefficients to perform the calculation. If min.prec is too low, the estimated gestational DNAm age can be poor
 #' @param ... Other arguments to be passed through impute package
 #'
 #' @details Imputation is performed when having missing data.
@@ -33,6 +34,7 @@ DNAmAge <- function(x,
                     age,
                     cell.count = TRUE,
                     cell.count.reference = "blood gse35069 complete",
+                    min.perc = 0.8,
                     ...) {
   available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE", "Wu", "TL", "all")
   method <- match(clocks, available.clocks)
@@ -115,7 +117,7 @@ DNAmAge <- function(x,
   }
 
   if (1 %in% method) {
-    DNAmAge <- predAge(cpgs.imp, coefHorvath, intercept = TRUE)
+    DNAmAge <- predAge(cpgs.imp, coefHorvath, intercept = TRUE, min.perc)
     horvath <- anti.trafo(DNAmAge)
     Horvath <- data.frame(
       id = rownames(cpgs.imp),
@@ -125,7 +127,7 @@ DNAmAge <- function(x,
 
 
   if (2 %in% method) {
-    hannum <- predAge(cpgs.imp, coefHannum, intercept = FALSE)
+    hannum <- predAge(cpgs.imp, coefHannum, intercept = FALSE, min.perc)
     Hannum <- data.frame(
       id = rownames(cpgs.imp),
       Hannum = hannum
@@ -133,7 +135,7 @@ DNAmAge <- function(x,
   }
 
   if (3 %in% method) {
-    levine <- predAge(cpgs.imp, coefLevine, intercept = TRUE)
+    levine <- predAge(cpgs.imp, coefLevine, intercept = TRUE, min.perc)
     Levine <- data.frame(
       id = rownames(cpgs.imp),
       Levine = levine
@@ -161,7 +163,7 @@ DNAmAge <- function(x,
   }
 
   if (5 %in% method) {
-    skinHorvath <- predAge(cpgs.imp, coefSkin, intercept = TRUE)
+    skinHorvath <- predAge(cpgs.imp, coefSkin, intercept = TRUE, min.perc)
     skinHorvath <- anti.trafo(skinHorvath)
     skinHorvath <- data.frame(
       id = rownames(cpgs.imp),
@@ -170,7 +172,7 @@ DNAmAge <- function(x,
   }
 
   if (6 %in% method) {
-    pedBE <- predAge(cpgs.imp, coefPedBE, intercept = TRUE)
+    pedBE <- predAge(cpgs.imp, coefPedBE, intercept = TRUE, min.perc)
     pedBE <- anti.trafo(pedBE)
     PedBE <- data.frame(
       id = rownames(cpgs.imp),
@@ -179,7 +181,7 @@ DNAmAge <- function(x,
   }
 
   if (7 %in% method) {
-    wu <- predAge(cpgs.imp, coefWu, intercept = TRUE)
+    wu <- predAge(cpgs.imp, coefWu, intercept = TRUE, min.perc)
     wu <- anti.trafo(wu)/12
     Wu <- data.frame(
       id = rownames(cpgs.imp),
@@ -189,7 +191,7 @@ DNAmAge <- function(x,
   
   
   if (8 %in% method) {
-    tl <- predAge(cpgs.imp, coefTL, intercept = TRUE)
+    tl <- predAge(cpgs.imp, coefTL, intercept = TRUE, min.perc)
     TL <- data.frame(
       id = rownames(cpgs.imp),
       TL = tl

@@ -6,6 +6,7 @@
 #' @param age individual's chronological age. Required to compute gestational age difference output
 #' @param cell.count Are cell counts estimated? Default is TRUE.
 #' @param cell.count.reference Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.
+#' @param min.perc Indicates the minimum conicidence percentage required between CpGs in or dataframee x and CpGs in clock coefficients to perform the calculation. If min.prec is too low, the estimated gestational DNAm age can be poor
 #' @param ... Other arguments to be passed through impute package
 #'
 #' @details Imputation is performed when having missing data.
@@ -31,6 +32,7 @@ DNAmGA <- function(x, toBetas = FALSE,
                    age,
                    cell.count = TRUE,
                    cell.count.reference = "andrews and bakulski cord blood",
+                   min.perc = 0.8,
                    ...) {
   if (inherits(x, "data.frame")) {
     cpgs.names <- as.character(x[, 1, drop = TRUE])
@@ -108,7 +110,7 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   # --------------> Knight
 
-  Knight <- predAge(cpgs.imp, coefKnightGA, intercept = TRUE)
+  Knight <- predAge(cpgs.imp, coefKnightGA, intercept = TRUE, min.perc)
   Knight <- data.frame(
     id = rownames(cpgs.imp),
     Knight = Knight
@@ -120,7 +122,7 @@ DNAmGA <- function(x, toBetas = FALSE,
 #  if (inherits(bohlin, "try-error")) {
 #    bohlin <- rep(NA, nrow(cpgs.imp))
 #  }
-  bohlin <- predAge(cpgs.imp, coefBohlin, intercept = TRUE)
+  bohlin <- predAge(cpgs.imp, coefBohlin, intercept = TRUE, min.perc)
   Bohlin <- data.frame(
     id = rownames(cpgs.imp),
     Bohlin = bohlin / 52
@@ -128,7 +130,7 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   # --------------> Mayne
 
-  mayne <- predAge(cpgs.imp, coefMayneGA, intercept = TRUE)
+  mayne <- predAge(cpgs.imp, coefMayneGA, intercept = TRUE, min.perc)
   Mayne <- data.frame(
     id = rownames(cpgs.imp),
     Mayne = mayne
@@ -143,13 +145,13 @@ DNAmGA <- function(x, toBetas = FALSE,
     #    Lee.RPC <- coefLeeGA$Coefficient_RPC[1] +
     #      cpgs.imp.s%*%coefLeeGA$Coefficient_RPC[-1]
     coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, CoefficientTraining = coefLeeGA$Coefficient_RPC)
-    Lee.RPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE)
+    Lee.RPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE, min.perc)
 
     coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, CoefficientTraining = coefLeeGA$Coefficient_CPC)
-    Lee.CPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE)
+    Lee.CPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE, min.perc)
 
     coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, CoefficientTraining = coefLeeGA$Coefficient_refined_RPC)
-    Lee.refRPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE)
+    Lee.refRPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE, min.perc)
 
 
     if (!missing(age)) {

@@ -119,7 +119,7 @@ In principle, data can be normalized by using any of the existing standard metho
 ## Missing individual's data
 All the implemented methods require complete cases. `DNAmAge` function has an imputation method based on KNN implemented in the function `knn.impute` from `impute` Bioconductor package. This is performed when missing data is present in the CpGs used in any of the computed clocks. There is also another option based on a fast imputation method that imputes missing values by the median of required CpGs as recommended in @bohlin2016prediction. This is recommended when analyzing 450K arrays since `knn.impute` for large datasets may be very time consuming. Fast imputation can be performed by setting `fastImp=TRUE` which is not the default value. 
 
-## Missing CpGs of DNAm clocks
+## Missing CpGs of DNAm clocks {#section-missingCpGs}
 By default the package computes the different clocks when there are more than 80% of the required CpGs of each method. Nothing is required when having missing CpGs since the main functions will return NA for those estimators when this criteria is not meet. Let us use a test dataset (`TestDataset`) which is available within the package to illustrate the type of information we are obtaining:
 
 ```{r check}
@@ -130,12 +130,19 @@ cpgs.missing <- checkClocks(TestDataset)
 cpgs.missing.GA <- checkClocksGA(TestDataset)
 ```
 
-The objects `cpgs.missing` and `cpgs.missing.GA` are lists havint the missing CpGs of each clock
+The objects `cpgs.missing` and `cpgs.missing.GA` are lists having the missing CpGs of each clock
 
 ```{r showMissing}
 names(cpgs.missing)
-cpgs.missing$Hannum
 ```
+
+We can see which are those CpGs for a given clock (for example Hannum) just typing:
+
+```{r showMissNames}
+cpgs.missing$Hannum
+``` 
+
+In Section \@ref(section-example) we describe how to change this 80% threshold.
 
 
 ## Cell counts
@@ -156,7 +163,7 @@ The EEAA method requires to estimate cell counts. We use the package `meffil` (@
 
 Next we illustrate how to estimate the chronological DNAm age using several datasets which aim to cover different data input formats.
 
-## Data in Horvath's format (e.g. `csv` with CpGs in rows)
+## Data in Horvath's format (e.g. `csv` with CpGs in rows) {#section-example}
 Let us start by reproducing the results proposed in @horvath2013dna. It uses the format available in the file 'MethylationDataExample55.csv" from his tutorial (available [here](https://dnamage.genetics.ucla.edu/home)). These data are available at `methylclock` package. Although these data can be loaded into R by using standard functions such as `read.csv` we hihgly recommend to use functions from `tidiverse`, in particular `read_csv` from `readr` package. The main reason is that currently researchers are analyzing Illumina 450K or EPIC arrays that contains a huge number of CpGs that can take a long time to be loaded when using basic importing R function. These functions import `csv` data as tibble which is one of the possible formats of `DNAmAge` function
 
 ```{r load_horvath_example}
@@ -209,23 +216,30 @@ In any case, if you use the object `mydata` that contains the CpGs in the second
 Error in DNAmAge(mydata) : First column should contain CpG names
 ```
 
-DNAmAge can be estimated by simply:
+Once data is in the proper format, DNAmAge can be estimated by simply:
 
 ```{r DNAmAge_horvath, warning=TRUE}
 age.example55 <- DNAmAge(MethylationData)
 age.example55
 ```
 
-We can set `min.perc` to allow estimations with less than 80% of conicidence between CpGs in our data and CpGs in clock coefficients,
 
-```{r DNAmAgemp_horvath, warning=TRUE}
-age.example55 <- DNAmAge(MethylationData, min.perc = 0.25)
-age.example55
+As mention in Section \@ref(section-missingCpGs) some clocks returns NA when there are more than 80% of  the required CpGs are missing as we can see when typing
+
+```{r show_cpg_miss}
+missCpGs <- checkClocks(MethylationData)
 ```
 
-Setting `min.perc = 0.25` we can estimate DNAmAge with Skin clock.
+Here we can observe that 72.1% of the required CpGs for SkinHorvath clock are missing. We could estimate DNAm age using this clock just changing the argument `min.perc` in `DNAmAge`.  For example, we can indicate that the minimum amount of required CpGs for computing a given clock should be 25%.  
 
-By default all available clocks (Hovarth, Hannum, Levine, BNN, Hovart2 and PedBE) are estimated. One may select a set of clocks by using the argument `clocks` as following:
+```{r DNAmAgemp_horvath, warning=TRUE}
+age.example55.2 <- DNAmAge(MethylationData, min.perc = 0.25)
+age.example55.2
+```
+
+In that case, we see as SkinHorvath clock is estimated (though it can be observed that the estimation is not very accurate - this is why we considered at least having 80% of the required CpGs).
+
+By default all available clocks (Hovarth, Hannum, Levine, BNN, skinHorvath, ...) are estimated. One may select a set of clocks by using the argument `clocks` as follows:
 
 
 ```{r DNAmAge_horvath_sel, warning=TRUE}
@@ -235,15 +249,9 @@ age.example55.sel
 ```
 
 
-One can also check which clocks can be estimated given the CpGs available in the methylation data by
-
-```{r check_clocks}
-checkClocks(MethylationData)
-```
-
 ## Age acceleration
 
-However, in epidemiological studies one is intereste in assessing whether age acceleration is associated with a given trait or condition. Three different measures can be computed:
+However, in epidemiological studies one is interested in assessing whether age acceleration is associated with a given trait or condition. Three different measures can be computed:
 
 - **ageAcc**: Difference between DNAmAge and chronological age.
 - **ageAcc2**: Residuals obtained after regressing chronological age and DNAmAge (similar to IEAA).
@@ -290,12 +298,12 @@ One may be interested in assessing association between chronologial age and DNA 
 
 
 ```{r get_gse58045, echo=FALSE}
-# ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
-#load(file.path(ff, "data/GSE58045.Rdata"))
+ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
+load(file.path(ff, "data/GSE58045.Rdata"))
 ```
 
 
-```{r get_geo_gse58045}
+```{r get_geo_gse58045, eval=FALSE}
 dd <- GEOquery::getGEO("GSE58045")
 gse58045 <- dd[[1]]
 ```
@@ -333,7 +341,13 @@ plotDNAmAge(age.gse58045$BNN, age, tit="Bayesian Neural Network")
 
 Let us illustrate how to use DNAmAge information in association studies (e.g case/control, smokers/non-smokers, responders/non-responders, ...). GEO number GSE19711 contains transcriptomic and epigenomic data of a study in lung cancer. Data can be retrieved into R by
 
-```{r get_gse19711, eval=TRUE}
+
+```{r get_gse19711, echo=FALSE}
+ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
+load(file.path(ff, "data/GSE19711.Rdata"))
+```
+
+```{r get_geo_gse19711, eval=FALSE}
 dd <- GEOquery::getGEO("GSE19711")
 gse19711 <- dd[[1]]
 ```
@@ -422,11 +436,15 @@ Here we observe as the positive association disapears after adjusting for cell c
 ## Use of DNAm age in children
 
 
-```{r get_gse8586}
+```{r get_gse109446, echo=FALSE}
+ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
+load(file.path(ff, "data/GSE109446.Rdata"))
+```
+
+```{r get_geo_109446, eval=FALSE}
 dd <- GEOquery::getGEO("GSE109446")
 gse109446 <- dd[[1]]
 ```
-
 
 
 ```{r age_gse109446, warning=TRUE}
@@ -436,7 +454,7 @@ age <- as.numeric(pData(gse)$`age:ch1`)
 age.gse <- DNAmAge(gse, age=age)
 ```
 
-```{r mod_gse109446_horvath}
+```{r plotClocks}
 plotCorClocks(age.gse)
 ```
 

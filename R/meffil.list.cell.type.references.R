@@ -3,7 +3,8 @@
 #' @return a list with reference globals
 #'
 #' @details ORIGINAL AUTHOR: Matthew Suderman
-#' The original meffil.list.cell.type.references and get.cell.type.reference function from meffil v1.0.0
+#' The original meffil.list.cell.type.references and 
+#' get.cell.type.reference function from meffil v1.0.0
 #' at githug : https://github.com/perishky/meffil
 #'
 #' @examples
@@ -12,15 +13,29 @@
 #' @export
 meffil.list.cell.type.references <- function() {
   # ls(reference.globals)
-  c("andrews and bakulski cord blood",
-    "blood gse35069",
-    "blood gse35069 chen",
-    "blood gse35069 complete",
-    "combined cord blood",
-    "cord blood gse68456",
-    "gervin and lyle cord blood",
-    "guintivano dlpfc",
-    "saliva gse48472")
+  # Get data from methylclockData package
+  if( !ls() %in% c("andrews and bakulski cord blood",
+                   "blood gse35069",
+                   "blood gse35069 chen",
+                   "blood gse35069 complete",
+                   "combined cord blood",
+                   "cord blood gse68456",
+                   "gervin and lyle cord blood",
+                   "guintivano dlpfc",
+                   "saliva gse48472"))
+  {
+    references <- get_references()
+    load(references)
+  }
+  return (  c("andrews and bakulski cord blood",
+              "blood gse35069",
+              "blood gse35069 chen",
+              "blood gse35069 complete",
+              "combined cord blood",
+              "cord blood gse68456",
+              "gervin and lyle cord blood",
+              "guintivano dlpfc",
+              "saliva gse48472") )
 }
 
 #' Get cell type reference
@@ -32,7 +47,8 @@ meffil.list.cell.type.references <- function() {
 #' 
 #' @details ORIGINAL AUTHOR: Matthew Suderman
 #' at githug : https://github.com/perishky/meffil
-#' The original meffil.list.cell.type.references and get.cell.type.reference function from meffil v1.0.0
+#' The original meffil.list.cell.type.references and 
+#' get.cell.type.reference function from meffil v1.0.0
 #'
 get.cell.type.reference <- function(name) {
   stopifnot(is.character(name) && name %in% meffil.list.cell.type.references())

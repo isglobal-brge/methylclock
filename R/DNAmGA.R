@@ -66,6 +66,10 @@ DNAmGA <- function(x, toBetas = FALSE,
     stop("Data seems to do not be beta values. Check your data or set 'toBetas=TRUE'")
   }
 
+  if( !all(c("coefKnightGA", "coefBohlin", "coefMayneGA", "coefLeeGA") %in%  ls(.GlobalEnv))) {
+    load_DNAmGA_Clocks_data() 
+  }
+  
   cpgs.all <- c(
     as.character(coefKnightGA$CpGmarker[-1]),
     as.character(coefBohlin$CpGmarker[-1]),
@@ -227,4 +231,28 @@ DNAmGA <- function(x, toBetas = FALSE,
   }
 
   out
+}
+
+
+# Load data from methylclockData package
+load_DNAmGA_Clocks_data <- function() 
+{
+  
+  if(!"coefKnightGA" %in%  ls()) {
+    coefKnightGA <- get_coefKnightGA()
+    assign("coefKnightGA", coefKnightGA, envir=.GlobalEnv)
+  }
+  if(!"coefBohlin" %in%  ls()) {
+    coefBohlin <- get_coefBohlin()
+    assign("coefBohlin", coefBohlin, envir=.GlobalEnv)
+  }
+  if(!"coefMayneGA" %in%  ls()) {
+    coefMayneGA <- get_coefMayneGA()
+    assign("coefMayneGA", coefMayneGA, envir=.GlobalEnv)
+  }
+  if(!"coefLeeGA" %in%  ls()) {
+    coefLeeGA <- get_coefLeeGA()
+    assign("coefLeeGA", coefLeeGA, envir=.GlobalEnv)
+  }
+  
 }

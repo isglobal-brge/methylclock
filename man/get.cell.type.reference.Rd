@@ -15,7 +15,8 @@ Get cell type reference
 \details{
 ORIGINAL AUTHOR: Matthew Suderman
 at githug : https://github.com/perishky/meffil
-The original meffil.list.cell.type.references and get.cell.type.reference function from meffil v1.0.0
+The original meffil.list.cell.type.references and 
+get.cell.type.reference function from meffil v1.0.0
 }
 \examples{
 name <- "andrews and bakulski cord blood"

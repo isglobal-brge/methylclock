@@ -19,11 +19,20 @@ checkClocks <- function(x, ...) {
   } else if (inherits(x, "matrix")) {
     cpg.names <- rownames(x)
   } else if (inherits(x, c("tbl", "tbl_df"))) {
+    if( !"MethylationData" %in%  ls(.GlobalEnv)) {
+      MethylationData <- get_MethylationDataExample()
+      assign("MethylationData", MethylationData, envir=.GlobalEnv)
+    }
     cpg.names <- pull(MethylationData, 1)
   } else if (inherits(x, "ExpressionSet")) {
     cpg.names <- Biobase::featureNames(x)
   } else if (inherits(x, "GenomicRatioSet")) {
     cpgs.names <- Biobase::featureNames(x)
+  }
+  
+  if( !all(c("coefHorvath", "coefHannum", "coefLevine", "coefSkin", 
+             "coefPedBE", "coefWu",  "coefTL") %in%  ls(.GlobalEnv))) {
+    load_DNAm_Clocks_data() 
   }
 
   checkHorvath <- coefHorvath$CpGmarker[-1][!coefHorvath$CpGmarker[-1] %in% cpg.names]

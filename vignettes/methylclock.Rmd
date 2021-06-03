@@ -123,6 +123,9 @@ All the implemented methods require complete cases. `DNAmAge` function has an im
 By default the package computes the different clocks when there are more than 80% of the required CpGs of each method. Nothing is required when having missing CpGs since the main functions will return NA for those estimators when this criteria is not meet. Let us use a test dataset (`TestDataset`) which is available within the package to illustrate the type of information we are obtaining:
 
 ```{r check}
+# Get TestDataset data
+TestDataset <- get_TestDataset()
+
 cpgs.missing <- checkClocks(TestDataset)
 ```
 
@@ -168,8 +171,7 @@ Let us start by reproducing the results proposed in @horvath2013dna. It uses the
 
 ```{r load_horvath_example}
 library(tidyverse)
-path <- system.file("extdata", package = "methylclock")
-MethylationData <- read_csv(file.path(path, "MethylationDataExample55.csv"))
+MethylationData <- get_MethylationDataExample()
 MethylationData
 ```
 
@@ -260,6 +262,8 @@ However, in epidemiological studies one is interested in assessing whether age a
 All this estimates can be obtained for each clock when providing chronological age through `age` argument. This information is normally provided in a different file including different covariates (metadata or sample annotation data). In this example data are available at 'SampleAnnotationExample55.csv' file that is also available at `methylclock` package:
 
 ```{r covariates_horvath_example}
+library(tidyverse)
+path <- system.file("extdata", package = "methylclock")
 covariates <- read_csv(file.path(path, 
                                  "SampleAnnotationExample55.csv"))
 covariates
@@ -298,12 +302,12 @@ One may be interested in assessing association between chronologial age and DNA 
 
 
 ```{r get_gse58045, echo=FALSE}
-ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
-load(file.path(ff, "data/GSE58045.Rdata"))
+# ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
+# load(file.path(ff, "data/GSE58045.Rdata"))
 ```
 
 
-```{r get_geo_gse58045, eval=FALSE}
+```{r get_geo_gse58045, eval=TRUE}
 dd <- GEOquery::getGEO("GSE58045")
 gse58045 <- dd[[1]]
 ```
@@ -343,11 +347,11 @@ Let us illustrate how to use DNAmAge information in association studies (e.g cas
 
 
 ```{r get_gse19711, echo=FALSE}
-ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
-load(file.path(ff, "data/GSE19711.Rdata"))
+# ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
+# load(file.path(ff, "data/GSE19711.Rdata"))
 ```
 
-```{r get_geo_gse19711, eval=FALSE}
+```{r get_geo_gse19711, eval=TRUE}
 dd <- GEOquery::getGEO("GSE19711")
 gse19711 <- dd[[1]]
 ```
@@ -437,11 +441,11 @@ Here we observe as the positive association disapears after adjusting for cell c
 
 
 ```{r get_gse109446, echo=FALSE}
-ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
-load(file.path(ff, "data/GSE109446.Rdata"))
+# ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
+# load(file.path(ff, "data/GSE109446.Rdata"))
 ```
 
-```{r get_geo_109446, eval=FALSE}
+```{r get_geo_109446, eval=TRUE}
 dd <- GEOquery::getGEO("GSE109446")
 gse109446 <- dd[[1]]
 ```

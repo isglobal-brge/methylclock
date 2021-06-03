@@ -10,14 +10,13 @@
 #' @import dplyr
 #' @import impute
 #' @import PerformanceAnalytics
-#' @import Biobase
 #' @import tidyverse
 #' @import ggplot2
-#' @import ggpmisc
 #' @import ggpubr 
 #' @import minfi 
 #' @import tibble
 #' @import preprocessCore
+#' @import methylclockData
 #' @useDynLib methylclock
 #' @name methylclock
 NULL  

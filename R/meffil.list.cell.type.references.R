@@ -14,7 +14,7 @@
 meffil.list.cell.type.references <- function() {
   # ls(reference.globals)
   # Get data from methylclockData package
-  if( !ls() %in% c("andrews and bakulski cord blood",
+  if( !all( c("andrews and bakulski cord blood",
                    "blood gse35069",
                    "blood gse35069 chen",
                    "blood gse35069 complete",
@@ -22,20 +22,13 @@ meffil.list.cell.type.references <- function() {
                    "cord blood gse68456",
                    "gervin and lyle cord blood",
                    "guintivano dlpfc",
-                   "saliva gse48472"))
+                   "saliva gse48472") %in% ls(.GlobalEnv)))
   {
     references <- get_references()
-    load(references)
+    refs <- load(references)
+    lapply(refs, function(x) assign(eval(x), get(x), envir = .GlobalEnv))
   }
-  return (  c("andrews and bakulski cord blood",
-              "blood gse35069",
-              "blood gse35069 chen",
-              "blood gse35069 complete",
-              "combined cord blood",
-              "cord blood gse68456",
-              "gervin and lyle cord blood",
-              "guintivano dlpfc",
-              "saliva gse48472") )
+  return ( ls(.GlobalEnv) )
 }
 
 #' Get cell type reference
@@ -52,5 +45,5 @@ meffil.list.cell.type.references <- function() {
 #'
 get.cell.type.reference <- function(name) {
   stopifnot(is.character(name) && name %in% meffil.list.cell.type.references())
-  get(name)
+  get(name, envir = .GlobalEnv)
 }

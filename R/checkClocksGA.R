@@ -23,6 +23,11 @@ checkClocksGA <- function(x, ...) {
     cpgs.names <- Biobase::featureNames(x)
   }
 
+  if( !all(c("coefKnightGA", "coefBohlin", "coefMayneGA", "coefLeeGA")
+           %in%  ls(.GlobalEnv))) {
+    load_DNAmGA_Clocks_data() 
+  }
+  
   checkKnight <- coefKnightGA$CpGmarker[-1][!coefKnightGA$CpGmarker[-1] %in% cpg.names]
   coefBoh <- coefBohlin$CpGmarker[-1][!coefBohlin$CpGmarker[-1] %in% cpg.names]
   checkBohlin <- coefBoh[!coefBoh %in% cpg.names]

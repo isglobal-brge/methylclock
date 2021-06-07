@@ -6,6 +6,12 @@
 \usage{
 get.cell.type.reference(name)
 }
+\arguments{
+\item{name, }{string with predefined datasets andrews and bakulski cord
+blood, blood gse35069, blood gse35069 chen, blood gse35069 complete,
+"combined cord blood", "cord blood gse68456", "gervin and lyle cord blood",
+"guintivano dlpfc" or "saliva gse48472"}
+}
 \value{
 name and reference.globals
 }

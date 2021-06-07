@@ -15,7 +15,7 @@
 #'          what about imputing only when CpGs for the clock are missing?
 #'
 #' @examples
-#' MethylationData <- read_csv(file.path(path, "MethylationDataExample55.csv"))
+#' MethylationData <- get_MethylationDataExample()
 #' age.example55 <- DNAmAge(MethylationData)
 #' 
 #' @return The estimated chronological and biological mDNA age 

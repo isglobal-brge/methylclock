@@ -5,6 +5,7 @@
 #' @details To be supplied
 #'
 #' @examples
+#' TestDataset <- get_TestDataset()
 #' checkClocksGA(TestDataset)
 #' @importFrom Biobase featureNames exprs
 #' @return a list with the different GA clocks when there are more than 80% of the required CpGs

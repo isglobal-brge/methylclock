@@ -21,12 +21,15 @@ Plot correlation among DNAm clockx
 To be supplied
 }
 \examples{
-dd <- GEOquery::getGEO("GSE109446")
-gse109446 <- dd[[1]]
-controls <- pData(gse109446)$`diagnosis:ch1` == "control"
-gse <- gse109446[, controls]
-age <- as.numeric(pData(gse)$`age:ch1`)
-age.gse <- DNAmAge(gse, age = age)
-plotCorClocks(age.gse)
+
+\donttest{
+  dd <- GEOquery::getGEO("GSE109446")
+  gse109446 <- dd[[1]]
+  controls <- pData(gse109446)$`diagnosis:ch1` == "control"
+  gse <- gse109446[, controls]
+  age <- as.numeric(pData(gse)$`age:ch1`)
+  age.gse <- DNAmAge(gse, age = age)
+  plotCorClocks(age.gse)
+}
 
 }

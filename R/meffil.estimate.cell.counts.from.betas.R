@@ -10,7 +10,6 @@
 #' to use for estimating cell counts.
 #' See \code{\link{meffil.list.cell.type.references}()} for a list of available
 #' references.  New references can be created using
-#' \code{\link{meffil.add.cell.type.reference}()}.
 #' @return A matrix of cell count estimates.
 #'
 #' Results should be nearly identical to \code{\link[minfi]{estimateCellCounts}()}.
@@ -23,6 +22,7 @@
 #' @examples
 #' 
 #' cell.count.reference <- "andrews and bakulski cord blood"
+#' TestDataset <- get_TestDataset()
 #' cpgs <- t(as.matrix(TestDataset[, -1]))
 #' colnames(cpgs) <- TestDataset$CpGName
 #' meffil.estimate.cell.counts.from.betas(t(cpgs), cell.count.reference)
@@ -99,7 +99,7 @@ estimate.cell.counts.from.beta <- function(beta, beta.cell.types) {
   ## <=> finding r to minimize -2 bT bc r + rT (bcT bc) r
   ## = rT (bcT bc) r - 2 (bcT b)T r
   ## <=> solve.QP(bcT bc, bcT b, I, z) where I = identity matrix, z = 0
-  require(quadprog)
+
   I <- diag(ncol(beta.cell.types))
   zero <- rep(0, ncol(beta.cell.types))
   cpg.idx <- which(!is.na(beta))

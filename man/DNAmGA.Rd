@@ -47,6 +47,7 @@ Imputation is performed when having missing data.
          what about imputing only when CpGs for the clock are missing?
 }
 \examples{
+TestDataset <- get_TestDataset()
 TestDataset[1:5, ]
 ga.test <- DNAmGA(TestDataset)
 

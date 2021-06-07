@@ -24,7 +24,9 @@ Plot with estimated DNAmAge
 Plot DNAm age estimation vs chronological age.
 }
 \examples{
-MethylationData <- read_csv(file.path(path, "MethylationDataExample55.csv"))
-age.example55 <- DNAmAge(MethylationData)
-plotDNAmAge(age.example55$Horvath, age)
+\donttest{
+  MethylationData <- get_MethylationDataExample()
+  age.example55 <- DNAmAge(MethylationData)
+  plotDNAmAge(age.example55$Horvath, age)
+}
 }

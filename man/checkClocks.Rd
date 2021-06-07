@@ -24,5 +24,6 @@ Check wheter input data contains the required CpGs for the implemented clocks.
 To be supplied
 }
 \examples{
+TestDataset <- get_TestDataset()
 checkClocks(TestDataset)
 }

@@ -1,4 +1,9 @@
-# Load data from methylclockData package
+# Load DNAm clock data
+
+#' Loads DNAm clock data from methylclockData
+#' @examples
+#' load_DNAm_Clocks_data()
+#' @return void
 #' @export 
 load_DNAm_Clocks_data <- function() 
 {

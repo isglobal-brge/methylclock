@@ -16,8 +16,7 @@ meffil.estimate.cell.counts.from.betas(
 \item{cell.type.reference}{Character string name of the cell type reference
 to use for estimating cell counts.
 See \code{\link{meffil.list.cell.type.references}()} for a list of available
-references.  New references can be created using
-\code{\link{meffil.add.cell.type.reference}()}.}
+references.  New references can be created using}
 
 \item{verbose}{If \code{TRUE}, then status messages are printed during execution
 (Default: \code{FALSE}).}
@@ -41,6 +40,7 @@ downloaded from  githug : https://github.com/perishky/meffil
 \examples{
 
 cell.count.reference <- "andrews and bakulski cord blood"
+TestDataset <- get_TestDataset()
 cpgs <- t(as.matrix(TestDataset[, -1]))
 colnames(cpgs) <- TestDataset$CpGName
 meffil.estimate.cell.counts.from.betas(t(cpgs), cell.count.reference)

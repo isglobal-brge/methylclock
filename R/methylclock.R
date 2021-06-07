@@ -6,6 +6,8 @@
 #' @author Juan R Gonzalez <juanr.gonzalez@isglobal.org>
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
+#' @importFrom RPMM blc betaObjf
+#' @importFrom  minfi getBeta
 #' @import ExperimentHub
 #' @import dplyr
 #' @import impute
@@ -13,7 +15,6 @@
 #' @import tidyverse
 #' @import ggplot2
 #' @import ggpubr 
-#' @import minfi 
 #' @import tibble
 #' @import preprocessCore
 #' @import methylclockData

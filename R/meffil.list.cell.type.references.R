@@ -33,6 +33,10 @@ meffil.list.cell.type.references <- function() {
 
 #' Get cell type reference
 #'
+#' @param name, string with predefined datasets andrews and bakulski cord
+#' blood, blood gse35069, blood gse35069 chen, blood gse35069 complete,
+#' "combined cord blood", "cord blood gse68456", "gervin and lyle cord blood",
+#' "guintivano dlpfc" or "saliva gse48472"
 #' @return name and reference.globals
 #' @examples
 #' name <- "andrews and bakulski cord blood"
@@ -42,7 +46,7 @@ meffil.list.cell.type.references <- function() {
 #' at githug : https://github.com/perishky/meffil
 #' The original meffil.list.cell.type.references and 
 #' get.cell.type.reference function from meffil v1.0.0
-#'
+#' @export
 get.cell.type.reference <- function(name) {
   stopifnot(is.character(name) && name %in% meffil.list.cell.type.references())
   get(name, envir = .GlobalEnv)

@@ -1,4 +1,4 @@
-#' @title  progress_data
+#' progress_data
 #'
 #' A dataset containing progress_data
 #'
@@ -10,7 +10,7 @@
 #' data(progress_data)
 "progress_data"
 
-#' @title  progress_vars
+#' progress_vars
 #'
 #' A dataset containing progress_vars
 #'
@@ -21,4 +21,3 @@
 #' @examples
 #' data(progress_vars)
 "progress_vars"
-NULL

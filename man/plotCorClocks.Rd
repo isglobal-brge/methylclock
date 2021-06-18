@@ -22,7 +22,6 @@ To be supplied
 }
 \examples{
 
-\donttest{
   dd <- GEOquery::getGEO("GSE109446")
   gse109446 <- dd[[1]]
   controls <- pData(gse109446)$`diagnosis:ch1` == "control"
@@ -30,6 +29,6 @@ To be supplied
   age <- as.numeric(pData(gse)$`age:ch1`)
   age.gse <- DNAmAge(gse, age = age)
   plotCorClocks(age.gse)
-}
+
 
 }

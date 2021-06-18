@@ -486,13 +486,13 @@ The results are the same as those described in the additional file 7 of @knight2
 Let us continue by illustrating how to compute GA of real examples. The PROGRESS cohort data is available in the additional file 8 of  @knight2016epigenetic. It is available at `methylclock` as a `tibble`:
 
 ```{r get_progress}
-progress_data
+data(progress_data)
 ```
 
 This file also contains different variables that are available in this `tibble`. 
 
 ```{r progressClin}
-progress_vars
+data(progress_vars)
 ```
 
 The Clinical Variables including clinical assesment of gestational age (EGA) are available at this `tibble`.

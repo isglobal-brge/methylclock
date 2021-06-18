@@ -8,6 +8,8 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom RPMM blc betaObjf
 #' @importFrom  minfi getBeta
+#' @importFrom graphics par points
+#' @importFrom stats IQR approx coef dbeta density lm median optim pbeta qbeta rbeta resid rmultinom
 #' @import ExperimentHub
 #' @import dplyr
 #' @import impute

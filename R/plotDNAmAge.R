@@ -8,11 +8,11 @@
 #' @return Plot with estimated DNAmAge
 #'
 #' @examples
-#' \donttest{
+#' 
 #'   MethylationData <- get_MethylationDataExample()
 #'   age.example55 <- DNAmAge(MethylationData)
 #'   plotDNAmAge(age.example55$Horvath, age)
-#' }
+#'   
 #' @import ggplot2
 #' @importFrom ggpmisc stat_poly_eq
 #' @export

@@ -35,7 +35,6 @@
 #' BMIQcalibration(TestDataset, goldstandard.beta)
 #' }
 #' 
-#' @export
 
 BMIQcalibration <- function(datM,
                             goldstandard.beta,

@@ -3,9 +3,7 @@
 \docType{data}
 \name{progress_vars}
 \alias{progress_vars}
-\title{progress_vars
-
-A dataset containing progress_vars}
+\title{progress_vars}
 \format{
 A data frame with 150 obs. and 3 variables
 }
@@ -13,8 +11,6 @@ A data frame with 150 obs. and 3 variables
 data(progress_vars)
 }
 \description{
-progress_vars
-
 A dataset containing progress_vars
 }
 \examples{

@@ -8,7 +8,6 @@
 #'
 #' @examples
 #' 
-#' \donttest{
 #'   dd <- GEOquery::getGEO("GSE109446")
 #'   gse109446 <- dd[[1]]
 #'   controls <- pData(gse109446)$`diagnosis:ch1` == "control"
@@ -16,7 +15,7 @@
 #'   age <- as.numeric(pData(gse)$`age:ch1`)
 #'   age.gse <- DNAmAge(gse, age = age)
 #'   plotCorClocks(age.gse)
-#' }
+#' 
 #' 
 #' @import ggplot2 ggpubr PerformanceAnalytics
 #' 

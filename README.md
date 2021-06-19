@@ -14,7 +14,7 @@ install_github("isglobal-brge\methylclock@master")
 
 ```
 
-To install methylclock to be used with R > 4.1 : 
+To install methylclock to be used with R >= 4.1 : 
 
 ```r{install}
 library(devtools)

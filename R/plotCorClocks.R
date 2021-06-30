@@ -34,7 +34,7 @@ plotCorClocks <- function(x, ...) {
   no.na <- apply(x.sel, 2, function(x) !all(is.na(x)))
   x.nona <- x.sel[, no.na]
   nclocks <- ncol(x.nona)
-  ee <- gather(x.nona, key = method, value = clock) %>% add_column(age = rep(x$age, nclocks))
+  ee <- tidyr::gather(x.nona, key = method, value = clock) %>% add_column(age = rep(x$age, nclocks))
 
   ggplot(ee, aes(x = clock, y = age)) +
     geom_point() +

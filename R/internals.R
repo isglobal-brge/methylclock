@@ -128,13 +128,16 @@ blc2 <- function(Y,
   }
   mu <- a <- b <- matrix(Inf, K, J)
   crit <- Inf
-  for (i in 1:maxiter) {
+  # for (i in 1:maxiter) {
+  for (i in seq_len(maxiter)) {  
     warn0 <- options()$warn
     options(warn = -1)
     eta <- apply(weights * w, 2, sum) / sum(weights)
     mu0 <- mu
-    for (k in 1:K) {
-      for (j in 1:J) {
+    # for (k in 1:K) {
+    for (k in seq_len(K)) {
+      # for (j in 1:J) {
+      for (j in seq_len(J)) {
         ab <- betaEst2(Y[, j], w[, k], weights)
         a[k, j] <- ab[1]
         b[k, j] <- ab[2]
@@ -142,8 +145,10 @@ blc2 <- function(Y,
       }
     }
     ww <- array(0, dim = c(n, J, K))
-    for (k in 1:K) {
-      for (j in 1:J) {
+    # for (k in 1:K) {
+    for (k in seq_len(K)) {
+      # for (j in 1:J) {
+      for (j in seq_len(J)) {
         ww[Yobs[, j], j, k] <- dbeta(Y[Yobs[, j], j],
           a[k, j], b[k, j],
           log = TRUE
@@ -153,7 +158,8 @@ blc2 <- function(Y,
     options(warn = warn0)
     w <- apply(ww, c(1, 3), sum, na.rm = TRUE)
     wmax <- apply(w, 1, max)
-    for (k in 1:K) {
+    # for (k in 1:K) {
+    for (k in seq_len(K)) {
       w[, k] <- w[, k] - wmax
     }
     w <- t(eta * t(exp(w)))
@@ -196,7 +202,8 @@ CalibrateUnitInterval <- function(datM, onlyIfOutside = TRUE) {
       maxBySample > 1) & !is.na(minBySample) & !is.na(maxBySample))
   }
   if (!onlyIfOutside) {
-    indexSamples <- 1:length(minBySample)
+    #..# indexSamples <- 1:length(minBySample)
+    indexSamples <- seq_len(minBySample)
   }
   if (length(indexSamples) >= 1) {
     for (i in indexSamples) {

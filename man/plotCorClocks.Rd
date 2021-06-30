@@ -22,6 +22,9 @@ To be supplied
 }
 \examples{
 
+  library(ggplot2)
+  library(Biobase)
+  
   dd <- GEOquery::getGEO("GSE109446")
   gse109446 <- dd[[1]]
   controls <- pData(gse109446)$`diagnosis:ch1` == "control"

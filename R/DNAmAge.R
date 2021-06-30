@@ -42,7 +42,7 @@ DNAmAge <- function(x,
     stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, Horvath2, PedBE, Wu, TL")
   }
   if (length(available.clocks) %in% method) {
-    method <- c(1:(length(available.clocks) - 1))
+    method <- seq_len(length(available.clocks)-1)
   }
 
   if (inherits(x, "data.frame")) {

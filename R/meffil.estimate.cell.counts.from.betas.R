@@ -57,7 +57,8 @@ quantile.normalize.betas <- function(beta, subsets, quantiles, verbose = FALSE) 
       stop(paste("subset", subset.name, "and beta matrix have no features in common"))
     }
     full.quantiles <- quantiles[[subset.name]]$beta
-    full.quantiles <- approx(1:length(full.quantiles), full.quantiles, 1:length(subset))$y
+    #..# full.quantiles <- approx(1:length(full.quantiles), full.quantiles, 1:length(subset))$y
+    full.quantiles <- approx(seq_len(full.quantiles), full.quantiles, seq_len(subset))$y
     beta[subset, ] <- preprocessCore::normalize.quantiles.use.target(
       beta[subset, , drop = FALSE],
       full.quantiles

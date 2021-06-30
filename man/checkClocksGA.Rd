@@ -2,20 +2,26 @@
 % Please edit documentation in R/checkClocksGA.R
 \name{checkClocksGA}
 \alias{checkClocksGA}
-\title{Check wheter input data contains the required CpGs for the implemented clocks for Gestational Age.}
+\title{Check wheter input data contains the required CpGs for
+ the implemented clocks for Gestational Age.}
 \usage{
 checkClocksGA(x, ...)
 }
 \arguments{
-\item{x}{data.frame or tibble (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), ExpressionSet or GenomicRatioSet. A matrix is also possible having the CpG names in the rownames.}
+\item{x}{data.frame or tibble (Individual in columns, CpGs in rows, 
+CpG names in first colum - i.e. Horvath's format), ExpressionSet or 
+GenomicRatioSet. A matrix is also possible having the CpG names 
+in the rownames.}
 
 \item{...}{other parameters}
 }
 \value{
-a list with the different GA clocks when there are more than 80% of the required CpGs
+a list with the different GA clocks when there are 
+more than 80% of the required CpGs
 }
 \description{
-Check wheter input data contains the required CpGs for the implemented clocks for Gestational Age.
+Check wheter input data contains the required CpGs for
+ the implemented clocks for Gestational Age.
 }
 \details{
 To be supplied

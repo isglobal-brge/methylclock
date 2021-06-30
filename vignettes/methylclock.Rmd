@@ -21,7 +21,7 @@ bibliography: methylclock.bib
 
 ```{r setup_knitr, include=FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE,
-                      cache=TRUE, comment = " ")
+                      cache=FALSE, comment = " ")
 options(timeout = 300)
 ```
 

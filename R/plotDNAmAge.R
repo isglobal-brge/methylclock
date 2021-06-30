@@ -9,8 +9,15 @@
 #'
 #' @examples
 #' 
+#'  library(tidyverse)
+#'  
+#'   path <- system.file("extdata", package = "methylclock")
+#'   covariates <- read_csv(file.path(path, 
+#'                          "SampleAnnotationExample55.csv"))
+#'   age <- covariates$Age
 #'   MethylationData <- get_MethylationDataExample()
 #'   age.example55 <- DNAmAge(MethylationData)
+#'   age <- as.numeric(pheno$`age:ch1`)
 #'   plotDNAmAge(age.example55$Horvath, age)
 #'   
 #' @import ggplot2

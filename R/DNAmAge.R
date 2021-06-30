@@ -278,25 +278,53 @@ DNAmAge <- function(x,
     out <- Horvath
   }
   if (2 %in% method) {
-    out <- out %>% full_join(Hannum, by = "id")
+    if(is.null(out)) {
+      out <- Hannum
+    } else {
+      out <- out %>% full_join(Hannum, by = "id")
+    }
   }
   if (3 %in% method) {
-    out <- out %>% full_join(Levine, by = "id")
+    if(is.null(out)) {
+      out <- Levine
+    } else {
+      out <- out %>% full_join(Levine, by = "id")
+    }
   }
   if (4 %in% method) {
-    out <- out %>% full_join(BNN, by = "id")
+    if(is.null(out)) {
+      out <- BNN
+    } else {
+      out <- out %>% full_join(BNN, by = "id")
+    }
   }
   if (5 %in% method) {
-    out <- out %>% full_join(skinHorvath, by = "id")
+    if(is.null(out)) {
+      out <- skinHorvath
+    } else {
+      out <- out %>% full_join(skinHorvath, by = "id")
+    }
   }
   if (6 %in% method) {
-    out <- out %>% full_join(PedBE, by = "id")
+    if(is.null(out)) {
+      out <- PedBE
+    } else {
+      out <- out %>% full_join(PedBE, by = "id")
+    }
   }
   if (7 %in% method) {
-    out <- out %>% full_join(Wu, by = "id")
+    if(is.null(out)) {
+      out <- Wu
+    } else {
+      out <- out %>% full_join(Wu, by = "id")
+    }
   }
   if (8 %in% method) {
-    out <- out %>% full_join(TL, by = "id")
+    if(is.null(out)) {
+      out <- TL
+    } else {
+      out <- out %>% full_join(TL, by = "id")
+    }
   }
 
   out <- tibble::as_tibble(out)

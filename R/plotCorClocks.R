@@ -8,14 +8,14 @@
 #'
 #' @examples
 #' 
-#'   library(ggplot2)
 #'   library(Biobase)
+#'   library(GEOquery)
 #'   
 #'   dd <- GEOquery::getGEO("GSE109446")
 #'   gse109446 <- dd[[1]]
-#'   controls <- pData(gse109446)$`diagnosis:ch1` == "control"
+#'   controls <- Biobase::pData(gse109446)$`diagnosis:ch1` == "control"
 #'   gse <- gse109446[, controls]
-#'   age <- as.numeric(pData(gse)$`age:ch1`)
+#'   age <- as.numeric(Biobase::pData(gse)$`age:ch1`)
 #'   age.gse <- DNAmAge(gse, age = age)
 #'   plotCorClocks(age.gse)
 #' 

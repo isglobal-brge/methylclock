@@ -18,7 +18,7 @@
 //                double c[1059]
 // Return Type  : void
 //
-void b_bsxfun(const double a[], const double b[], double c[], int cpgs, int samples)
+void b_bsxfun( double *a,  double *b, double *c, int cpgs, int samples)
 {
   int ak = 0;
   int ck;
@@ -39,7 +39,7 @@ void b_bsxfun(const double a[], const double b[], double c[], int cpgs, int samp
 //                double c[1059]
 // Return Type  : void
 //
-void bsxfun(const double a[], const double b[], double c[], int cpgs, int samples)
+void bsxfun( double *a,  double *b, double *c, int cpgs, int samples)
 {
   int ak = 0;
   int ck;
@@ -59,7 +59,7 @@ void bsxfun(const double a[], const double b[], double c[], int cpgs, int sample
 //                double c[1059]
 // Return Type  : void
 //
-void c_bsxfun(const double a[], double c[], int cpgs, int samples)
+void c_bsxfun( double *a, double *c, int cpgs, int samples)
 {
   int ak = 0;
   int ck;

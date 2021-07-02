@@ -33,17 +33,17 @@ static void mapminmax_apply( double *x, double *settings_xoffset,
   
   unsigned int isize = cpgs*samples;
   double b_y[isize];
-  double c_y[isize];
-  
+
+
   //  ===== MODULE FUNCTIONS ========
   //  Map Minimum and Maximum Input Processing Function
   bsxfun(x, settings_xoffset, y, cpgs, samples);
   memcpy(&b_y[0], &y[0], isize* sizeof(double));
-  
+
   b_bsxfun(b_y, settings_gain, y, cpgs, samples);
-  memcpy(&c_y[0], &y[0], isize* sizeof(double));
-  
-  c_bsxfun(c_y, y, cpgs, samples);
+  memcpy(&b_y[0], &y[0], isize* sizeof(double));
+
+  c_bsxfun(b_y, y, cpgs, samples);
 }
 
 //
@@ -118,7 +118,7 @@ void NewModel1Clean( Rcpp::NumericMatrix x1, double b_y1[], int cpgs, int sample
   const int sizealloc = cpgs * samples;
   const int inobs = samples;
   const int sizeobs5 = samples*5;
-  
+
   double t0_xoffset[353] = { 0.3301587, 0.2921687, 0.03137724, 0.08788598,
                              0.03973289, 0.2988361, 0.3254237, 0.01646124, 0.3322259, 0.02059573,
                              0.03078112, 0.302465, 0.02380256, 0.03755031, 0.009516819, 0.3925234,
@@ -276,7 +276,7 @@ void NewModel1Clean( Rcpp::NumericMatrix x1, double b_y1[], int cpgs, int sample
   double dv3[samples];
   double d0;
   int i2;
-  
+
   static const double a[1765] = { 0.046465863584370819, -0.024806425885406602,
                                   0.082740500346220935, 0.0083528170555940712, 0.0064795001975091948,
                                   -0.03775606616772726, 0.013446026263179301, -0.047401799192415814,
@@ -880,6 +880,7 @@ void NewModel1Clean( Rcpp::NumericMatrix x1, double b_y1[], int cpgs, int sample
   //  samples
   //  Input 1
   mapminmax_apply( REAL(x1), t0_xoffset, t0_gain, xp1, cpgs, samples);
+  
   
   
   //  Layer 1

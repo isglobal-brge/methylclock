@@ -16,9 +16,9 @@
 #include "NewModel1Clean_types.h"
 
 // Function Declarations
-extern void b_bsxfun(const double a[], const double b[], double c[], int cpgs, int samples);
-extern void bsxfun(const double a[], const double b[], double c[], int cpgs, int samples);
-extern void c_bsxfun(const double a[], double c[], int cpgs, int samples);
+void b_bsxfun( double *a,  double *b, double *c, int cpgs, int samples);
+void bsxfun( double *a,  double *b, double *c, int cpgs, int samples);
+void c_bsxfun( double *a, double *c, int cpgs, int samples);
 
 #endif
 

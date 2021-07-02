@@ -24,40 +24,11 @@
 
 // Function Declarations
 //..// static emxArray_real_T *argInit_1xUnbounded_real_T();
-emxArray_real_T *argInit_1xUnbounded_real_T( int dim, int irows, int icols, Rcpp::NumericVector data);
 static float argInit_real_T();
 Rcpp::NumericVector main_NewModel1Clean(Rcpp::RObject odata );
 
 // Function Definitions
 
-//
-// Arguments    : void
-// Return Type  : emxArray_real_T *
-//
-//static emxArray_real_T *argInit_1xUnbounded_real_T()
-emxArray_real_T *argInit_1xUnbounded_real_T( int dim, int irows, int icols, Rcpp::NumericVector data)
-{
-  emxArray_real_T *result;
-  int iv0[] = { irows, icols };
-  
-  int idx1;
-  
-  // Set the size of the array.
-  // Change this size to the value that the application requires.
-  result = emxCreateND_real_T(2, *(int (*)[2])&iv0[0]);
-  
-  
-  // Loop over the array to initialize each element.
-  for (idx1 = 0; idx1 < result->allocatedSize; idx1++) {
-    // Set the value of the array element.
-    // Change this value to the value that the application requires.
-    //result->data[result->size[0] * idx1] = argInit_real_T();
-    result->data[idx1] = data[idx1];
-  }
-  
-  
-  return result;
-}
 
 //
 // Arguments    : void
@@ -80,20 +51,15 @@ Rcpp::NumericVector main_NewModel1Clean(Rcpp::RObject odata )
   
   Rcpp::NumericMatrix data = Rcpp:: as<Rcpp::NumericMatrix>(odata);
   
-  emxArray_real_T *x1;
   int icpgs = data.nrow(); // Common CpGs
   int isamples= data.ncol(); // Samples
   double b_y1[isamples];
   
+  
   // Call the entry-point 'NewModel1Clean'.
   NewModel1Clean(data, b_y1, icpgs, isamples);
   
-  Rcpp::NumericVector age( isamples );
+  return Rcpp::as<Rcpp::NumericVector>(Rcpp::wrap(std::vector<double>( b_y1, b_y1+sizeof(b_y1)/sizeof(*b_y1))));
   
-  for (int idq = 0; idq < isamples; idq++) {
-    age[idq] = b_y1[idq];
-  }
-  
-  return Rcpp::wrap(age);
   
 }

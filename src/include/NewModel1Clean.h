@@ -8,6 +8,7 @@
 #define NEWMODEL1CLEAN_H
 
 // Include Files
+#include <Rcpp.h>
 #include <cmath>
 #include <stddef.h>
 #include <stdlib.h>
@@ -16,7 +17,7 @@
 #include "NewModel1Clean_types.h"
 
 // Function Declarations
-extern void NewModel1Clean(const emxArray_real_T *x11, double b_y1[]);
+extern void NewModel1Clean(Rcpp::NumericMatrix x1, double b_y1[], int cpgs, int samples);
 
 #endif
 

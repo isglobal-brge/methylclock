@@ -9,7 +9,7 @@
 #include "include/rt_nonfinite.h"
 #include "include/NewModel1Clean.h"
 #include "include/bsxfun.h"
-
+#include <Rcpp.h>
 // Function Definitions
 
 //
@@ -18,18 +18,18 @@
 //                double c[1059]
 // Return Type  : void
 //
-void b_bsxfun(const double a[], const double b[353], double c[], int sizealloc)
+void b_bsxfun(const double a[], const double b[], double c[], int cpgs, int samples)
 {
-  int ak;
+  int ak = 0;
   int ck;
   int k;
-  ak = 0;
-  for (ck = 0; ck <= (sizealloc-352); ck += 353) {
-    for (k = 0; k < 353; k++) {
+  
+  for (ck = 0; ck <= (cpgs*(samples-1))+1; ck += cpgs) {
+    for (k = 0; k < cpgs; k++) {
       c[ck + k] = a[ak + k] * b[k];
     }
-
-    ak += 353;
+    
+    ak += cpgs;
   }
 }
 
@@ -39,18 +39,18 @@ void b_bsxfun(const double a[], const double b[353], double c[], int sizealloc)
 //                double c[1059]
 // Return Type  : void
 //
-void bsxfun(const double a[], const double b[353], double c[], int sizealloc)
+void bsxfun(const double a[], const double b[], double c[], int cpgs, int samples)
 {
-  int ak;
+  int ak = 0;
   int ck;
   int k;
-  ak = 0;
-  for (ck = 0; ck <= (sizealloc-352); ck += 353) {
-    for (k = 0; k < 353; k++) {
+  
+  for (ck = 0; ck <= (cpgs*(samples-1))+1; ck += cpgs) {
+    for (k = 0; k < cpgs; k++) {
       c[ck + k] = a[ak + k] - b[k];
     }
-
-    ak += 353;
+    
+    ak += cpgs;
   }
 }
 
@@ -59,18 +59,18 @@ void bsxfun(const double a[], const double b[353], double c[], int sizealloc)
 //                double c[1059]
 // Return Type  : void
 //
-void c_bsxfun(const double a[], double c[], int sizealloc)
+void c_bsxfun(const double a[], double c[], int cpgs, int samples)
 {
-  int ak;
+  int ak = 0;
   int ck;
   int k;
-  ak = 0;
-  for (ck = 0; ck <= (sizealloc-352); ck += 353) {
-    for (k = 0; k < 353; k++) {
-      c[ck + k] = a[ak + k] + -1.0;
+  
+  for (ck = 0; ck <= (cpgs*(samples-1))+1; ck += cpgs) {
+    for (k = 0; k < cpgs; k++) {
+      c[ck + k] = a[ak + k] - 1.0;
     }
-
-    ak += 353;
+    
+    ak += cpgs;
   }
 }
 

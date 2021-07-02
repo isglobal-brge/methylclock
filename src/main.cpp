@@ -78,59 +78,22 @@ static float argInit_real_T()
 Rcpp::NumericVector main_NewModel1Clean(Rcpp::RObject odata )
 {
   
-  NewModel1Clean_initialize();
-
   Rcpp::NumericMatrix data = Rcpp:: as<Rcpp::NumericMatrix>(odata);
   
   emxArray_real_T *x1;
-  int idat = 353;
-  int icount = (data.length() / idat);
-  double b_y1[icount];
+  int icpgs = data.nrow(); // Common CpGs
+  int isamples= data.ncol(); // Samples
+  double b_y1[isamples];
 
-  x1 = argInit_1xUnbounded_real_T(2, idat, icount, data);
-  
   // Call the entry-point 'NewModel1Clean'.
-  NewModel1Clean(x1, b_y1);
-
-  emxDestroyArray_real_T(x1);
+  NewModel1Clean(data, b_y1, icpgs, isamples);
   
-  Rcpp::NumericVector age( sizeof(b_y1)/sizeof(double) );
-
-  for (int idq = 0; idq < sizeof(b_y1)/sizeof(double); idq++) {
+  Rcpp::NumericVector age( isamples );
+  
+  for (int idq = 0; idq < isamples; idq++) {
     age[idq] = b_y1[idq];
   }
-
-  NewModel1Clean_terminate();
   
   return Rcpp::wrap(age);
-
+  
 }
-
-//
-// Arguments    : int argc
-//                const char * const argv[]
-// Return Type  : int
-//
-/*
-int main(int, const char * const [])
-{
-  // Initialize the application.
-  // You do not need to do this more than one time.
-  NewModel1Clean_initialize();
-
-  // Invoke the entry-point functions.
-  // You can call entry-point functions multiple times.
-  //..// main_NewModel1Clean();
-
-  // Terminate the application.
-  // You do not need to do this more than one time.
-  NewModel1Clean_terminate();
-  return 0;
-}
-*/
-//
-// File trailer for main.cpp
-//
-// [EOF]
-//
-

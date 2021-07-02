@@ -82,6 +82,7 @@ install_github("isglobal-brge/methylclock")
 The package is loaded into R as usual:
 
 ```{r load_package}
+library(methylclockData)
 library(methylclock)
 ```
 

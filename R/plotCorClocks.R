@@ -7,7 +7,7 @@
 #' @return Plot with Correlation Clocks
 #'
 #' @examples
-#' 
+#' \dontrun{
 #'   library(Biobase)
 #'   library(GEOquery)
 #'   
@@ -18,7 +18,7 @@
 #'   age <- as.numeric(Biobase::pData(gse)$`age:ch1`)
 #'   age.gse <- DNAmAge(gse, age = age)
 #'   plotCorClocks(age.gse)
-#' 
+#' }
 #' 
 #' @import ggplot2 ggpubr PerformanceAnalytics
 #' 

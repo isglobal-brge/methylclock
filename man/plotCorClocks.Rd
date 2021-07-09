@@ -21,7 +21,7 @@ Plot correlation among DNAm clockx
 To be supplied
 }
 \examples{
-
+\dontrun{
   library(Biobase)
   library(GEOquery)
   
@@ -32,6 +32,6 @@ To be supplied
   age <- as.numeric(Biobase::pData(gse)$`age:ch1`)
   age.gse <- DNAmAge(gse, age = age)
   plotCorClocks(age.gse)
-
+}
 
 }

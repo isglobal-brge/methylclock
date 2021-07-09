@@ -7,10 +7,11 @@
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
 #' @importFrom RPMM blc betaObjf
-#' @importFrom  minfi getBeta
+#' @importFrom minfi getBeta
 #' @importFrom tidyr gather
 #' @importFrom graphics par points
 #' @importFrom stats IQR approx coef dbeta density lm median optim pbeta qbeta rbeta resid rmultinom
+#' @importFrom dynamicTreeCut printFlush
 #' @import ExperimentHub
 #' @import dplyr
 #' @import impute

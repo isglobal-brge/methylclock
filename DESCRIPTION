@@ -40,7 +40,8 @@ Imports:
   stats,
   graphics,
   tidyr,
-  preprocessCore
+  preprocessCore,
+  dynamicTreeCut
 Suggests: 
   BiocStyle,
   knitr, 

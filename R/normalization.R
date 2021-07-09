@@ -29,9 +29,11 @@
 #' sometimes gets stuck. Toward this end, the function blc was replaced by blc2.
 #' 
 #' @examples
+#' \dontrun{
 #' goldstandard.beta <- c(2.4,0.1,0.01,0.001)
 #' TestDataset <- get_TestDataset()
 #' methylclock:::BMIQcalibration(TestDataset[1:50,], goldstandard.beta)
+#' }
 #' 
 
 BMIQcalibration <- function(datM,

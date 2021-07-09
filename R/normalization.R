@@ -29,11 +29,9 @@
 #' sometimes gets stuck. Toward this end, the function blc was replaced by blc2.
 #' 
 #' @examples
-#' \donttest{
 #' goldstandard.beta <- c(2.4,0.1,0.01,0.001)
 #' TestDataset <- get_TestDataset()
-#' BMIQcalibration(TestDataset, goldstandard.beta)
-#' }
+#' methylclock:::BMIQcalibration(TestDataset[1:50,], goldstandard.beta)
 #' 
 
 BMIQcalibration <- function(datM,
@@ -77,10 +75,9 @@ BMIQcalibration <- function(datM,
 
   ## Disabled to accomplish BioC check() 
   ## set.seed(1)
-  #..# rand.idx <- sample(1:length(beta1.v), min(c(nfit, length(beta1.v))),
-  rand.idx <- sample(seq_len(beta1.v), min(c(nfit, length(beta1.v))),
-    replace =
-      FALSE
+  rand.idx <- sample(1:length(beta1.v), min(c(nfit, length(beta1.v))),
+                     #..# rand.idx <- sample(seq_len(beta1.v), min(c(nfit, length(beta1.v))),
+    replace = FALSE
   )
   em1.o <- blc(
     matrix(beta1.v[rand.idx], ncol = 1),
@@ -110,13 +107,12 @@ BMIQcalibration <- function(datM,
   if (plots) {
     print("Check")
 
-    #..# tmpL.v <- as.vector(rmultinom(1:nL, length(beta1.v), prob = em1.o$eta))
-    tmpL.v <- as.vector(rmultinom( seq_len(nL), length(beta1.v), prob = em1.o$eta))
+    tmpL.v <- as.vector(rmultinom(1:nL, length(beta1.v), prob = em1.o$eta))
 
     tmpB.v <- vector()
 
-    # for (l in 1:nL) {
-    for (l in seq_len(nL)) {
+    for (l in 1:nL) {
+    #..# for (l in seq_len(nL)) {
       tmpB.v <- c(tmpB.v, rbeta(tmpL.v[l], em1.o$a[l, 1], em1.o$b[l, 1]))
     }
     plot(density(beta1.v), main = paste("Type1fit-", sep = ""))
@@ -150,8 +146,7 @@ BMIQcalibration <- function(datM,
   }
 
   ### BETA 2
-  # for (ii in 1:dim(datM)[[1]]) {
-  for (ii in  seq_len(dim(datM)[[1]])) {
+  for (ii in 1:dim(datM)[[1]]) {
     printFlush(paste("ii=", ii))
     sampleID <- ii
     beta2.v <- as.numeric(datM[ii, ])
@@ -187,8 +182,8 @@ BMIQcalibration <- function(datM,
     # I fixed an error in the following line (replaced beta1 by beta2)
     ## Disabled to accomplish BioC check() 
     ## set.seed(1)
-    #..# rand.idx <- sample(1:length(beta2.v), min(c(nfit, length(beta2.v)),
-    rand.idx <- sample(seq_len(beta2.v), min(c(nfit, length(beta2.v)),
+    rand.idx <- sample(1:length(beta2.v), min(c(nfit, length(beta2.v)),
+    #..# rand.idx <- sample(seq_len(beta2.v), min(c(nfit, length(beta2.v)),
       na.rm =
         TRUE
     ), replace = FALSE)
@@ -236,13 +231,13 @@ BMIQcalibration <- function(datM,
 
     ### generate plot
     if (plots) {
-      #..# tmpL.v <- as.vector(rmultinom(1:nL, length(beta2.v), prob = em2.o$eta))
-      tmpL.v <- as.vector(rmultinom( seq_len(nL), length(beta2.v), prob = em2.o$eta))
+      tmpL.v <- as.vector(rmultinom(1:nL, length(beta2.v), prob = em2.o$eta))
+      #..# tmpL.v <- as.vector(rmultinom( seq_len(nL), length(beta2.v), prob = em2.o$eta))
 
       tmpB.v <- vector()
 
-      # for (lt in 1:nL) {
-      for (lt in seq_len(nL)) {
+      for (lt in 1:nL) {
+      #..#for (lt in seq_len(nL)) {
         tmpB.v <- c(tmpB.v, rbeta(tmpL.v[lt], em2.o$a[lt, 1], em2.o$b[lt, 1]))
       }
       plot(density(beta2.v), main = paste("Type2fit-", sampleID, sep = ""))
@@ -262,8 +257,8 @@ BMIQcalibration <- function(datM,
     classAV1.v <- vector()
     classAV2.v <- vector()
 
-    # for (l in 1:nL) {
-    for (l in seq_len(nL)) {
+    for (l in 1:nL) {
+    #..#for (l in seq_len(nL)) {
       classAV1.v[l] <- em1.o$mu[l, 1]
 
       classAV2.v[l] <- em2.o$mu[l, 1]

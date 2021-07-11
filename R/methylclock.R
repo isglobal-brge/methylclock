@@ -1,6 +1,7 @@
 #' methylclock
 #' 
-#' Package to estimate DNA methylation age (DNAmAge) using different methylation clocks. 
+#' Package to estimate DNA methylation age (DNAmAge)
+#'  using different methylation clocks. 
 #' 
 #' @docType package
 #' @author Juan R Gonzalez <juanr.gonzalez@isglobal.org>
@@ -10,7 +11,8 @@
 #' @importFrom minfi getBeta
 #' @importFrom tidyr gather
 #' @importFrom graphics par points
-#' @importFrom stats IQR approx coef dbeta density lm median optim pbeta qbeta rbeta resid rmultinom
+#' @importFrom stats IQR approx coef dbeta density lm median
+#'  optim pbeta qbeta rbeta resid rmultinom
 #' @importFrom dynamicTreeCut printFlush
 #' @import ExperimentHub
 #' @import dplyr

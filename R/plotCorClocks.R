@@ -7,7 +7,7 @@
 #' @return Plot with Correlation Clocks
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'   library(Biobase)
 #'   library(GEOquery)
 #'   

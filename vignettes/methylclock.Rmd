@@ -67,8 +67,7 @@ The main aim of this package is to facilitate the interconnection with R and Bio
 The package depends on some R packages that can be previously installed into your computer by:
 
 ```{r install_req_packages, eval=FALSE}
-library(BiocManager)
-install(c("tidyverse", "impute", "Rcpp"))
+install.packages(c("tidyverse", "impute", "Rcpp"))
 ```
 
 

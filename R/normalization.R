@@ -16,9 +16,10 @@
 #' The original BMIQ function from Teschendorff 2013 adjusts for the
 #' type-2 bias in Illumina Infinium 450k data.
 #' Later functions and edits were provided by yours truly, Steve Horvath.
-#' I changed the code so that one can calibrate methylation data to a gold standard.
-#' Specifically, I took version v_1.2 by Teschendorff  and fixed minor issues.
-#' Also I made the code more robust e.g. by changing the optimization algorithm.
+#' I changed the code so that one can calibrate methylation data to a gold 
+#' standard. Specifically, I took version v_1.2 by Teschendorff  and fixed 
+#' minor issues. Also I made the code more robust e.g. by changing the 
+#' optimization algorithm.
 #' Toward this end, I used the method="Nelder-Mead" in optim()
 #'
 #' Later functions and edits by Steve Horvath
@@ -26,10 +27,10 @@
 #' and fixed minor errors. Also he made the code more robust.
 #' Importantly, SH changed the optimization algorithm to make it more robust.
 #' SH used method="Nelder-Mead" in optim() since the other optimization method
-#' sometimes gets stuck. Toward this end, the function blc was replaced by blc2.
+#' sometimes gets stuck. Toward this end, the function blc was replaced by blc2
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' goldstandard.beta <- c(2.4,0.1,0.01,0.001)
 #' TestDataset <- get_TestDataset()
 #' methylclock:::BMIQcalibration(TestDataset[1:50,], goldstandard.beta)
@@ -51,7 +52,8 @@ BMIQcalibration <- function(datM,
   #  if (length(goldstandard.beta) != dim(datM)[[2]]) {
   if (length(goldstandard.beta) > dim(datM)[[2]]) {
     stop(
-      "Error in function arguments length(goldstandard.beta) !=dim(datM)[[2]]. Consider transposing datM."
+      "Error in function arguments length(goldstandard.beta)
+      !=dim(datM)[[2]]. Consider transposing datM."
     )
   }
   if (plots) {
@@ -68,17 +70,14 @@ BMIQcalibration <- function(datM,
 
   w0.m[which(beta1.v <= th1.v[1]), 1] <- 1
 
-  w0.m[intersect(which(beta1.v > th1.v[1]), which(beta1.v <= th1.v[2])), 2] <- 1
+  w0.m[intersect(which(beta1.v > th1.v[1]), which(beta1.v <= th1.v[2])), 2]<- 1
 
   w0.m[which(beta1.v > th1.v[2]), 3] <- 1
 
   ### fit type1
   message("Fitting EM beta mixture to goldstandard probes")
 
-  ## Disabled to accomplish BioC check() 
-  ## set.seed(1)
   rand.idx <- sample(1:length(beta1.v), min(c(nfit, length(beta1.v))),
-                     #..# rand.idx <- sample(seq_len(beta1.v), min(c(nfit, length(beta1.v))),
     replace = FALSE
   )
   em1.o <- blc(
@@ -90,9 +89,10 @@ BMIQcalibration <- function(datM,
 
   subsetclass1.v <- apply(em1.o$w, 1, which.max)
 
-  subsetth1.v <- c(mean(max(beta1.v[rand.idx[subsetclass1.v == 1]]), min(beta1.v[rand.idx[subsetclass1.v ==
-    2]])), mean(max(beta1.v[rand.idx[subsetclass1.v == 2]]), min(beta1.v[rand.idx[subsetclass1.v ==
-    3]])))
+  subsetth1.v <- c(mean(max(beta1.v[rand.idx[subsetclass1.v == 1]]), 
+                        min(beta1.v[rand.idx[subsetclass1.v == 2]])), 
+                   mean(max(beta1.v[rand.idx[subsetclass1.v == 2]]), 
+                        min(beta1.v[rand.idx[subsetclass1.v == 3]])))
 
   class1.v <- rep(2, length(beta1.v))
 
@@ -173,7 +173,7 @@ BMIQcalibration <- function(datM,
 
     w0.m[which(beta2.v <= th2.v[1]), 1] <- 1
 
-    w0.m[intersect(which(beta2.v > th2.v[1]), which(beta2.v <= th2.v[2])), 2] <- 1
+    w0.m[intersect(which(beta2.v > th2.v[1]), which(beta2.v<=th2.v[2])), 2]<-1
 
     w0.m[which(beta2.v > th2.v[2]), 3] <- 1
 
@@ -203,43 +203,34 @@ BMIQcalibration <- function(datM,
     ### for type II probes assign to state (unmethylated, hemi or full methylation)
     subsetclass2.v <- apply(em2.o$w, 1, which.max)
 
-
-
     if (sum(subsetclass2.v == 2) > 0) {
       subsetth2.v <- c(
-        mean(max(beta2.v[rand.idx[subsetclass2.v == 1]]), min(beta2.v[rand.idx[subsetclass2.v ==
-          2]])),
-        mean(max(beta2.v[rand.idx[subsetclass2.v == 2]]), min(beta2.v[rand.idx[subsetclass2.v ==
-          3]]))
+        mean(max(beta2.v[rand.idx[subsetclass2.v == 1]]), 
+             min(beta2.v[rand.idx[subsetclass2.v == 2]])),
+        mean(max(beta2.v[rand.idx[subsetclass2.v == 2]]),
+             min(beta2.v[rand.idx[subsetclass2.v == 3]]))
       )
     }
     if (sum(subsetclass2.v == 2) == 0) {
       subsetth2.v <- c(
-        1 / 2 * max(beta2.v[rand.idx[subsetclass2.v == 1]]) + 1 / 2 * mean(beta2.v[rand.idx[subsetclass2.v ==
-          3]]),
-        1 / 3 * max(beta2.v[rand.idx[subsetclass2.v == 1]]) + 2 / 3 * mean(beta2.v[rand.idx[subsetclass2.v ==
-          3]])
+        1 / 2 * max(beta2.v[rand.idx[subsetclass2.v == 1]]) + 1 / 2 * 
+          mean(beta2.v[rand.idx[subsetclass2.v == 3]]),
+        1 / 3 * max(beta2.v[rand.idx[subsetclass2.v == 1]]) + 2 / 3 * 
+          mean(beta2.v[rand.idx[subsetclass2.v == 3]])
       )
     }
 
-
-
     class2.v <- rep(2, length(beta2.v))
-
     class2.v[which(beta2.v <= subsetth2.v[1])] <- 1
-
     class2.v[which(beta2.v >= subsetth2.v[2])] <- 3
-
 
     ### generate plot
     if (plots) {
       tmpL.v <- as.vector(rmultinom(1:nL, length(beta2.v), prob = em2.o$eta))
-      #..# tmpL.v <- as.vector(rmultinom( seq_len(nL), length(beta2.v), prob = em2.o$eta))
 
       tmpB.v <- vector()
 
       for (lt in 1:nL) {
-      #..#for (lt in seq_len(nL)) {
         tmpB.v <- c(tmpB.v, rbeta(tmpL.v[lt], em2.o$a[lt, 1], em2.o$b[lt, 1]))
       }
       plot(density(beta2.v), main = paste("Type2fit-", sampleID, sep = ""))
@@ -260,15 +251,12 @@ BMIQcalibration <- function(datM,
     classAV2.v <- vector()
 
     for (l in 1:nL) {
-    #..#for (l in seq_len(nL)) {
       classAV1.v[l] <- em1.o$mu[l, 1]
-
       classAV2.v[l] <- em2.o$mu[l, 1]
     }
 
     ### start normalising input probes
     message("Start normalising input probes")
-
     nbeta2.v <- beta2.v
 
     ### select U probes
@@ -282,9 +270,7 @@ BMIQcalibration <- function(datM,
 
     ### find prob according to typeII distribution
     p.v <- pbeta(beta2.v[selUR.idx], em2.o$a[lt, 1], em2.o$b[lt, 1],
-      lower.tail =
-        FALSE
-    )
+                    lower.tail = FALSE )
 
     ### find corresponding quantile in type I distribution
     q.v <- qbeta(p.v, em1.o$a[lt, 1], em1.o$b[lt, 1], lower.tail = FALSE)
@@ -292,23 +278,18 @@ BMIQcalibration <- function(datM,
     nbeta2.v[selUR.idx] <- q.v
 
     p.v <- pbeta(beta2.v[selUL.idx], em2.o$a[lt, 1], em2.o$b[lt, 1],
-      lower.tail =
-        TRUE
-    )
+                    lower.tail = TRUE )
 
     ### find corresponding quantile in type I distribution
     q.v <- qbeta(p.v, em1.o$a[lt, 1], em1.o$b[lt, 1], lower.tail = TRUE)
 
     nbeta2.v[selUL.idx] <- q.v
-
-
+    
     ### select M probes
     lt <- 3
 
     selM.idx <- which(class2.v == lt)
-
     selMR.idx <- selM.idx[which(beta2.v[selM.idx] > classAV2.v[lt])]
-
     selML.idx <- selM.idx[which(beta2.v[selM.idx] < classAV2.v[lt])]
 
     ### find prob according to typeII distribution
@@ -319,14 +300,12 @@ BMIQcalibration <- function(datM,
 
     ### find corresponding quantile in type I distribution
     q.v <- qbeta(p.v, em1.o$a[lt, 1], em1.o$b[lt, 1], lower.tail = FALSE)
-
     nbeta2.v[selMR.idx] <- q.v
-
-
 
     if (doH) {
       ### if TRUE also correct type2 hemimethylated probes
-      ### select H probes and include ML probes (left ML tail is not well described by a beta-distribution).
+      ### select H probes and include ML probes (left ML tail 
+      ### is not well described by a beta-distribution).
       lt <- 2
 
       selH.idx <- c(which(class2.v == lt), selML.idx)
@@ -336,14 +315,10 @@ BMIQcalibration <- function(datM,
       deltaH <- maxH - minH
 
       #### need to do some patching
-      deltaUH <- -max(beta2.v[selU.idx], na.rm = TRUE) + min(beta2.v[selH.idx],
-        na.rm =
-          TRUE
-      )
-      deltaHM <- -max(beta2.v[selH.idx], na.rm = TRUE) + min(beta2.v[selMR.idx],
-        na.rm =
-          TRUE
-      )
+      deltaUH <- -max(beta2.v[selU.idx], na.rm = TRUE) + 
+        min(beta2.v[selH.idx], na.rm = TRUE )
+      deltaHM <- -max(beta2.v[selH.idx], na.rm = TRUE) + 
+        min(beta2.v[selMR.idx], na.rm = TRUE )
 
       ## new maximum of H probes should be
       nmaxH <- min(nbeta2.v[selMR.idx], na.rm = TRUE) - deltaHM
@@ -366,13 +341,9 @@ BMIQcalibration <- function(datM,
     ### generate final plot to check normalisation
     if (plots) {
       message("Generating final plot")
-
       d1.o <- density(beta1.v)
-
       d2.o <- density(beta2.v)
-
       d2n.o <- density(nbeta2.v)
-
       ymax <- max(d2.o$y, d1.o$y, d2n.o$y)
 
       plot(

@@ -1,13 +1,24 @@
 #' DNAm age estimation using different DNA methylation clocks.
-#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
-#' @param clocks the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" are available. Default is "all" and all clocks are estimated.
-#' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
-#' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
+#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first
+#'  colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in
+#'   rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
+#' @param clocks the methods used for estimating DNAmAge. Currrently "Horvath",
+#'  "Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" are available.
+#'   Default is "all" and all clocks are estimated.
+#' @param toBetas Should data be transformed to beta values? Default is FALSE.
+#'  If TRUE, it implies data are M values.
+#' @param fastImp Is fast imputation performed if necessary? (see details).
+#'  Default is FALSE
 #' @param normalize Is Horvath's normalization performed? By default is FALSE
 #' @param age individual's chronological age.
 #' @param cell.count Are cell counts estimated? Default is TRUE.
-#' @param cell.count.reference Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.
-#' @param min.perc Indicates the minimum conicidence percentage required between CpGs in or dataframee x and CpGs in clock coefficients to perform the calculation. If min.prec is too low, the estimated gestational DNAm age can be poor
+#' @param cell.count.reference Used when 'cell.count' is TRUE. Default is
+#'  "blood gse35069 complete".See 'meffil::meffil.list.cell.count.references()'
+#'  for possible values.
+#' @param min.perc Indicates the minimum conicidence percentage required
+#'  between CpGs in or dataframee x and CpGs in clock coefficients to perform
+#'   the calculation. If min.prec is too low, the estimated gestational DNAm
+#'    age can be poor
 #' @param ... Other arguments to be passed through impute package
 #'
 #' @details Imputation is performed when having missing data.
@@ -36,55 +47,26 @@ DNAmAge <- function(x,
                     cell.count.reference = "blood gse35069 complete",
                     min.perc = 0.8,
                     ...) {
+  
   available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "Horvath2",
                         "PedBE", "Wu", "TL", "all")
   method <- match(clocks, available.clocks)
+  
   if (any(is.na(method))) {
     stop("You wrote the name of an unavailable clock. Available clocks are: 
          Horvath, Hannum, Levine, BNN, Horvath2, PedBE, Wu, TL")
   }
+  
   if (length(available.clocks) %in% method) {
     method <- seq_len(length(available.clocks)-1)
   }
 
-  if (inherits(x, "data.frame")) {
-    cpgs.names <- as.character(x[, 1, drop = TRUE])
-    if (length(grep("cg", cpgs.names)) == 0) {
-      stop("First column should contain CpG names")
-    }
-    cpgs <- t(as.matrix(x[, -1]))
-    colnames(cpgs) <- cpgs.names
-  }
-  else if (inherits(x, "matrix")) {
-    cpgs <- t(x)
-  }
-  else if (inherits(x, "ExpressionSet")) {
-    cpgs <- t(Biobase::exprs(x))
-  }
-  else if (inherits(x, "GenomicRatioSet")) {
-    cpgs <- t(minfi::getBeta(x))
-  }
-  else {
-    stop("x must be a data.frame or a 'GenomicRatioSet' or a 'ExpressionSet' object")
+  cpgs <- getInputCpgValues(x, toBetas)
+
+  if( !all( available.clocks %in%  ls(.GlobalEnv))) {
+    load_DNAm_Clocks_data()
   }
 
-  if (toBetas) {
-    toBeta <- function(m) {
-      2^m / (2^m + 1)
-    }
-    cpgs <- toBeta(cpgs)
-  }
-
-  if (any(cpgs < -0.1 | cpgs > 1.1, na.rm = TRUE)) {
-    stop("Data seems to do not be beta values. Check your data or set 'toBetas=TRUE'")
-  }
-
-
-  if( !all(c("coefHorvath", "coefHannum", "coefLevine", "coefSkin", 
-              "coefPedBE", "coefWu",  "coefTL") %in%  ls(.GlobalEnv))) {
-    load_DNAm_Clocks_data() 
-  }
-  
   cpgs.all <- c(
     coefHorvath$CpGmarker,
     coefHannum$CpGmarker,
@@ -237,8 +219,10 @@ DNAmAge <- function(x,
         t(cpgs), cell.count.reference), TRUE)
 
       if (inherits(cell.counts, "try-error")) {
-        stop("cell counts cannot be estimated since meffilEstimateCellCountsFromBetas function is giving an error.  
-             Probably your data do not have any of the required CpGs for that reference panel.")
+        stop("cell counts cannot be estimated since 
+        meffilEstimateCellCountsFromBetas function is giving an error.  
+             Probably your data do not have any of the required CpGs for that 
+             reference panel.")
       } else {
         ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
         cell.counts <- cell.counts[, ok]

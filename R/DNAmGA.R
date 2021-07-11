@@ -1,12 +1,22 @@
 #' Gestational DNAm age estimation using different DNA methylation clocks.
-#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
-#' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
-#' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
+#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first
+#'  colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in
+#'   rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
+#' @param toBetas Should data be transformed to beta values? Default is FALSE.
+#'  If TRUE, it implies data are M values.
+#' @param fastImp Is fast imputation performed if necessary? (see details).
+#'  Default is FALSE
 #' @param normalize Is Horvath's normalization performed? By default is FALSE
-#' @param age individual's chronological age. Required to compute gestational age difference output
+#' @param age individual's chronological age. Required to compute gestational
+#'  age difference output
 #' @param cell.count Are cell counts estimated? Default is TRUE.
-#' @param cell.count.reference Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.
-#' @param min.perc Indicates the minimum conicidence percentage required between CpGs in or dataframee x and CpGs in clock coefficients to perform the calculation. If min.prec is too low, the estimated gestational DNAm age can be poor
+#' @param cell.count.reference Used when 'cell.count' is TRUE. Default is
+#' "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()'
+#'  for possible values.
+#' @param min.perc Indicates the minimum conicidence percentage required
+#'  between CpGs in or dataframee x and CpGs in clock coefficients to perform
+#'   the calculation. If min.prec is too low, the estimated gestational DNAm
+#'    age can be poor
 #' @param ... Other arguments to be passed through impute package
 #'
 #' @details Imputation is performed when having missing data.
@@ -35,39 +45,12 @@ DNAmGA <- function(x, toBetas = FALSE,
                    cell.count.reference = "andrews and bakulski cord blood",
                    min.perc = 0.8,
                    ...) {
-  if (inherits(x, "data.frame")) {
-    cpgs.names <- as.character(x[, 1, drop = TRUE])
-    if (length(grep("cg", cpgs.names)) == 0) {
-      stop("First column should contain CpG names")
-    }
-    cpgs <- t(as.matrix(x[, -1]))
-    colnames(cpgs) <- cpgs.names
-  }
-  else if (inherits(x, "matrix")) {
-    cpgs <- t(x)
-  }
-  else if (inherits(x, "ExpressionSet")) {
-    cpgs <- t(Biobase::exprs(x))
-  }
-  else if (inherits(x, "GenomicRatioSet")) {
-    cpgs <- t(minfi::getBeta(x))
-  }
-  else {
-    stop("x must be a data.frame, matrix, 'GenomicRatioSet' or an 'ExpressionSet' object")
-  }
 
-  if (toBetas) {
-    toBeta <- function(m) {
-      2^m / (2^m + 1)
-    }
-    cpgs <- toBeta(cpgs)
-  }
 
-  if (any(cpgs < -0.1 | cpgs > 1.1, na.rm = TRUE)) {
-    stop("Data seems to do not be beta values. Check your data or set 'toBetas=TRUE'")
-  }
+  cpgs <- getInputCpgValues(x, toBetas)
 
-  if( !all(c("coefKnightGA", "coefBohlin", "coefMayneGA", "coefLeeGA") %in%  ls(.GlobalEnv))) {
+  if( !all(c("coefKnightGA", "coefBohlin", "coefMayneGA", "coefLeeGA")
+           %in%  ls(.GlobalEnv))) {
     load_DNAmGA_Clocks_data() 
   }
   
@@ -79,8 +62,8 @@ DNAmGA <- function(x, toBetas = FALSE,
   )
 
   if (any(!cpgs.all %in% colnames(cpgs))) {
-    warning("CpGs in all Gestational Age clocks are not present in your data. Try 'checkClocksGA' function
-         to find the missing CpGs of each method.")
+    warning("CpGs in all Gestational Age clocks are not present in your data. 
+    Try 'checkClocksGA' function to find the missing CpGs of each method.")
   }
 
   cpgs.in <- intersect(cpgs.all, colnames(cpgs))
@@ -123,10 +106,6 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   # --------------> Bohlin
 
-#  bohlin <- try(GAprediction::predictGA(cpgs.imp, transp = FALSE, se = FALSE)[, 1] / 52, TRUE)
-#  if (inherits(bohlin, "try-error")) {
-#    bohlin <- rep(NA, nrow(cpgs.imp))
-#  }
   bohlin <- predAge(cpgs.imp, coefBohlin, intercept = TRUE, min.perc)
   Bohlin <- data.frame(
     id = rownames(cpgs.imp),
@@ -146,16 +125,16 @@ DNAmGA <- function(x, toBetas = FALSE,
 
 
   if (mean(coefLeeGA$CpGmarker[-1] %in% colnames(cpgs.imp)) > 0.8) {
-    #    cpgs.imp.s <- cpgs.imp[, coefLeeGA$CpGs[-1]]
-    #    Lee.RPC <- coefLeeGA$Coefficient_RPC[1] +
-    #      cpgs.imp.s%*%coefLeeGA$Coefficient_RPC[-1]
-    coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, CoefficientTraining = coefLeeGA$Coefficient_RPC)
+    coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, 
+                             CoefficientTraining = coefLeeGA$Coefficient_RPC)
     Lee.RPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE, min.perc)
 
-    coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, CoefficientTraining = coefLeeGA$Coefficient_CPC)
+    coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, 
+                             CoefficientTraining = coefLeeGA$Coefficient_CPC)
     Lee.CPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE, min.perc)
 
-    coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, CoefficientTraining = coefLeeGA$Coefficient_refined_RPC)
+    coefLeeSel <- data.frame(CpGmarker = coefLeeGA$CpGmarker, 
+                      CoefficientTraining = coefLeeGA$Coefficient_refined_RPC)
     Lee.refRPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE, min.perc)
 
 
@@ -179,7 +158,8 @@ DNAmGA <- function(x, toBetas = FALSE,
     }
   }
   else {
-    warning("The number of missing CpGs for Lee clocks exceeds 80%.\n  ---> This DNAm clock will be NA.")
+    warning("The number of missing CpGs for Lee clocks exceeds 80%.
+            \n  ---> This DNAm clock will be NA.")
 
     Lee <- data.frame(
       id = rownames(cpgs.imp),
@@ -201,7 +181,8 @@ DNAmGA <- function(x, toBetas = FALSE,
         cell.count.reference
       ), TRUE)
       if (inherits(cell.counts, "try-error")) {
-        stop("cell counts cannot be estimated since your data have missing CpGs for meffil")
+        stop("cell counts cannot be estimated since your data 
+             have missing CpGs for meffil")
       } else {
         ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
         cell.counts <- cell.counts[, ok]

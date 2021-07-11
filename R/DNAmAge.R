@@ -36,10 +36,12 @@ DNAmAge <- function(x,
                     cell.count.reference = "blood gse35069 complete",
                     min.perc = 0.8,
                     ...) {
-  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE", "Wu", "TL", "all")
+  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "Horvath2",
+                        "PedBE", "Wu", "TL", "all")
   method <- match(clocks, available.clocks)
   if (any(is.na(method))) {
-    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, Horvath2, PedBE, Wu, TL")
+    stop("You wrote the name of an unavailable clock. Available clocks are: 
+         Horvath, Hannum, Levine, BNN, Horvath2, PedBE, Wu, TL")
   }
   if (length(available.clocks) %in% method) {
     method <- seq_len(length(available.clocks)-1)
@@ -99,7 +101,7 @@ DNAmAge <- function(x,
 
   if (any(miss)) {
     if (fastImp) {
-      cat(paste("Imputing missing data of", sum(miss), "CpGs .... \n"))
+      message("Imputing missing data of", sum(miss), "CpGs .... \n")
       mm <- apply(cpgs[, cpgs.in], 2, median, na.rm = TRUE)
       cpgs.imp <- sweep(cpgs[, cpgs.in], 2,
         STATS = mm,
@@ -112,10 +114,10 @@ DNAmAge <- function(x,
         on.exit(sink())
         invisible(force(x))
       }
-      cat(paste("Imputing missing data of the entire matrix .... \n"))
+      message("Imputing missing data of the entire matrix .... \n")
       cpgs.imp <- quiet(t(impute.knn(t(cpgs), ...)$data))
     }
-    cat("Data imputed. Starting DNAm clock estimation ... \n")
+    message("Data imputed. Starting DNAm clock estimation ... \n")
   }
   else {
     cpgs.imp <- cpgs
@@ -231,11 +233,11 @@ DNAmAge <- function(x,
       }
     }
     else {
-      cell.counts <- try(meffil.estimate.cell.counts.from.betas(
+      cell.counts <- try(meffilEstimateCellCountsFromBetas(
         t(cpgs), cell.count.reference), TRUE)
 
       if (inherits(cell.counts, "try-error")) {
-        stop("cell counts cannot be estimated since meffil.estimate.cell.counts.from.betas function is giving an error.  
+        stop("cell counts cannot be estimated since meffilEstimateCellCountsFromBetas function is giving an error.  
              Probably your data do not have any of the required CpGs for that reference panel.")
       } else {
         ok <- which(apply(cell.counts, 2, IQR) > 10e-6)

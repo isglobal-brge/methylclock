@@ -75,8 +75,10 @@ install(c("tidyverse", "impute", "Rcpp"))
 Then `methylclock` package is installed into your computer by executing:
 
 ```{r install_packages, eval=FALSE}
-library(devtools)
-install_github("isglobal-brge/methylclock")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("methylclock")
 ``` 
 
 The package is loaded into R as usual:
@@ -138,10 +140,13 @@ The objects `cpgs.missing` and `cpgs.missing.GA` are lists having the missing Cp
 names(cpgs.missing)
 ```
 
-We can see which are those CpGs for a given clock (for example Hannum) just typing:
+We can see which are those CpGs for a given clock (for example Hannum) with the function `commonClockCpgs` :
 
 ```{r showMissNames}
-cpgs.missing$Hannum
+commonClockCpgs(cpgs.missing, "Hannum" )
+
+commonClockCpgs(cpgs.missing.GA, "Bohlin" )
+
 ``` 
 
 In Section \@ref(section-example) we describe how to change this 80% threshold.

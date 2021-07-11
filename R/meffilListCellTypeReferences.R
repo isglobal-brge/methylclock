@@ -3,15 +3,15 @@
 #' @return a list with reference globals
 #'
 #' @details ORIGINAL AUTHOR: Matthew Suderman
-#' The original meffil.list.cell.type.references and 
-#' get.cell.type.reference function from meffil v1.0.0
+#' The original meffilListCellTypeReferences and 
+#' getCellTypeReference function from meffil v1.0.0
 #' at githug : https://github.com/perishky/meffil
 #'
 #' @examples
-#' meffil.list.cell.type.references()
+#' meffilListCellTypeReferences()
 #' 
 #' @export
-meffil.list.cell.type.references <- function() {
+meffilListCellTypeReferences <- function() {
   # ls(reference.globals)
   # Get data from methylclockData package
   if( !all( c("andrews and bakulski cord blood",
@@ -40,14 +40,14 @@ meffil.list.cell.type.references <- function() {
 #' @return name and reference.globals
 #' @examples
 #' name <- "andrews and bakulski cord blood"
-#' get.cell.type.reference(name)
+#' getCellTypeReference(name)
 #' 
 #' @details ORIGINAL AUTHOR: Matthew Suderman
 #' at githug : https://github.com/perishky/meffil
-#' The original meffil.list.cell.type.references and 
-#' get.cell.type.reference function from meffil v1.0.0
+#' The original meffilListCellTypeReferences and 
+#' getCellTypeReference function from meffil v1.0.0
 #' @export
-get.cell.type.reference <- function(name) {
-  stopifnot(is.character(name) && name %in% meffil.list.cell.type.references())
+getCellTypeReference <- function(name) {
+  stopifnot(is.character(name) && name %in% meffilListCellTypeReferences())
   get(name, envir = .GlobalEnv)
 }

@@ -6,16 +6,16 @@
 #' @param beta Matrix of Illumina 450K methylation levels (rows = CpG sites, columns = subjects).
 #' @param verbose If \code{TRUE}, then status messages are printed during execution
 #' (Default: \code{FALSE}).
-#' @param cell.type.reference Character string name of the cell type reference
+#' @param cellTypeReference Character string name of the cell type reference
 #' to use for estimating cell counts.
-#' See \code{\link{meffil.list.cell.type.references}()} for a list of available
+#' See \code{\link{meffil.list.cellTypeReferences}()} for a list of available
 #' references.  New references can be created using
 #' @return A matrix of cell count estimates.
 #'
 #' Results should be nearly identical to \code{\link[minfi]{estimateCellCounts}()}.
 #'
 #' @details ORIGINAL AUTHOR: Matthew Suderman
-#' The original meffil.list.cell.type.references and get.cell.type.reference function from meffil v1.0.0
+#' The original meffil.list.cellTypeReferences and get.cellTypeReference function from meffil v1.0.0
 #' downloaded from  githug : https://github.com/perishky/meffil
 #'
 #' @return betas
@@ -25,15 +25,15 @@
 #' TestDataset <- get_TestDataset()
 #' cpgs <- t(as.matrix(TestDataset[, -1]))
 #' colnames(cpgs) <- TestDataset$CpGName
-#' meffil.estimate.cell.counts.from.betas(t(cpgs), cell.count.reference)
+#' meffilEstimateCellCountsFromBetas(t(cpgs), cell.count.reference)
 #' 
 #' @import preprocessCore quadprog devtools
 #' @importFrom minfi getBeta
 #' 
 #' @export
-meffil.estimate.cell.counts.from.betas <- function(beta, cell.type.reference, verbose = FALSE) {
+meffilEstimateCellCountsFromBetas <- function(beta, cellTypeReference, verbose = FALSE) {
   stopifnot(is.matrix(beta))
-  reference.object <- get.cell.type.reference(cell.type.reference)
+  reference.object <- getCellTypeReference(cellTypeReference)
 
   beta <- quantile.normalize.betas(beta, reference.object$subsets, reference.object$quantiles, verbose = verbose)
 
@@ -43,7 +43,7 @@ meffil.estimate.cell.counts.from.betas <- function(beta, cell.type.reference, ve
   beta <- beta[cpg.sites, ]
   reference.beta <- reference.object$beta[cpg.sites, ]
 
-  t(apply(beta, 2, estimate.cell.counts.from.beta, reference.beta))
+  t(apply(beta, 2, estimateCellCountsFromBeta, reference.beta))
 }
 
 quantile.normalize.betas <- function(beta, subsets, quantiles, verbose = FALSE) {
@@ -54,7 +54,7 @@ quantile.normalize.betas <- function(beta, subsets, quantiles, verbose = FALSE) 
   for (subset.name in names(subsets)) {
     subset <- intersect(subsets[[subset.name]], rownames(beta))
     if (length(subset) == 0) {
-      stop(paste("subset", subset.name, "and beta matrix have no features in common"))
+      stop("subset", subset.name, "and beta matrix have no features in common")
     }
     full.quantiles <- quantiles[[subset.name]]$beta
     full.quantiles <- approx(1:length(full.quantiles), full.quantiles, 1:length(subset))$y
@@ -77,7 +77,7 @@ quantile.normalize.betas <- function(beta, subsets, quantiles, verbose = FALSE) 
 ## subject to counts >= 0.
 ##
 ## Based on code from PMID 22568884.
-estimate.cell.counts.from.beta <- function(beta, beta.cell.types) {
+estimateCellCountsFromBeta <- function(beta, beta.cell.types) {
   stopifnot(length(beta) == nrow(beta.cell.types))
 
   ## Let r = counts[cell type],

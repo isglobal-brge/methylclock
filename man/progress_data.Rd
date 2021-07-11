@@ -3,7 +3,7 @@
 \docType{data}
 \name{progress_data}
 \alias{progress_data}
-\title{progress_data}
+\title{PROGRESS cohor data}
 \format{
 A data frame with 148 obs. and 151 variables
 }
@@ -11,7 +11,16 @@ A data frame with 148 obs. and 151 variables
 data(progress_data)
 }
 \description{
-A dataset containing progress_data
+The PROGRESS cohort data is available in the additional file 8 of :
+Knight, A.K., Craig, J.M., Theda, C. et al. 
+An epigenetic clock for gestational age at birth based on blood
+methylation data. 
+Genome Biol 17, 206 (2016). 
+https://doi.org/10.1186/s13059-016-1068-z
+}
+\details{
+A dataset containing data from the PROGRESS (Programming 
+Research in Obesity, Growth, Environment and Social Stressors) cohort
 }
 \examples{
 data(progress_data)

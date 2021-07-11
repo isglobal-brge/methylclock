@@ -1,25 +1,18 @@
 # methylclock
 
 
-To use methylclock under R<4.1 you need to install the package under master branch or release <= 0.7.3 (https://github.com/isglobal-brge/methylclock/releases/tag/v0.7.3)
+To use methylclock under R<4.1 you need to install the package under main branch or release <= 0.7.3 (https://github.com/isglobal-brge/methylclock/releases/tag/v0.7.3)
 
 ## Installation : 
 
-To install methylclock to be used with R < 4.1 : 
+To install methylclock you need  R >= 4.1 : 
 
-```r{install}
-library(devtools)
+```r{install, eval=FALSE}
 
-install_github("isglobal-brge\methylclock@master")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
-```
-
-To install methylclock to be used with R >= 4.1 : 
-
-```r{install}
-library(devtools)
-
-install_github("isglobal-brge\methylclock@RELEASE_3_13")
+BiocManager::install("methylclock")
 
 ```
 

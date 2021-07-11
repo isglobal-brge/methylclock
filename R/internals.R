@@ -52,7 +52,9 @@ predAge <- function(x, coefs, intercept = TRUE, min.perc = 0.8) {
   }
   else {
     tit <- gsub("GA", "", gsub("coef", "", substitute(coefs)))
-    warning(paste("The number of missing CpGs for", tit, "clock exceeds ",min.perc*100,"%.\n  ---> This DNAm clock will be NA.\n"))
+    warning("The number of missing CpGs for", tit, 
+                  "clock exceeds ",min.perc*100,
+                  "%.\n  ---> This DNAm clock will be NA.\n")
     predAge <- rep(NA, nrow(x))
   }
   predAge

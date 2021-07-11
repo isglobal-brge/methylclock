@@ -73,7 +73,7 @@ BMIQcalibration <- function(datM,
   w0.m[which(beta1.v > th1.v[2]), 3] <- 1
 
   ### fit type1
-  print("Fitting EM beta mixture to goldstandard probes")
+  message("Fitting EM beta mixture to goldstandard probes")
 
   ## Disabled to accomplish BioC check() 
   ## set.seed(1)
@@ -102,12 +102,12 @@ BMIQcalibration <- function(datM,
 
   nth1.v <- subsetth1.v
 
-  print("Done")
+  message("Done")
 
 
   ### generate plot from estimated mixture
   if (plots) {
-    print("Check")
+    message("Check")
 
     tmpL.v <- as.vector(rmultinom(1:nL, length(beta1.v), prob = em1.o$eta))
 
@@ -178,7 +178,7 @@ BMIQcalibration <- function(datM,
     w0.m[which(beta2.v > th2.v[2]), 3] <- 1
 
 
-    print("Fitting EM beta mixture to input probes")
+    message("Fitting EM beta mixture to input probes")
     # incProgress(1/dim(datM)[[1]])
 
     # I fixed an error in the following line (replaced beta1 by beta2)
@@ -197,7 +197,7 @@ BMIQcalibration <- function(datM,
       verbose = TRUE
     )
 
-    print("Done")
+    message("Done")
 
 
     ### for type II probes assign to state (unmethylated, hemi or full methylation)
@@ -267,7 +267,7 @@ BMIQcalibration <- function(datM,
     }
 
     ### start normalising input probes
-    print("Start normalising input probes")
+    message("Start normalising input probes")
 
     nbeta2.v <- beta2.v
 
@@ -365,7 +365,7 @@ BMIQcalibration <- function(datM,
 
     ### generate final plot to check normalisation
     if (plots) {
-      print("Generating final plot")
+      message("Generating final plot")
 
       d1.o <- density(beta1.v)
 

@@ -89,7 +89,7 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   if (any(miss)) {
     if (fastImp) {
-      cat(paste("Imputing missing data of", sum(miss), "CpGs .... \n"))
+      message("Imputing missing data of", sum(miss), "CpGs .... \n")
       mm <- apply(cpgs[, cpgs.in], 2, median, na.rm = TRUE)
       cpgs.imp <- sweep(cpgs[, cpgs.in], 2,
         STATS = mm,
@@ -102,10 +102,10 @@ DNAmGA <- function(x, toBetas = FALSE,
         on.exit(sink())
         invisible(force(x))
       }
-      cat(paste("Imputing missing data of the entire matrix .... \n"))
+      message("Imputing missing data of the entire matrix .... \n")
       cpgs.imp <- quiet(t(impute.knn(t(cpgs), ...)$data))
     }
-    cat("Data imputed. Starting DNAm clock estimation ... \n")
+    message("Data imputed. Starting DNAm clock estimation ... \n")
   }
   else {
     cpgs.imp <- cpgs
@@ -196,7 +196,7 @@ DNAmGA <- function(x, toBetas = FALSE,
       Mayne <- ageAcc1(Mayne, age, lab = "Mayne")
     }
     else {
-      cell.counts <- try(meffil.estimate.cell.counts.from.betas(
+      cell.counts <- try(meffilEstimateCellCountsFromBetas(
         t(cpgs),
         cell.count.reference
       ), TRUE)

@@ -54,10 +54,10 @@ checkClocks <- function(x, ...) {
 
     df <- data.frame( clock = c( "Horvath", "Hannum", "Levine", "SkinHorvath",
                                  "PedBE", "Wu", "TL" ), Cpgs_in_clock = n,
-                      missing_CpGs = sizes, percentage = round((sizes / n) * 100, 1) )
+                      missing_CpGs=sizes, percentage=round((sizes/n)*100,1))
 
     if (any(sizes != 0)) {
-        cat("There are some clocks that cannot be computed since your 
+        message("There are some clocks that cannot be computed since your 
         data do not contain the required CpGs.These are the total number 
         of missing CpGs for each clock : \n \n")
 
@@ -68,8 +68,9 @@ checkClocks <- function(x, ...) {
                      PedBE = checkPedBE, Wu = checkWu, TL = checkTL )
     }
     else {
-        cat("Your data contain the required CpGs for all clocks")
+        message("Your data contain the required CpGs for all clocks")
         out <- NULL
     }
     return(out)
 }
+

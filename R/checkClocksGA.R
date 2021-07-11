@@ -58,7 +58,7 @@ checkClocksGA <- function(x, ...) {
                       )
   
     if (any(sizes != 0)) {
-        cat("There are some clocks that cannot be computed since your data do
+        message("There are some clocks that cannot be computed since your data do
             not contain the required CpGs.These are the total number of missing 
             CpGs for each clock : \n \n")
         print(df)
@@ -68,9 +68,12 @@ checkClocksGA <- function(x, ...) {
                      )
     }
     else {
-        cat("Your data contain the required CpGs for all clocks")
+        message("Your data contain the required CpGs for all clocks")
         out <- NULL
     }
     
     return(invisible(out))
 }
+
+
+

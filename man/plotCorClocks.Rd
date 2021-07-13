@@ -9,7 +9,8 @@ plotCorClocks(x, ...)
 \arguments{
 \item{x}{a tible or data.frame with the different DNAm clocks}
 
-\item{...}{other arguments to be passs through function 'chart.Correlation' from 'PerformanceAnalytics' package}
+\item{...}{other arguments to be passs through function
+'chart.Correlation' from 'PerformanceAnalytics' package}
 }
 \value{
 Plot with Correlation Clocks
@@ -21,17 +22,17 @@ Plot correlation among DNAm clockx
 To be supplied
 }
 \examples{
-\dontrun{
-  library(Biobase)
-  library(GEOquery)
-  
-  dd <- GEOquery::getGEO("GSE109446")
-  gse109446 <- dd[[1]]
-  controls <- Biobase::pData(gse109446)$`diagnosis:ch1` == "control"
-  gse <- gse109446[, controls]
-  age <- as.numeric(Biobase::pData(gse)$`age:ch1`)
-  age.gse <- DNAmAge(gse, age = age)
-  plotCorClocks(age.gse)
+\donttest{
+library(Biobase)
+library(GEOquery)
+
+dd <- GEOquery::getGEO("GSE109446")
+gse109446 <- dd[[1]]
+controls <- Biobase::pData(gse109446)$`diagnosis:ch1` == "control"
+gse <- gse109446[, controls]
+age <- as.numeric(Biobase::pData(gse)$`age:ch1`)
+age.gse <- DNAmAge(gse, age = age)
+plotCorClocks(age.gse)
 }
 
 }

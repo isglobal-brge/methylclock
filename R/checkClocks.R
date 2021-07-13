@@ -1,14 +1,14 @@
 #' Check wheter input data contains the required 
 #' CpGs for the implemented clocks.
-#' @param x data.frame or tibble (Individual in columns, 
+#' @param    x data.frame or tibble (Individual in columns, 
 #' CpGs in rows, CpG names in first colum - i.e. Horvath's format), 
 #' ExpressionSet or GenomicRatioSet. 
 #' A matrix is also possible having the CpG names in the rownames.
-#' @param ... other parameters
+#' @param    ... other parameters
 #' @details To be supplied
 #' @examples
-#' TestDataset <- get_TestDataset()
-#' checkClocks(TestDataset)
+#'    TestDataset <- get_TestDataset()
+#'    checkClocks(TestDataset)
 #' @return a list with the different clocks when there are more than 80% of 
 #' the required CpGs
 #' @importFrom Biobase featureNames exprs

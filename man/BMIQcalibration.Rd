@@ -5,17 +5,17 @@
 \title{BMIQ normallization}
 \usage{
 BMIQcalibration(
-  datM,
-  goldstandard.beta,
-  nL = 3,
-  doH = TRUE,
-  nfit = 20000,
-  th1.v = c(0.2, 0.75),
-  th2.v = NULL,
-  niter = 5,
-  tol = 0.001,
-  plots = FALSE,
-  calibrateUnitInterval = TRUE
+    datM,
+    goldstandard.beta,
+    nL = 3,
+    doH = TRUE,
+    nfit = 20000,
+    th1.v = c(0.2, 0.75),
+    th2.v = NULL,
+    niter = 5,
+    tol = 0.001,
+    plots = FALSE,
+    calibrateUnitInterval = TRUE
 )
 }
 \arguments{
@@ -52,9 +52,10 @@ ORIGINAL AUTHOR: Andrew Teschendorff
 The original BMIQ function from Teschendorff 2013 adjusts for the
 type-2 bias in Illumina Infinium 450k data.
 Later functions and edits were provided by yours truly, Steve Horvath.
-I changed the code so that one can calibrate methylation data to a gold standard.
-Specifically, I took version v_1.2 by Teschendorff  and fixed minor issues.
-Also I made the code more robust e.g. by changing the optimization algorithm.
+I changed the code so that one can calibrate methylation data to a gold
+standard. Specifically, I took version v_1.2 by Teschendorff  and fixed
+minor issues. Also I made the code more robust e.g. by changing the
+optimization algorithm.
 Toward this end, I used the method="Nelder-Mead" in optim()
 
 Later functions and edits by Steve Horvath
@@ -62,13 +63,13 @@ Steve Horvath took version v_1.2 by Teschendorff
 and fixed minor errors. Also he made the code more robust.
 Importantly, SH changed the optimization algorithm to make it more robust.
 SH used method="Nelder-Mead" in optim() since the other optimization method
-sometimes gets stuck. Toward this end, the function blc was replaced by blc2.
+sometimes gets stuck. Toward this end, the function blc was replaced by blc2
 }
 \examples{
-\dontrun{
-goldstandard.beta <- c(2.4,0.1,0.01,0.001)
-TestDataset <- get_TestDataset()
-methylclock:::BMIQcalibration(TestDataset[1:50,], goldstandard.beta)
+\donttest{
+    goldstandard.beta <- c(2.4, 0.1, 0.01, 0.001)
+    TestDataset <- get_TestDataset()
+    methylclock:::BMIQcalibration(TestDataset[1:1500, ], goldstandard.beta)
 }
 
 }

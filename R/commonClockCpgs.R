@@ -1,9 +1,9 @@
-#' Get common CpGs 
-#' 
+#' Get common CpGs
+#'
 #' Show the required CpGs contained on input data for the implemented clocks
-#' 
+#'
 #' @param object resulting object from checkClocks functions
-#' @param clock string with the implemented clock, possible values are : 
+#' @param clock string with the implemented clock, possible values are :
 #' "Knight", "Bohlin", "Mayne" and "Lee", "Horvath", "Hannum", "Levine",
 #'  "Horvath2", "PedBE", "Wu" and "TL"
 #' @examples
@@ -13,36 +13,27 @@
 #' commonClockCpgs(cpgs.missing.GA, "Bohlin")
 #' commonClockCpgs(cpgs.missing, "Hannum")
 #' @return The common CpGs between input data and defined GA clock
-#' 
+#'
 #' @export
 
-commonClockCpgs <- function(object, clock)
-{
-    available.clocks <- c("Knight", "Bohlin", "Mayne", "Lee",
-                          "Horvath", "Hannum", "Levine", "BNN", 
-                          "Horvath2", "PedBE", "Wu", "TL")
+commonClockCpgs <- function(object, clock) {
+    available.clocks <- c( "Knight", "Bohlin", "Mayne", "Lee",
+                            "Horvath", "Hannum", "Levine", "BNN",
+                            "Horvath2", "PedBE", "Wu", "TL" )
     
-    if( sum(available.clocks %in% names(object))==0 ) {
+    if (sum(available.clocks %in% names(object)) == 0) {
         stop("Object don't contain any GA clock information")
     }
-    if(!clock %in% available.clocks){
+    if (!clock %in% available.clocks) {
         stop("You wrote the name of an unavailable clock.
-    Available clocks are: Knight, Bohlin, Mayne and Lee")
+            Available clocks are: Knight, Bohlin, Mayne and Lee")
     }
     
-    res <- switch (clock,
-                   "Knight" = object$Knight,
-                   "Bohlin" = object$Bohlin,
-                   "Mayne" = object$Mayne,
-                   "Lee" = object$Lee,
-                   "Horvath" = object$Horvath,
-                   "Hannum" = object$Hannum,
-                   "Levine" = object$Levine,
-                   "BNN" = object$Horvath,
-                   "Horvath2" = object$SkinHorvath,
-                   "PedBE" = object$PedBE,
-                   "Wu" = object$Wu,
-                   "TL" = object$TL
-    )
+    res <- switch(clock, "Knight" = object$Knight, "Bohlin" = object$Bohlin,
+                    "Mayne" = object$Mayne, "Lee" = object$Lee,
+                    "Horvath" = object$Horvath, "Hannum" = object$Hannum,
+                    "Levine" = object$Levine, "BNN" = object$Horvath,
+                    "Horvath2" = object$SkinHorvath, "PedBE" = object$PedBE, 
+                    "Wu" = object$Wu, "TL" = object$TL )
     return(res)
 }

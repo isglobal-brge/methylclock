@@ -14,11 +14,10 @@ List of available cell type references
 }
 \details{
 ORIGINAL AUTHOR: Matthew Suderman
-The original meffilListCellTypeReferences and 
+The original meffilListCellTypeReferences and
 getCellTypeReference function from meffil v1.0.0
 at githug : https://github.com/perishky/meffil
 }
 \examples{
 meffilListCellTypeReferences()
-
 }

@@ -5,33 +5,43 @@
 \title{Gestational DNAm age estimation using different DNA methylation clocks.}
 \usage{
 DNAmGA(
-  x,
-  toBetas = FALSE,
-  fastImp = FALSE,
-  normalize = FALSE,
-  age,
-  cell.count = TRUE,
-  cell.count.reference = "andrews and bakulski cord blood",
-  min.perc = 0.8,
-  ...
+    x,
+    toBetas = FALSE,
+    fastImp = FALSE,
+    normalize = FALSE,
+    age,
+    cell.count = TRUE,
+    cell.count.reference = "andrews and bakulski cord blood",
+    min.perc = 0.8,
+    ...
 )
 }
 \arguments{
-\item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.}
+\item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in first
+colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in 
+rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.}
 
-\item{toBetas}{Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.}
+\item{toBetas}{Should data be transformed to beta values? Default is FALSE.
+If TRUE, it implies data are M values.}
 
-\item{fastImp}{Is fast imputation performed if necessary? (see details). Default is FALSE}
+\item{fastImp}{Is fast imputation performed if necessary? (see details).
+Default is FALSE}
 
 \item{normalize}{Is Horvath's normalization performed? By default is FALSE}
 
-\item{age}{individual's chronological age. Required to compute gestational age difference output}
+\item{age}{individual's chronological age. Required to compute gestational
+age difference output}
 
 \item{cell.count}{Are cell counts estimated? Default is TRUE.}
 
-\item{cell.count.reference}{Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.}
+\item{cell.count.reference}{Used when 'cell.count' is TRUE. Default is
+"blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' 
+for possible values.}
 
-\item{min.perc}{Indicates the minimum conicidence percentage required between CpGs in or dataframee x and CpGs in clock coefficients to perform the calculation. If min.prec is too low, the estimated gestational DNAm age can be poor}
+\item{min.perc}{Indicates the minimum conicidence percentage required
+between CpGs in or dataframee x and CpGs in clock coefficients to perform 
+the calculation. If min.prec is too low, the estimated gestational DNAm 
+age can be poor}
 
 \item{...}{Other arguments to be passed through impute package}
 }
@@ -43,12 +53,11 @@ Gestational DNAm age estimation using different DNA methylation clocks.
 }
 \details{
 Imputation is performed when having missing data.
-         Fast imputation is performed by ...
-         what about imputing only when CpGs for the clock are missing?
+Fast imputation is performed by ... 
+what about imputing only when CpGs for the clock are missing?
 }
 \examples{
 TestDataset <- get_TestDataset()
 TestDataset[1:5, ]
 ga.test <- DNAmGA(TestDataset)
-
 }

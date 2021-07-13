@@ -9,9 +9,9 @@ commonClockCpgs(object, clock)
 \arguments{
 \item{object}{resulting object from checkClocks functions}
 
-\item{clock}{string with the implemented clock, possible values are : 
-"Knight", "Bohlin", "Mayne" and "Lee", "Horvath", "Hannum", "Levine",
- "Horvath2", "PedBE", "Wu" and "TL"}
+\item{clock}{string with the implemented clock, possible values are :
+"Knight", "Bohlin", "Mayne" and "Lee", "Horvath", "Hannum", "Levine", 
+"Horvath2", "PedBE", "Wu" and "TL"}
 }
 \value{
 The common CpGs between input data and defined GA clock

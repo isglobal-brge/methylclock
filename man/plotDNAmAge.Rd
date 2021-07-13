@@ -13,7 +13,8 @@ plotDNAmAge(x, y, tit = "Horvath's method", clock = "chronological", ...)
 
 \item{tit}{Plot title. Default is "Horvath's method".}
 
-\item{clock}{Type of clock 'chronological' or 'GA'. Default is 'chronological'.}
+\item{clock}{Type of clock 'chronological' or 'GA',
+default 'chronological'}
 
 \item{...}{Other plot parameters for ggplot}
 }
@@ -25,15 +26,16 @@ Plot DNAm age estimation vs chronological age.
 }
 \examples{
 
- library(tidyverse)
- 
-  path <- system.file("extdata", package = "methylclock")
-  covariates <- read_csv(file.path(path, 
-                         "SampleAnnotationExample55.csv"))
-  age <- covariates$Age
-  MethylationData <- get_MethylationDataExample()
-  
-  age.example55 <- DNAmAge(MethylationData)
-  plotDNAmAge(age.example55$Horvath, age)
-  
+library(tidyverse)
+
+path <- system.file("extdata", package = "methylclock")
+covariates <- read_csv(file.path(
+    path,
+    "SampleAnnotationExample55.csv"
+))
+age <- covariates$Age
+MethylationData <- get_MethylationDataExample()
+
+age.example55 <- DNAmAge(MethylationData)
+plotDNAmAge(age.example55$Horvath, age)
 }

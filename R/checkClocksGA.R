@@ -1,8 +1,8 @@
 #' Check wheter input data contains the required CpGs for
 #'  the implemented clocks for Gestational Age.
-#' @param x data.frame or tibble (Individual in columns, CpGs in rows, 
-#' CpG names in first colum - i.e. Horvath's format), ExpressionSet or 
-#' GenomicRatioSet. A matrix is also possible having the CpG names 
+#' @param x data.frame or tibble (Individual in columns, CpGs in rows,
+#' CpG names in first colum - i.e. Horvath's format), ExpressionSet or
+#' GenomicRatioSet. A matrix is also possible having the CpG names
 #' in the rownames.
 #' @param ... other parameters
 #'
@@ -12,51 +12,47 @@
 #' TestDataset <- get_TestDataset()
 #' checkClocksGA(TestDataset)
 #' @importFrom Biobase featureNames exprs
-#' @return a list with the different GA clocks when there are 
+#' @return a list with the different GA clocks when there are
 #' more than 80% of the required CpGs
 #' @export
 
 checkClocksGA <- function(x, ...) {
-
     cpg.names <- getInputCpgNames(x)
-
-    if( !all(c("coefKnightGA", "coefBohlin", 
-               "coefMayneGA", "coefLeeGA") %in% ls(.GlobalEnv))) {
-        load_DNAmGA_Clocks_data() 
+    if (!all(c( "coefKnightGA", "coefBohlin", "coefMayneGA", "coefLeeGA") 
+                %in% ls(.GlobalEnv))) {
+        load_DNAmGA_Clocks_data()
     }
-    
-    checkKnight <- coefKnightGA$CpGmarker[-1][!coefKnightGA$CpGmarker[-1] 
-                                                    %in% cpg.names]
+    checkKnight <- coefKnightGA$CpGmarker[-1][!coefKnightGA$CpGmarker[-1]
+                                                %in% cpg.names]
     coefBoh <- coefBohlin$CpGmarker[-1][!coefBohlin$CpGmarker[-1]
-                                                    %in% cpg.names]
+                                                %in% cpg.names]
     checkBohlin <- coefBoh[!coefBoh %in% cpg.names]
     checkMayne <- coefMayneGA$CpGmarker[-1][!coefMayneGA$CpGmarker[-1]
-                                                    %in% cpg.names]
+                                                %in% cpg.names]
     checkLee <- coefLeeGA$CpGmarker[-1][!coefLeeGA$CpGmarker[-1]
-                                                    %in% cpg.names]
+                                                %in% cpg.names]
 
-    sizes <- c(
-        length(checkKnight), length(checkBohlin),
-        length(checkMayne), length(checkLee)
-    )
+    sizes <- c( length(checkKnight), length(checkBohlin),
+                length(checkMayne), length(checkLee) )
 
     n <- c( nrow(coefKnightGA) - 1, length(coefBoh),
-            nrow(coefMayneGA) - 1, 
-            nrow(coefLeeGA) - 1
-          )
+            nrow(coefMayneGA) - 1,
+            nrow(coefLeeGA) - 1 )
 
-    df <- data.frame( clock = c("Knight", "Bohlin", "Mayne", "Lee"),
-                    Cpgs_in_clock = n,
-                    missing_CpGs = sizes,
-                    percentage = round((sizes / n) * 100, 1) )
+    df <- data.frame(
+        clock = c("Knight", "Bohlin", "Mayne", "Lee"),
+        Cpgs_in_clock = n,
+        missing_CpGs = sizes,
+        percentage = round((sizes / n) * 100, 1)
+    )
 
     if (any(sizes != 0)) {
         message("There are some clocks that cannot be computed since
-            your data donot contain the required CpGs.These are the total
-            number of missing CpGs for each clock : \n \n")
+                your data donot contain the required CpGs.These are the total
+                number of missing CpGs for each clock : \n \n")
         print(df)
-
-        out <- list( Knight = checkKnight, Bohlin = checkBohlin,
+    
+        out <- list( Knight = checkKnight, Bohlin = checkBohlin, 
                     Mayne = checkMayne, Lee = checkLee )
     }
     else {
@@ -66,6 +62,3 @@ checkClocksGA <- function(x, ...) {
 
     return(invisible(out))
 }
-
-
-

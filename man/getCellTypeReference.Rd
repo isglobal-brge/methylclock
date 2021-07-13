@@ -21,11 +21,10 @@ Get cell type reference
 \details{
 ORIGINAL AUTHOR: Matthew Suderman
 at githug : https://github.com/perishky/meffil
-The original meffilListCellTypeReferences and 
+The original meffilListCellTypeReferences and
 getCellTypeReference function from meffil v1.0.0
 }
 \examples{
 name <- "andrews and bakulski cord blood"
 getCellTypeReference(name)
-
 }

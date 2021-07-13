@@ -27,6 +27,6 @@ CpGs for the implemented clocks.
 To be supplied
 }
 \examples{
-TestDataset <- get_TestDataset()
-checkClocks(TestDataset)
+    TestDataset <- get_TestDataset()
+    checkClocks(TestDataset)
 }

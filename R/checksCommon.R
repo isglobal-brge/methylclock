@@ -1,15 +1,13 @@
 # Get CpGs name from input data
-getInputCpgNames <- function(x)
-{
-    
+getInputCpgNames <- function(x) {
     if (inherits(x, "data.frame") & !inherits(x, c("tbl", "tbl_df"))) {
         cpgs.names <- x[, 1]
     } else if (inherits(x, "matrix")) {
         cpgs.names <- rownames(x)
     } else if (inherits(x, c("tbl", "tbl_df"))) {
-        if( !"MethylationData" %in%  ls(.GlobalEnv)) {
+        if (!"MethylationData" %in% ls(.GlobalEnv)) {
             MethylationData <- get_MethylationDataExample()
-            assign("MethylationData", MethylationData, envir=.GlobalEnv)
+            assign("MethylationData", MethylationData, envir = .GlobalEnv)
         }
         cpgs.names <- pull(MethylationData, 1)
     } else if (inherits(x, "ExpressionSet")) {
@@ -18,17 +16,13 @@ getInputCpgNames <- function(x)
         cpgs.names <- Biobase::featureNames(x)
     }
     
-    
     return(cpgs.names)
-    
 }
 
 
 
 # Get CpGs values from input data
-getInputCpgValues <- function(x, tobetas)
-{
-    
+getInputCpgValues <- function(x, tobetas) {
     if (inherits(x, "data.frame")) {
         cpgs.names <- as.character(x[, 1, drop = TRUE])
         if (length(grep("cg", cpgs.names)) == 0) {
@@ -47,8 +41,8 @@ getInputCpgValues <- function(x, tobetas)
         cpgs <- t(minfi::getBeta(x))
     }
     else {
-        stop("x must be a data.frame, matrix, 'GenomicRatioSet' or 
-             an 'ExpressionSet' object")
+        stop("x must be a data.frame, matrix, 'GenomicRatioSet' or
+            an 'ExpressionSet' object")
     }
     
     if (tobetas) {
@@ -59,10 +53,9 @@ getInputCpgValues <- function(x, tobetas)
     }
     
     if (any(cpgs < -0.1 | cpgs > 1.1, na.rm = TRUE)) {
-        stop("Data seems to do not be beta values. Check your data 
-             or set 'toBetas=TRUE'")
+        stop("Data seems to do not be beta values. Check your data
+            or set 'toBetas=TRUE'")
     }
     
     return(cpgs)
-    
 }

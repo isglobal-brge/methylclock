@@ -7,30 +7,34 @@
 meffilEstimateCellCountsFromBetas(beta, cellTypeReference, verbose = FALSE)
 }
 \arguments{
-\item{beta}{Matrix of Illumina 450K methylation levels (rows = CpG sites, columns = subjects).}
+\item{beta}{Matrix of Illumina 450K methylation levels (rows = CpG sites,
+columns = subjects).}
 
 \item{cellTypeReference}{Character string name of the cell type reference
 to use for estimating cell counts.
 See \code{\link{meffil.list.cellTypeReferences}()} for a list of available
 references.  New references can be created using}
 
-\item{verbose}{If \code{TRUE}, then status messages are printed during execution
+\item{verbose}{If \code{TRUE}, then status messages are printed during 
+execution
 (Default: \code{FALSE}).}
 }
 \value{
 A matrix of cell count estimates.
 
-Results should be nearly identical to \code{\link[minfi]{estimateCellCounts}()}.
+Results should be nearly identical to
+\code{\link[minfi]{estimateCellCounts}()}.
 
 betas
 }
 \description{
-Estimate cell type ratios from methylation profiles of purified cell populations
-(Infinium HumanMethylation450 BeadChip).
+Estimate cell type ratios from methylation profiles of purified cell 
+populations (Infinium HumanMethylation450 BeadChip).
 }
 \details{
 ORIGINAL AUTHOR: Matthew Suderman
-The original meffil.list.cellTypeReferences and get.cellTypeReference function from meffil v1.0.0
+The original meffil.list.cellTypeReferences and get.cellTypeReference 
+function from meffil v1.0.0
 downloaded from  githug : https://github.com/perishky/meffil
 }
 \examples{
@@ -40,5 +44,4 @@ TestDataset <- get_TestDataset()
 cpgs <- t(as.matrix(TestDataset[, -1]))
 colnames(cpgs) <- TestDataset$CpGName
 meffilEstimateCellCountsFromBetas(t(cpgs), cell.count.reference)
-
 }

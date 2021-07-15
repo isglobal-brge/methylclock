@@ -15,7 +15,7 @@
 #' @return A matrix of cell count estimates.
 #'
 #' Results should be nearly identical to
-#'  \code{\link[minfi]{estimateCellCounts}()}.
+#' \code{\link[minfi:estimateCellCounts]{minfi::estimateCellCounts()}}
 #'
 #' @details ORIGINAL AUTHOR: Matthew Suderman
 #' The original meffil.list.cellTypeReferences and get.cellTypeReference 

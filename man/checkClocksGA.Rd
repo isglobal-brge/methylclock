@@ -2,7 +2,7 @@
 % Please edit documentation in R/checkClocksGA.R
 \name{checkClocksGA}
 \alias{checkClocksGA}
-\title{Check wheter input data contains the required CpGs for
+\title{Check wheter input data contains the required CpGs for 
 the implemented clocks for Gestational Age.}
 \usage{
 checkClocksGA(x, ...)
@@ -20,7 +20,7 @@ a list with the different GA clocks when there are
 more than 80% of the required CpGs
 }
 \description{
-Check wheter input data contains the required CpGs for
+Check wheter input data contains the required CpGs for 
 the implemented clocks for Gestational Age.
 }
 \details{

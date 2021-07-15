@@ -23,7 +23,7 @@ execution
 A matrix of cell count estimates.
 
 Results should be nearly identical to
-\code{\link[minfi]{estimateCellCounts}()}.
+\code{\link[minfi:estimateCellCounts]{minfi::estimateCellCounts()}}
 
 betas
 }

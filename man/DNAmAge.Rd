@@ -18,18 +18,19 @@ DNAmAge(
 )
 }
 \arguments{
-\item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in first
-colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in 
-rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.}
+\item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in 
+first colum - i.e. Horvath's format), matrix (individuals in columns and 
+Cpgs in rows having CpG names in the rownames), ExpressionSet or 
+GenomicRatioSet.}
 
-\item{clocks}{the methods used for estimating DNAmAge. Currrently "Horvath",
-"Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" are available.
-Default is "all" and all clocks are estimated.}
+\item{clocks}{the methods used for estimating DNAmAge. Currrently 
+"Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" 
+are available. Default is "all" and all clocks are estimated.}
 
-\item{toBetas}{Should data be transformed to beta values? Default is FALSE.
+\item{toBetas}{Should data be transformed to beta values? Default is FALSE. 
 If TRUE, it implies data are M values.}
 
-\item{fastImp}{Is fast imputation performed if necessary? (see details).
+\item{fastImp}{Is fast imputation performed if necessary? (see details). 
 Default is FALSE}
 
 \item{normalize}{Is Horvath's normalization performed? By default is FALSE}
@@ -38,11 +39,11 @@ Default is FALSE}
 
 \item{cell.count}{Are cell counts estimated? Default is TRUE.}
 
-\item{cell.count.reference}{Used when 'cell.count' is TRUE. Default is
-"blood gse35069 complete".See 'meffil::meffil.list.cell.count.references()'
+\item{cell.count.reference}{Used when 'cell.count' is TRUE. Default is 
+"blood gse35069 complete".See 'meffil::meffil.list.cell.count.references()' 
 for possible values.}
 
-\item{min.perc}{Indicates the minimum conicidence percentage required
+\item{min.perc}{Indicates the minimum conicidence percentage required 
 between CpGs in or dataframee x and CpGs in clock coefficients to perform 
 the calculation. If min.prec is too low, the estimated gestational DNAm 
 age can be poor}
@@ -57,7 +58,7 @@ DNAm age estimation using different DNA methylation clocks.
 }
 \details{
 Imputation is performed when having missing data.
-Fast imputation is performed by ... 
+Fast imputation is performed by ...
 what about imputing only when CpGs for the clock are missing?
 }
 \examples{

@@ -14,8 +14,8 @@
 #'
 #' path <- system.file("extdata", package = "methylclock")
 #' covariates <- read_csv(file.path(
-#'   path,
-#'   "SampleAnnotationExample55.csv"
+#' path,
+#' "SampleAnnotationExample55.csv"
 #' ))
 #' age <- covariates$Age
 #' MethylationData <- get_MethylationDataExample()

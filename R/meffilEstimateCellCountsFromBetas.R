@@ -1,16 +1,16 @@
 #' Estimate cell counts for a beta matrix from a reference
 #'
-#' Estimate cell type ratios from methylation profiles of purified cell
-#'  populations (Infinium HumanMethylation450 BeadChip).
+#' Estimate cell type ratios from methylation profiles of purified cell 
+#' populations (Infinium HumanMethylation450 BeadChip).
 #'
-#' @param beta Matrix of Illumina 450K methylation levels (rows = CpG sites,
-#'  columns = subjects).
-#' @param verbose If \code{TRUE}, then status messages are printed during
-#'  execution
+#' @param beta Matrix of Illumina 450K methylation levels (rows = CpG sites, 
+#' columns = subjects).
+#' @param verbose If \code{TRUE}, then status messages are printed during 
+#' execution
 #' (Default: \code{FALSE}).
-#' @param cellTypeReference Character string name of the cell type reference
+#' @param cellTypeReference Character string name of the cell type reference 
 #' to use for estimating cell counts.
-#' See \code{\link{meffil.list.cellTypeReferences}()} for a list of available
+#' See \code{\link{meffil.list.cellTypeReferences}()} for a list of available 
 #' references.  New references can be created using
 #' @return A matrix of cell count estimates.
 #'
@@ -18,8 +18,8 @@
 #'  \code{\link[minfi]{estimateCellCounts}()}.
 #'
 #' @details ORIGINAL AUTHOR: Matthew Suderman
-#' The original meffil.list.cellTypeReferences and get.cellTypeReference
-#'  function from meffil v1.0.0
+#' The original meffil.list.cellTypeReferences and get.cellTypeReference 
+#' function from meffil v1.0.0
 #' downloaded from  githug : https://github.com/perishky/meffil
 #'
 #' @return betas

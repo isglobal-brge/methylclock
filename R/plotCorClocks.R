@@ -1,7 +1,7 @@
 #' Plot correlation among DNAm clockx
 #' @param x a tible or data.frame with the different DNAm clocks
-#' @param ... other arguments to be passs through function
-#'  'chart.Correlation' from 'PerformanceAnalytics' package
+#' @param ... other arguments to be passs through function 
+#' 'chart.Correlation' from 'PerformanceAnalytics' package
 #'
 #' @details To be supplied
 #'

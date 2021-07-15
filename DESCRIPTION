@@ -42,10 +42,10 @@ Imports:
   preprocessCore,
   dynamicTreeCut
 Suggests: 
-  BiocStyle,
-  knitr, 
-  GEOquery,
-  rmarkdown
+    BiocStyle,
+    knitr,
+    GEOquery,
+    rmarkdown
 LinkingTo: Rcpp
 Encoding: UTF-8
 RoxygenNote: 7.1.1

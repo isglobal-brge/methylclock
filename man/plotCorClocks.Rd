@@ -9,7 +9,7 @@ plotCorClocks(x, ...)
 \arguments{
 \item{x}{a tible or data.frame with the different DNAm clocks}
 
-\item{...}{other arguments to be passs through function
+\item{...}{other arguments to be passs through function 
 'chart.Correlation' from 'PerformanceAnalytics' package}
 }
 \value{

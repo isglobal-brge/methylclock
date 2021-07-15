@@ -5,7 +5,7 @@
 #' @param object resulting object from checkClocks functions
 #' @param clock string with the implemented clock, possible values are :
 #' "Knight", "Bohlin", "Mayne" and "Lee", "Horvath", "Hannum", "Levine",
-#'  "Horvath2", "PedBE", "Wu" and "TL"
+#' "Horvath2", "PedBE", "Wu" and "TL"
 #' @examples
 #' TestDataset <- get_TestDataset()
 #' cpgs.missing.GA <- checkClocksGA(TestDataset)

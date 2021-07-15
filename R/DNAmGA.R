@@ -1,27 +1,28 @@
 #' Gestational DNAm age estimation using different DNA methylation clocks.
-#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first
-#'  colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in
-#'   rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
-#' @param toBetas Should data be transformed to beta values? Default is FALSE.
-#'  If TRUE, it implies data are M values.
-#' @param fastImp Is fast imputation performed if necessary? (see details).
-#'  Default is FALSE
+#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in 
+#' first colum - i.e. Horvath's format), matrix (individuals in columns 
+#' and Cpgs in rows having CpG names in the rownames), ExpressionSet or 
+#' GenomicRatioSet.
+#' @param toBetas Should data be transformed to beta values? Default is FALSE. 
+#' If TRUE, it implies data are M values.
+#' @param fastImp Is fast imputation performed if necessary? (see details). 
+#' Default is FALSE
 #' @param normalize Is Horvath's normalization performed? By default is FALSE
-#' @param age individual's chronological age. Required to compute gestational
-#'  age difference output
+#' @param age individual's chronological age. Required to compute gestational 
+#' age difference output
 #' @param cell.count Are cell counts estimated? Default is TRUE.
-#' @param cell.count.reference Used when 'cell.count' is TRUE. Default is
-#' "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()'
-#'  for possible values.
-#' @param min.perc Indicates the minimum conicidence percentage required
-#'  between CpGs in or dataframee x and CpGs in clock coefficients to perform
-#'   the calculation. If min.prec is too low, the estimated gestational DNAm
-#'    age can be poor
+#' @param cell.count.reference Used when 'cell.count' is TRUE. Default is 
+#' "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' 
+#' for possible values.
+#' @param min.perc Indicates the minimum conicidence percentage required 
+#' between CpGs in or dataframee x and CpGs in clock coefficients to perform 
+#' the calculation. If min.prec is too low, the estimated gestational DNAm 
+#' age can be poor
 #' @param ... Other arguments to be passed through impute package
 #'
-#' @details Imputation is performed when having missing data.
-#'          Fast imputation is performed by ...
-#'          what about imputing only when CpGs for the clock are missing?
+#' @details Imputation is performed when having missing data. 
+#' Fast imputation is performed by ... 
+#' what about imputing only when CpGs for the clock are missing?
 #'
 #' @examples
 #' TestDataset <- get_TestDataset()

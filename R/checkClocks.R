@@ -7,8 +7,8 @@
 #' @param    ... other parameters
 #' @details To be supplied
 #' @examples
-#'    TestDataset <- get_TestDataset()
-#'    checkClocks(TestDataset)
+#' TestDataset <- get_TestDataset()
+#' checkClocks(TestDataset)
 #' @return a list with the different clocks when there are more than 80% of 
 #' the required CpGs
 #' @importFrom Biobase featureNames exprs

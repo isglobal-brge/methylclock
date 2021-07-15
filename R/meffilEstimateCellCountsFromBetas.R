@@ -14,8 +14,9 @@
 #' references.  New references can be created using
 #' @return A matrix of cell count estimates.
 #'
-#' Results should be nearly identical to
-#' \code{\link[minfi:estimateCellCounts]{minfi::estimateCellCounts()}}
+#' Results should be nearly identical to estimateCellCounts() 
+#' function in minfi package
+#'  
 #'
 #' @details ORIGINAL AUTHOR: Matthew Suderman
 #' The original meffil.list.cellTypeReferences and get.cellTypeReference 

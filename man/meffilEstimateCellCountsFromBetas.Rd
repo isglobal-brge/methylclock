@@ -22,8 +22,9 @@ execution
 \value{
 A matrix of cell count estimates.
 
-Results should be nearly identical to
-\code{\link[minfi:estimateCellCounts]{minfi::estimateCellCounts()}}
+Results should be nearly identical to estimateCellCounts() function 
+in minfi package
+
 
 betas
 }

@@ -10,13 +10,12 @@
 #' (Default: \code{FALSE}).
 #' @param cellTypeReference Character string name of the cell type reference 
 #' to use for estimating cell counts.
-#' See \code{\link{meffil.list.cellTypeReferences}()} for a list of available 
+#' See \code{\link{meffilListCellTypeReferences}()} for a list of available 
 #' references.  New references can be created using
 #' @return A matrix of cell count estimates.
 #'
-#' Results should be nearly identical to estimateCellCounts() 
-#' function in minfi package
-#'  
+#' Results should be nearly identical to
+#' \code{\link[minfi:estimateCellCounts]{minfi::estimateCellCounts()}}
 #'
 #' @details ORIGINAL AUTHOR: Matthew Suderman
 #' The original meffil.list.cellTypeReferences and get.cellTypeReference 

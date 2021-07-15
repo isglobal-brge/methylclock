@@ -1,7 +1,7 @@
 Package: methylclock
 Type: Package
 Title: Methylclock - DNA methylation-based clocks
-Version: 0.99.18
+Version: 0.99.19
 Authors@R: c( person("Dolors", "Pelegri-Siso", , "dolors.pelegri@isglobal.org", role = c("aut", "cre")),
               person("Juan R.", "Gonzalez", ,"juanr.gonzalez@isglobal.org", role = c("aut")))
 Description: This package allows to estimate chronological and gestational DNA methylation

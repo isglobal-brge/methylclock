@@ -250,7 +250,7 @@ DNAmAge <- function(x,
           BNN <- ageAcc2(BNN, df, lab = "BNN")
         }
         if (5 %in% method) {
-          skinHorvath <- ageAcc2(skinHorvath, df, lab = "Hovarth2")
+          skinHorvath <- ageAcc2(skinHorvath, df, lab = "Horvath2")
         }
         if (6 %in% method) {
           PedBE <- ageAcc2(PedBE, df, lab = "PedBE")

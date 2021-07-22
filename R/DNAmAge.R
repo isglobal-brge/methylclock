@@ -1,6 +1,6 @@
 #' DNAm age estimation using different DNA methylation clocks.
 #' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
-#' @param clocks the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" are available. Default is "all" and all clocks are estimated.
+#' @param clocks the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE" and "all" are available. Default is "all" and all clocks are estimated.
 #' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
 #' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
 #' @param normalize Is Horvath's normalization performed? By default is FALSE
@@ -36,10 +36,10 @@ DNAmAge <- function(x,
                     cell.count.reference = "blood gse35069 complete",
                     min.perc = 0.8,
                     ...) {
-  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE", "Wu", "TL", "all")
+  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE", "Wu", "TL", "all")
   method <- match(clocks, available.clocks)
   if (any(is.na(method))) {
-    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, Horvath2, PedBE, Wu, TL")
+    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, skinHorvath, PedBE, Wu, TL")
   }
   if (length(available.clocks) %in% method) {
     method <- c(1:(length(available.clocks) - 1))
@@ -213,7 +213,7 @@ DNAmAge <- function(x,
         BNN <- ageAcc1(BNN, age, lab = "BNN")
       }
       if (5 %in% method) {
-        skinHorvath <- ageAcc1(skinHorvath, age, lab = "Horvath2")
+        skinHorvath <- ageAcc1(skinHorvath, age, lab = "skinHorvath")
       }
       if (6 %in% method) {
         PedBE <- ageAcc1(PedBE, age, lab = "PedBE")
@@ -250,7 +250,7 @@ DNAmAge <- function(x,
           BNN <- ageAcc2(BNN, df, lab = "BNN")
         }
         if (5 %in% method) {
-          skinHorvath <- ageAcc2(skinHorvath, df, lab = "Horvath2")
+          skinHorvath <- ageAcc2(skinHorvath, df, lab = "skinHorvath")
         }
         if (6 %in% method) {
           PedBE <- ageAcc2(PedBE, df, lab = "PedBE")

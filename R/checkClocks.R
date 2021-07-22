@@ -65,7 +65,7 @@ checkClocks <- function(x, ...) {
 
     out <- list(
       Horvath = checkHorvath, Hannum = checkHannum,
-      Levine = checkLevine, Horvath2 = checkSkin,
+      Levine = checkLevine, skinHorvath = checkSkin,
       PedBE = checkPedBE, Wu = checkWu, TL = checkTL
     )
   }

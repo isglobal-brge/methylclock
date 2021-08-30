@@ -51,7 +51,7 @@ biomarer is also computed:
 chronological age.
 - **BNN**: It uses Horvath's CpGs to train a Bayesian Neural Network
 (BNN) to predict DNAm age as described in @alfonso2018.
-- **Horvath's skin+blood clock (Horvath2)**: Epigenetic clock for skin
+- **Horvath's skin+blood clock (skinHorvath)**: Epigenetic clock for skin
 and blood cells. It uses 391 CpGs described in @horvath2018epigenetic.
 It was trained using 450K EPIC arrays in skin and blood sampels.
 - **PedBE clock**: Epigenetic clock from buccal epithelial swabs. It's
@@ -122,7 +122,7 @@ library(methylclock)
 
 These libraries are required to reproduce this document:
 
-```{r load_others}
+```{r load_others, eval=TRUE}
 library(Biobase)
 library(tibble)
 library(impute)
@@ -439,8 +439,15 @@ object that can be the input of our main function.
 
 
 ```{r get_geo_gse58045, eval=TRUE}
+# To avoid connection buffer size 
+Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 10)
+
+# Download data
 dd <- GEOquery::getGEO("GSE58045")
 gse58045 <- dd[[1]]
+
+# Restore connection buffer size
+Sys.setenv("VROOM_CONNECTION_SIZE" = 131072)
 ```
 
 ```{r show_gse58045}
@@ -451,7 +458,6 @@ The chronological age is obtained by using `pData` function from  `Biobase`
 package that is able to deal with `ExpressionSet` objects:
 
 ```{r age_gse58045}
-library(Biobase)
 pheno <- pData(gse58045)
 age <- as.numeric(pheno$`age:ch1`)
 ``` 
@@ -492,8 +498,15 @@ in lung cancer. Data can be retrieved into R by
 ```
 
 ```{r get_geo_gse19711, eval=TRUE}
+# To avoid connection buffer size 
+Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 10)
+
+# Download data
 dd <- GEOquery::getGEO("GSE19711")
 gse19711 <- dd[[1]]
+
+# Restore connection buffer size
+Sys.setenv("VROOM_CONNECTION_SIZE" = 131072)
 ```
 
 
@@ -542,10 +555,10 @@ mod.horvath1 <- glm(disease ~ ageAcc.Horvath ,
                     family="binomial")
 summary(mod.horvath1)
 
-mod.horvath2 <- glm(disease ~ ageAcc2.Horvath , 
-                    data=age.gse19711,
-                    family="binomial")
-summary(mod.horvath2)
+mod.skinHorvath <- glm(disease ~ ageAcc2.Horvath , 
+                       data=age.gse19711,
+                       family="binomial")
+summary(mod.skinHorvath)
 
 mod.horvath3 <- glm(disease ~ ageAcc3.Horvath , 
                     data=age.gse19711,

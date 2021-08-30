@@ -5,7 +5,7 @@
 #' @param object resulting object from checkClocks functions
 #' @param clock string with the implemented clock, possible values are :
 #' "Knight", "Bohlin", "Mayne" and "Lee", "Horvath", "Hannum", "Levine",
-#' "Horvath2", "PedBE", "Wu" and "TL"
+#' "skinHorvath", "PedBE", "Wu" and "TL"
 #' @examples
 #' TestDataset <- get_TestDataset()
 #' cpgs.missing.GA <- checkClocksGA(TestDataset)
@@ -19,7 +19,7 @@
 commonClockCpgs <- function(object, clock) {
     available.clocks <- c( "Knight", "Bohlin", "Mayne", "Lee",
                             "Horvath", "Hannum", "Levine", "BNN",
-                            "Horvath2", "PedBE", "Wu", "TL" )
+                            "skinHorvath", "PedBE", "Wu", "TL" )
     
     if (sum(available.clocks %in% names(object)) == 0) {
         stop("Object don't contain any GA clock information")
@@ -33,7 +33,7 @@ commonClockCpgs <- function(object, clock) {
                     "Mayne" = object$Mayne, "Lee" = object$Lee,
                     "Horvath" = object$Horvath, "Hannum" = object$Hannum,
                     "Levine" = object$Levine, "BNN" = object$Horvath,
-                    "Horvath2" = object$SkinHorvath, "PedBE" = object$PedBE, 
+                    "skinHorvath" = object$SkinHorvath, "PedBE" = object$PedBE,
                     "Wu" = object$Wu, "TL" = object$TL )
     return(res)
 }

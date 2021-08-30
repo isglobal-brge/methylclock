@@ -29,7 +29,7 @@ This package allows to estimate chronological and gestational DNA methylation (D
 - **Hannum's clock**: It uses 71 CpGs described in @hannum2013genome. It was trained using 450K array in blood samples. Another are-related biomarer is also computed:
      - **AMAR** (Apparent Methylomic Aging Rate): Measure proposed in @hannum2013genome computed as the ratio between DNAm age and the chronological age.
 - **BNN**: It uses Horvath's CpGs to train a Bayesian Neural Network (BNN) to predict DNAm age as described in @alfonso2018.
-- **Horvath's skin+blood clock (Horvath2)**: Epigenetic clock for skin and blood cells. It uses 391 CpGs described in @horvath2018epigenetic. It was trained using 450K EPIC arrays in skin and blood sampels.
+- **Horvath's skin+blood clock (skinHorvath)**: Epigenetic clock for skin and blood cells. It uses 391 CpGs described in @horvath2018epigenetic. It was trained using 450K EPIC arrays in skin and blood sampels.
 - **PedBE clock**: Epigenetic clock from buccal epithelial swabs. It's intended purpose is buccal samples from individuals aged 0-20 years old. It uses 84 CpGs described in @mcewen2019pedbe. The authors gathered 1,721 genome-wide DNAm profiles from 11 different cohorts with individuals aged 0 to 20 years old. 
 - **Wu's clock**: It uses 111 CpGs described in @wu2019dna. It is designed to predict age in children. It was trained using 27K and 450K.
 

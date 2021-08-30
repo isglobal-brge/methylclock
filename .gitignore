@@ -51,3 +51,4 @@
 *.gz
 *.old
 methylclock.Rproj
+R/.normalization.R

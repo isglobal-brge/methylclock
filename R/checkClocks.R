@@ -47,7 +47,7 @@ checkClocks <- function(x, ...) {
         of missing CpGs for each clock : \n \n")
         print(df)
         out <- list( Horvath = checkHorvath, Hannum = checkHannum,
-                    Levine = checkLevine, Horvath2 = checkSkin,
+                    Levine = checkLevine, skinHorvath = checkSkin,
                     PedBE = checkPedBE, Wu = checkWu, TL = checkTL )
     }
     else {

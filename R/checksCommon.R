@@ -36,6 +36,14 @@ getInputCpgValues <- function(x, tobetas) {
     }
     else if (inherits(x, "ExpressionSet")) {
         cpgs <- t(Biobase::exprs(x))
+        if(is.character(cpgs[1])) {
+            colcpg <- colnames(cpgs)
+            rowcpg <- rownames(cpgs)
+            cpgs <- matrix(as.numeric(cpgs), ncol = length(colcpg))    
+            rownames(cpgs) <- rowcpg
+            colnames(cpgs) <- colcpg
+        }
+        
     }
     else if (inherits(x, "GenomicRatioSet")) {
         cpgs <- t(minfi::getBeta(x))
@@ -44,6 +52,7 @@ getInputCpgValues <- function(x, tobetas) {
         stop("x must be a data.frame, matrix, 'GenomicRatioSet' or
             an 'ExpressionSet' object")
     }
+    
     
     if (tobetas) {
         toBeta <- function(m) {

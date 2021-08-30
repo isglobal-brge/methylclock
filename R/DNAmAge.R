@@ -4,7 +4,7 @@
 #' Cpgs in rows having CpG names in the rownames), ExpressionSet or 
 #' GenomicRatioSet.
 #' @param clocks the methods used for estimating DNAmAge. Currrently 
-#' "Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" 
+#' "Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE" and "all" 
 #' are available. Default is "all" and all clocks are estimated.
 #' @param toBetas Should data be transformed to beta values? Default is FALSE. 
 #' If TRUE, it implies data are M values.
@@ -47,13 +47,13 @@ DNAmAge <- function(x,
                     cell.count.reference = "blood gse35069 complete",
                     min.perc = 0.8,
                     ...) {
-    available.clocks <- c( "Horvath", "Hannum", "Levine", "BNN", "Horvath2",
+    available.clocks <- c( "Horvath", "Hannum", "Levine", "BNN", "skinHorvath",
                             "PedBE", "Wu", "TL", "all" )
     method <- match(clocks, available.clocks)
 
     if (any(is.na(method))) {
         stop("You wrote the name of an unavailable clock. Available clocks are:
-            Horvath, Hannum, Levine, BNN, Horvath2, PedBE, Wu, TL")
+            Horvath, Hannum, Levine, BNN, skinHorvath, PedBE, Wu, TL")
     }
 
     if (length(available.clocks) %in% method) {
@@ -169,7 +169,7 @@ DNAmAge <- function(x,
                 BNN <- ageAcc1(BNN, age, lab = "BNN")
             }
             if (5 %in% method) {
-                skinHorvath <- ageAcc1(skinHorvath, age, lab = "Horvath2")
+                skinHorvath <- ageAcc1(skinHorvath, age, lab = "skinHorvath")
             }
             if (6 %in% method) {
                 PedBE <- ageAcc1(PedBE, age, lab = "PedBE")

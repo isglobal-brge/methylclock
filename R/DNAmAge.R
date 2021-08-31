@@ -125,9 +125,6 @@ DNAmAge <- function(x,
     )
   }
 
-a<<- cpgs.imp
-
-
   if (2 %in% method) {
     hannum <- predAge(cpgs.imp, coefHannum, intercept = FALSE, min.perc)
     Hannum <- data.frame(

@@ -297,12 +297,12 @@ One may be interested in assessing association between chronologial age and DNA 
 
 
 ```{r get_gse58045, echo=FALSE}
-# ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
-# load(file.path(ff, "data/GSE58045.Rdata"))
+ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
+load(file.path(ff, "data/GSE58045.Rdata"))
 ```
 
 
-```{r get_geo_gse58045, eval=TRUE}
+```{r get_geo_gse58045, eval=FALSE}
 dd <- GEOquery::getGEO("GSE58045")
 gse58045 <- dd[[1]]
 ```
@@ -341,11 +341,11 @@ Let us illustrate how to use DNAmAge information in association studies (e.g cas
 
 
 ```{r get_gse19711, echo=FALSE}
-# ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
-# load(file.path(ff, "data/GSE19711.Rdata"))
+ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
+load(file.path(ff, "data/GSE19711.Rdata"))
 ```
 
-```{r get_geo_gse19711, eval=TRUE}
+```{r get_geo_gse19711, eval=FALSE}
 dd <- GEOquery::getGEO("GSE19711")
 gse19711 <- dd[[1]]
 ```
@@ -435,11 +435,11 @@ Here we observe as the positive association disapears after adjusting for cell c
 
 
 ```{r get_gse109446, echo=FALSE}
-# ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
-# load(file.path(ff, "data/GSE109446.Rdata"))
+ff <- "c:/juan/CREAL/BayesianPrediction/Bayesian_clock/paper"
+load(file.path(ff, "data/GSE109446.Rdata"))
 ```
 
-```{r get_geo_109446, eval=TRUE}
+```{r get_geo_109446, eval=FALSE}
 dd <- GEOquery::getGEO("GSE109446")
 gse109446 <- dd[[1]]
 ```
@@ -550,6 +550,11 @@ We can obtain, for instance, the correlation among the clocks estimated for the 
 plotCorClocks(age.gse58045)
 ```
 
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
 # References
 
-SessionInfo()

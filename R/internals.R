@@ -39,11 +39,7 @@ predAge <- function(x, coefs, intercept = TRUE, min.perc = 0.8) {
     mask <- coefs$CpGmarker[-1] %in% cpgs
   }
   if (mean(mask) > min.perc) {
-    if (intercept) {
-      obs.cpgs <- coefs$CpGmarker[mask]
-    } else {
-      obs.cpgs <- coefs$CpGmarker[-1][mask]
-    }
+    obs.cpgs <- coefs$CpGmarker[mask]
     X <- x[, obs.cpgs]
     predAge <- X %*% coefs$CoefficientTraining[coefs$CpGmarker %in% obs.cpgs]
     if (intercept) {

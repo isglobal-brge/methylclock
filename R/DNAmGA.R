@@ -95,7 +95,7 @@ DNAmGA <- function(x, toBetas = FALSE,
 
     # --------------> Bohlin
     bohlin <- predAge(cpgs.imp, coefBohlin, intercept = TRUE, min.perc)
-    Bohlin <- data.frame( id = rownames(cpgs.imp), Bohlin = bohlin / 52 )
+    Bohlin <- data.frame( id = rownames(cpgs.imp), Bohlin = bohlin / 7 )
 
     # --------------> Mayne
     mayne <- predAge(cpgs.imp, coefMayneGA, intercept = TRUE, min.perc)

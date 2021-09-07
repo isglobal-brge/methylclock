@@ -33,11 +33,8 @@ ageAcc2 <- function(x, df, lab) {
 
 predAge <- function(x, coefs, intercept = TRUE, min.perc = 0.8) {
   cpgs <- colnames(x)
-  if (intercept) {
-    mask <- coefs$CpGmarker %in% cpgs
-  } else {
-    mask <- coefs$CpGmarker[-1] %in% cpgs
-  }
+  mask <- coefs$CpGmarker %in% cpgs
+
   if (mean(mask) > min.perc) {
     obs.cpgs <- coefs$CpGmarker[mask]
     X <- x[, obs.cpgs]

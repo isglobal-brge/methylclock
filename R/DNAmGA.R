@@ -118,14 +118,14 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   # --------------> Bohlin
 
-#  bohlin <- try(GAprediction::predictGA(cpgs.imp, transp = FALSE, se = FALSE)[, 1] / 52, TRUE)
+#  bohlin <- try(GAprediction::predictGA(cpgs.imp, transp = FALSE, se = FALSE)[, 1] / 7, TRUE)
 #  if (inherits(bohlin, "try-error")) {
 #    bohlin <- rep(NA, nrow(cpgs.imp))
 #  }
   bohlin <- predAge(cpgs.imp, coefBohlin, intercept = TRUE, min.perc)
   Bohlin <- data.frame(
     id = rownames(cpgs.imp),
-    Bohlin = bohlin / 52
+    Bohlin = bohlin / 7
   )
 
   # --------------> Mayne

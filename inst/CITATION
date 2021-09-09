@@ -1,7 +1,7 @@
 citHeader("To cite methylclock in publications, please use:")
 
 citEntry(entry="Article",
-         author = "Pelegrí-Sisó D, de Prado P, Ronkainen J, Bustamante M, González JR", 
+         author = "Pelegri-Siso D, de Prado P, Ronkainen J, Bustamante M, Gonzalez JR", 
          title = "methylclock: a Bioconductor package to estimate DNA methylation age.",
          volume = "37", 
          number = "12", 
@@ -11,7 +11,7 @@ citEntry(entry="Article",
          url = "https://doi.org/10.1093/bioinformatics/btaa825", 
          journal = "Bioinformatics",
          issn = "1367-4803",
-         textVersion="Dolors Pelegrí-Sisó, Paula de Prado, Justiina Ronkainen, Mariona Bustamante, Juan R González, methylclock: a Bioconductor package to estimate DNA methylation age, Bioinformatics, Volume 37, Issue 12, 15 June 2021, Pages 1759–1760, https://doi.org/10.1093/bioinformatics/btaa825."
+         textVersion="Dolors Pelegri-Siso, Paula de Prado, Justiina Ronkainen, Mariona Bustamante, Juan R Gonzalez, methylclock: a Bioconductor package to estimate DNA methylation age, Bioinformatics, Volume 37, Issue 12, 15 June 2021, Pages 1759–1760, https://doi.org/10.1093/bioinformatics/btaa825."
 )
 
 citFooter("This free open-source software implements academic research by the authors and co-workers. If you use it, please support the project by citing the appropriate journal articles.")

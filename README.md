@@ -1,6 +1,6 @@
 # methylclock
 
-To use methylclock under R<4.1 you need to install the package under master branch or release <= 0.7.3 (https://github.com/isglobal-brge/methylclock/releases/tag/v0.7.3)
+To use methylclock under R<4.1 you need to install the package under main branch or release <= 0.99.0 (https://github.com/isglobal-brge/methylclock/releases/tag/v0.7.7)
 
 ## Installation : 
 
@@ -13,14 +13,20 @@ install_github("isglobal-brge/methylclock@main")
 
 ```
 
-To install methylclock to be used with R >= 4.1 : 
+Latest version is available in Bioconductor development release 3.14,
+to install the Bioconductor package R >= 4.1 is required : 
 
 ```r{install}
-library(devtools)
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
-install_github("isglobal-brge/methylclock@master")
-
+BiocManager::install("methylclock")
 ```
+
+Source code for Bioconductor release can be found under `master` branch.
+
+https://github.com/isglobal-brge/methylclock/tree/master
+
 
 ## Description
  

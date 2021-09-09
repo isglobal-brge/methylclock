@@ -1,7 +1,7 @@
 # methylclock
 
 
-To use methylclock under R<4.1 you need to install the package under main branch or release <= 0.7.3 (https://github.com/isglobal-brge/methylclock/releases/tag/v0.7.3)
+To use methylclock under R<4.1 you need to install the package under main branch or release <= 0.99.0 (https://github.com/isglobal-brge/methylclock/releases/tag/v0.7.7)
 
 ## Installation : 
 

@@ -48,3 +48,7 @@ The biological DNAm clocks implemented in this package are:
 
 - **Levine's clock** (also know as PhenoAge): It uses 513 CpGs described in @levine2018epigenetic. It was trained using 27K, 450K and EPIC arrays in blood samples.
 - **Telomere Length's clock** (TL): It uses 140 CpGs described in @lu2019dna It was trained using 450K and EPIC arrays in blood samples.
+
+## Citation
+<a id="1">[1]</a> 
+Dolors Pelegri-Siso, Paula de Prado, Justiina Ronkainen, Mariona Bustamante, Juan R Gonzalez, methylclock: a Bioconductor package to estimate DNA methylation age, Bioinformatics, Volume 37, Issue 12, 15 June 2021, Pages 1759â€“1760, doi: [10.1093/bioinformatics/btaa825](https://doi.org/10.1093/bioinformatics/btaa825). PMID: 32960939.

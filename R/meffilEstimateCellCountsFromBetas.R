@@ -69,8 +69,14 @@ quantile.normalize.betas <- function(beta, subsets,
         full.quantiles <- quantiles[[subset.name]]$beta
         full.quantiles <- approx( seq_len(length(full.quantiles)), 
                                 full.quantiles, seq_len(length(subset)) )$y
-        beta[subset, ] <- preprocessCore::normalize.quantiles.use.target(
-                                beta[subset, , drop = FALSE], full.quantiles )
+        tryCatch(
+            beta[subset, ] <- preprocessCore::normalize.quantiles.use.target(
+                beta[subset, , drop = FALSE],
+                full.quantiles
+            ),error = function(e){
+                message("An error occurred:\n", e, " try to disable threading in preprocessCore package")
+            }
+        )
     }
     beta
 }

@@ -256,6 +256,19 @@ umbilical cord blood, Bcell, CD4T, CD8T, Gran, Mono, NK and nRBC
 Next we illustrate how to estimate the chronological DNAm age using several
 datasets which aim to cover different data input formats.
 
+
+**IMPORTANT NOTE**: On some systems we can find an error in the `DNAmAge()`
+function when parameter `cell.count = TRUE`. This error is related to 
+`preprocessCore` package and can be fixed by disabling multi-threading
+when installing the preprocessCore package using the command
+
+```
+BiocManager::install("preprocessCore", 
+                     configure.args = "--disable-threading", 
+                     force = TRUE)
+```
+
+
 ## Data in Horvath's format (e.g. `csv` with CpGs in rows) {#section-example}
 Let us start by reproducing the results proposed in @horvath2013dna. It uses
 the format available in the file 'MethylationDataExample55.csv" from his

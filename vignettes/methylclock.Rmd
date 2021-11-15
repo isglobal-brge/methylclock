@@ -162,6 +162,18 @@ The EEAA method requires to estimate cell counts. We use the package `meffil` (@
 
 Next we illustrate how to estimate the chronological DNAm age using several datasets which aim to cover different data input formats.
 
+
+**IMPORTANT NOTE**: On some systems we can find an error in the `DNAmAge()`
+function when parameter `cell.count = TRUE`. This error is related to 
+`preprocessCore` package and can be fixed by disabling multi-threading
+when installing the preprocessCore package using the command
+
+```
+BiocManager::install("preprocessCore", 
+                     configure.args = "--disable-threading", 
+                     force = TRUE)
+```
+
 ## Data in Horvath's format (e.g. `csv` with CpGs in rows) {#section-example}
 Let us start by reproducing the results proposed in @horvath2013dna. It uses the format available in the file 'MethylationDataExample55.csv" from his tutorial (available [here](https://dnamage.genetics.ucla.edu/home)). These data are available at `methylclock` package. Although these data can be loaded into R by using standard functions such as `read.csv` we hihgly recommend to use functions from `tidiverse`, in particular `read_csv` from `readr` package. The main reason is that currently researchers are analyzing Illumina 450K or EPIC arrays that contains a huge number of CpGs that can take a long time to be loaded when using basic importing R function. These functions import `csv` data as tibble which is one of the possible formats of `DNAmAge` function
 

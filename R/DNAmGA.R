@@ -140,7 +140,7 @@ DNAmGA <- function(x, toBetas = FALSE,
   # --------------> Lee
 
 
-  if (mean(coefLeeGA$CpGmarker[-1] %in% colnames(cpgs.imp)) > 0.8) {
+  if (mean(coefLeeGA$CpGmarker[-1] %in% colnames(cpgs.imp)) >= min.perc) {
     #    cpgs.imp.s <- cpgs.imp[, coefLeeGA$CpGs[-1]]
     #    Lee.RPC <- coefLeeGA$Coefficient_RPC[1] +
     #      cpgs.imp.s%*%coefLeeGA$Coefficient_RPC[-1]

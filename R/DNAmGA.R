@@ -103,7 +103,7 @@ DNAmGA <- function(x, toBetas = FALSE,
 
 
     # --------------> Lee
-    if (mean(coefLeeGA$CpGmarker[-1] %in% colnames(cpgs.imp)) > 0.8) {
+    if (mean(coefLeeGA$CpGmarker[-1] %in% colnames(cpgs.imp)) >= min.perc) {
         coefLeeSel <- data.frame( CpGmarker = coefLeeGA$CpGmarker,
                     CoefficientTraining = coefLeeGA$Coefficient_RPC )
         Lee.RPC <- predAge(cpgs.imp, coefLeeSel, intercept = TRUE, min.perc)

@@ -30,6 +30,11 @@ ageAcc2 <- function(x, df, lab) {
 
 
 predAge <- function(x, coefs, intercept = TRUE, min.perc = 0.8) {
+    
+    if(inherits(coefs$CpGmarker, "factor")){
+        coefs$CpGmarker <- as.character(coefs$CpGmarker)
+    }
+    
     cpgs <- colnames(x)
     
     mask <- coefs$CpGmarker %in% cpgs

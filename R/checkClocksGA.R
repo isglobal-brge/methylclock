@@ -16,7 +16,7 @@ checkClocksGA <- function(x, ...) {
   } else if (inherits(x, "matrix")) {
     cpg.names <- rownames(x)
   } else if (inherits(x, c("tbl", "tbl_df"))) {
-    cpg.names <- pull(MethylationData, 1)
+    cpg.names <- pull(x, 1)
   } else if (inherits(x, "ExpressionSet")) {
     cpg.names <- Biobase::featureNames(x)
   } else if (inherits(x, "GenomicRatioSet")) {

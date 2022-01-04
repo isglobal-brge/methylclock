@@ -140,7 +140,7 @@ DNAmGA <- function(x, toBetas = FALSE,
   # --------------> Lee
 
 
-  if (mean(coefLeeGA$CpGmarker[-1] %in% colnames(cpgs.imp)) >= min.perc) {
+  if (  sum(coefLeeGA$CpGmarker[-1] %in% colnames(cpgs.imp)) / length(coefLeeGA$CpGmarker) >= min.perc) {
     #    cpgs.imp.s <- cpgs.imp[, coefLeeGA$CpGs[-1]]
     #    Lee.RPC <- coefLeeGA$Coefficient_RPC[1] +
     #      cpgs.imp.s%*%coefLeeGA$Coefficient_RPC[-1]
@@ -189,6 +189,11 @@ DNAmGA <- function(x, toBetas = FALSE,
       Knight <- ageAcc1(Knight, age, lab = "Knight")
       Bohlin <- ageAcc1(Bohlin, age, lab = "Bohlin")
       Mayne <- ageAcc1(Mayne, age, lab = "Mayne")
+      if( dim(Lee)[2]>2){  #. 04/01/2022.#
+        Lee.RPC <- ageAcc1(Lee[,c("id", "Lee.RPC")], age, lab = "Lee.RPC") #. 04/01/2022.#
+        Lee.CPC <- ageAcc1(Lee[,c("id", "Lee.CPC")], age, lab = "Lee.CPC") #. 04/01/2022.#
+        Lee.refRPC <- ageAcc1(Lee[,c("id", "Lee.refRPC")], age, lab = "Lee.refRPC") #. 04/01/2022.#
+      }
     }
     else {
       cell.counts <- try(meffil.estimate.cell.counts.from.betas(
@@ -205,6 +210,10 @@ DNAmGA <- function(x, toBetas = FALSE,
         Knight <- ageAcc2(Knight, df, lab = "Knight")
         Bohlin <- ageAcc2(Bohlin, df, lab = "Bohlin")
         Mayne <- ageAcc2(Mayne, df, lab = "Mayne")
+        if(exists( "Lee.RPC" )) Lee.RPC <- ageAcc2(Lee.RPC, df, lab = "Lee.RPC")
+        if(exists( "Lee.CPC" )) Lee.CPC <- ageAcc2(Lee.CPC, df, lab = "Lee.CPC")
+        if(exists( "Lee.refRPC" )) Lee.refRPC <- ageAcc2(Lee.refRPC, df, lab = "Lee.refRPC")
+        # Lee <- ageAcc2(Lee, df, lab = "Lee")
       }
     }
   }
@@ -214,8 +223,18 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   out <- Knight %>%
     full_join(Bohlin, by = "id") %>%
-    full_join(Mayne, by = "id") %>%
-    full_join(Lee, by = "id")
+    full_join(Mayne, by = "id")
+  
+  if( exists( "Lee.RPC" )) {
+    out <- out %>%
+      full_join(Lee.RPC, by = "id") %>%
+      full_join(Lee.CPC, by = "id") %>%
+      full_join(Lee.refRPC, by = "id")
+  } else {
+    out <- out %>%
+      full_join(Lee, by = "id")
+  }
+    
   out <- tibble::as_tibble(out)
 
   if (!missing(age)) {

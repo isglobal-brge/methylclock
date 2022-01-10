@@ -244,6 +244,44 @@
 #' data(coefTL)
 "coefTL"
 
+#' BLUP clock coefficients
+#'
+#' A dataset containing the coefficients and CpGs information from  Best Linear
+#'Unbiased Prediction (BLUP) clock
+#'
+#' @docType data
+#'
+#' @usage data(coefBlup)
+#' @format A data frame with 392 CpGs and 2 variables
+#' @references \url{https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-019-0667-1}
+#' \describe{
+#'   \item{CpGmarker}{CpGs id}
+#'   \item{CoefficientTraining}{Training Coefficient }
+#' }
+#'
+#' @examples
+#' data(coefBlup)
+"coefBlup"
+
+#' EN clock coefficients
+#'
+#' A dataset containing the coefficients and CpGs information from Elastic Net
+#' (EN) clock
+#'
+#' @docType data
+#'
+#' @usage data(coefEN)
+#' @format A data frame with 392 CpGs and 2 variables
+#' @references \url{https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-019-0667-1}
+#' \describe{
+#'   \item{CpGmarker}{CpGs id}
+#'   \item{CoefficientTraining}{Training Coefficient }
+#' }
+#'
+#' @examples
+#' data(coefEN)
+"coefEN"
+
 #' probeAnnotation21kdatMethUsed
 #'
 #' A dataset containing probeAnnotation21kdatMethUsed (REMOVE??)

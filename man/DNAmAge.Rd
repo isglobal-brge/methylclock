@@ -13,13 +13,14 @@ DNAmAge(
   age,
   cell.count = TRUE,
   cell.count.reference = "blood gse35069 complete",
+  min.perc = 0.8,
   ...
 )
 }
 \arguments{
 \item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.}
 
-\item{clocks}{the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" are available. Default is "all" and all clocks are estimated.}
+\item{clocks}{the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE" and "all" are available. Default is "all" and all clocks are estimated.}
 
 \item{toBetas}{Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.}
 
@@ -32,6 +33,8 @@ DNAmAge(
 \item{cell.count}{Are cell counts estimated? Default is TRUE.}
 
 \item{cell.count.reference}{Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.}
+
+\item{min.perc}{Indicates the minimum conicidence percentage required between CpGs in or dataframee x and CpGs in clock coefficients to perform the calculation. If min.prec is too low, the estimated gestational DNAm age can be poor}
 
 \item{...}{Other arguments to be passed through impute package}
 }

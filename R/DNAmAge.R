@@ -36,10 +36,10 @@ DNAmAge <- function(x,
                     cell.count.reference = "blood gse35069 complete",
                     min.perc = 0.8,
                     ...) {
-  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE", "Wu", "TL", "all")
+  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE", "Wu", "TL", "BLUP", "EN", "all")
   method <- match(clocks, available.clocks)
   if (any(is.na(method))) {
-    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, skinHorvath, PedBE, Wu, TL")
+    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, skinHorvath, PedBE, Wu, TL, BLUP, EN")
   }
   if (length(available.clocks) %in% method) {
     method <- c(1:(length(available.clocks) - 1))
@@ -85,7 +85,9 @@ DNAmAge <- function(x,
     coefSkin$CpGmarker,
     coefPedBE$CpGmarker,
     coefWu$CpGmarker,
-    coefTL$CpGmarker
+    coefTL$CpGmarker,
+    coefBlup$CpGmarker,
+    coefEN$CpGmarker
   )
 
   cpgs.in <- intersect(cpgs.all, colnames(cpgs))
@@ -93,24 +95,7 @@ DNAmAge <- function(x,
   miss <- apply(cpgs[, cpgs.in], 2, function(x) any(is.na(x)))
 
   if (any(miss)) {
-    if (fastImp) {
-      cat(paste("Imputing missing data of", sum(miss), "CpGs .... \n"))
-      mm <- apply(cpgs[, cpgs.in], 2, median, na.rm = TRUE)
-      cpgs.imp <- sweep(cpgs[, cpgs.in], 2,
-        STATS = mm,
-        FUN = function(x, s) ifelse(is.na(x), s, x)
-      )
-    }
-    else {
-      quiet <- function(x) {
-        sink(tempfile())
-        on.exit(sink())
-        invisible(force(x))
-      }
-      cat(paste("Imputing missing data of the entire matrix .... \n"))
-      cpgs.imp <- quiet(t(impute.knn(t(cpgs), ...)$data))
-    }
-    cat("Data imputed. Starting DNAm clock estimation ... \n")
+    cpgs.imp <- cpgs_imputation(miss, cpgs, fastImp)
   }
   else {
     cpgs.imp <- cpgs
@@ -196,6 +181,30 @@ DNAmAge <- function(x,
       TL = tl
     )
   }
+  
+  if (9 %in% method | 10 %in% method ) { 
+    
+    colCpGs <- colnames(cpgs.imp)
+    cpgs.imp <- t(apply(cpgs.imp, 1, scale))
+    colnames(cpgs.imp) <- colCpGs
+  
+    if (9 %in% method) {
+      blup <- predAge(cpgs.imp, coefBlup, intercept = TRUE, min.perc)
+      BLUP <- data.frame(
+        id = rownames(cpgs.imp),
+        BLUP = blup
+      )
+    }
+    
+    if (10 %in% method) {
+      en <- predAge(cpgs.imp, coefEN, intercept = TRUE, min.perc)
+      EN <- data.frame(
+        id = rownames(cpgs.imp),
+        EN = en
+      )
+    }
+  }
+  
 
   if (!missing(age)) {
     if (!cell.count) {
@@ -222,6 +231,12 @@ DNAmAge <- function(x,
       }
       if (8 %in% method) {
         TL <- ageAcc1(TL, age, lab = "TL")
+      }
+      if (9 %in% method) {
+        BLUP <- ageAcc1(BLUP, age, lab = "BLUP")
+      }
+      if (10 %in% method) {
+        EN <- ageAcc1(EN, age, lab = "EN")
       }
     }
     else {
@@ -259,6 +274,12 @@ DNAmAge <- function(x,
         }
         if (8 %in% method) {
           TL <- ageAcc2(TL, df, lab = "TL")
+        }
+        if (9 %in% method) {
+          BLUP <- ageAcc2(BLUP, df, lab = "BLUP")
+        }
+        if (10 %in% method) {
+          EN <- ageAcc2(EN, df, lab = "EN")
         }
       }
     }
@@ -318,6 +339,20 @@ DNAmAge <- function(x,
       out <- TL
     } else{
       out <- out %>% full_join(TL, by = "id")
+    }
+  }
+  if (9 %in% method) {
+    if(is.null(out)) {
+      out <- BLUP
+    } else{
+      out <- out %>% full_join(BLUP, by = "id")
+    }
+  }
+  if (10 %in% method) {
+    if(is.null(out)) {
+      out <- EN
+    } else{
+      out <- out %>% full_join(EN, by = "id")
     }
   }
 

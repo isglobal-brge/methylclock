@@ -208,3 +208,31 @@ CalibrateUnitInterval <- function(datM, onlyIfOutside = TRUE) {
   }
   datM
 } # end of function for calibrating to [0,1]
+
+
+cpgs_imputation <- function( imp, cpgs, fastImp)
+{
+  if (any(miss)) {
+    if (fastImp) {
+      cat(paste("Imputing missing data of", sum(miss), "CpGs .... \n"))
+      mm <- apply(cpgs[, cpgs.in], 2, median, na.rm = TRUE)
+      cpgs.imp <- sweep(cpgs[, cpgs.in], 2,
+                        STATS = mm,
+                        FUN = function(x, s) ifelse(is.na(x), s, x)
+      )
+    }
+    else {
+      quiet <- function(x) {
+        sink(tempfile())
+        on.exit(sink())
+        invisible(force(x))
+      }
+      cat(paste("Imputing missing data of the entire matrix .... \n"))
+      cpgs.imp <- quiet(t(impute.knn(t(cpgs), ...)$data))
+    }
+    cat("Data imputed. Starting DNAm clock estimation ... \n")
+  }
+  else {
+    cpgs.imp <- cpgs
+  }
+}

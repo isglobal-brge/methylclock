@@ -12,6 +12,7 @@ DNAmGA(
   age,
   cell.count = TRUE,
   cell.count.reference = "andrews and bakulski cord blood",
+  min.perc = 0.8,
   ...
 )
 }
@@ -29,6 +30,8 @@ DNAmGA(
 \item{cell.count}{Are cell counts estimated? Default is TRUE.}
 
 \item{cell.count.reference}{Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.}
+
+\item{min.perc}{Indicates the minimum conicidence percentage required between CpGs in or dataframee x and CpGs in clock coefficients to perform the calculation. If min.prec is too low, the estimated gestational DNAm age can be poor}
 
 \item{...}{Other arguments to be passed through impute package}
 }

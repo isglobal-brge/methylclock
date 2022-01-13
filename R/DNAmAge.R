@@ -1,6 +1,6 @@
 #' DNAm age estimation using different DNA methylation clocks.
 #' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
-#' @param clocks the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE" and "all" are available. Default is "all" and all clocks are estimated.
+#' @param clocks the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE", "Wu", "TL", "BLUP", "EN" and "all" are available. Default is "all" and all clocks are estimated.
 #' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
 #' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
 #' @param normalize Is Horvath's normalization performed? By default is FALSE
@@ -95,7 +95,7 @@ DNAmAge <- function(x,
   miss <- apply(cpgs[, cpgs.in], 2, function(x) any(is.na(x)))
 
   if (any(miss)) {
-    cpgs.imp <- cpgs_imputation(miss, cpgs, fastImp)
+    cpgs.imp <- cpgs_imputation(miss, cpgs, fastImp, ...)
   }
   else {
     cpgs.imp <- cpgs

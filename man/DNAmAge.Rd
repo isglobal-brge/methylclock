@@ -20,7 +20,7 @@ DNAmAge(
 \arguments{
 \item{x}{data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.}
 
-\item{clocks}{the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE" and "all" are available. Default is "all" and all clocks are estimated.}
+\item{clocks}{the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE", "Wu", "TL", "BLUP", "EN" and "all" are available. Default is "all" and all clocks are estimated.}
 
 \item{toBetas}{Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.}
 

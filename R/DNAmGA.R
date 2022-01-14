@@ -210,9 +210,9 @@ DNAmGA <- function(x, toBetas = FALSE,
         Knight <- ageAcc2(Knight, df, lab = "Knight")
         Bohlin <- ageAcc2(Bohlin, df, lab = "Bohlin")
         Mayne <- ageAcc2(Mayne, df, lab = "Mayne")
-        if(exists( "Lee.RPC" )) Lee.RPC <- ageAcc2(Lee.RPC, df, lab = "Lee.RPC")
-        if(exists( "Lee.CPC" )) Lee.CPC <- ageAcc2(Lee.CPC, df, lab = "Lee.CPC")
-        if(exists( "Lee.refRPC" )) Lee.refRPC <- ageAcc2(Lee.refRPC, df, lab = "Lee.refRPC")
+        if(exists( "Lee.RPC" )) Lee.RPC <- ageAcc2(Lee[,c("id", "Lee.RPC")], df, lab = "Lee.RPC")
+        if(exists( "Lee.CPC" )) Lee.CPC <- ageAcc2(Lee[,c("id", "Lee.CPC")], df, lab = "Lee.CPC")
+        if(exists( "Lee.refRPC" )) Lee.refRPC <- ageAcc2(Lee[,c("id", "Lee.refRPC")], df, lab = "Lee.refRPC")
         # Lee <- ageAcc2(Lee, df, lab = "Lee")
       }
     }

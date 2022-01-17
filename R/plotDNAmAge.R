@@ -22,20 +22,46 @@ plotDNAmAge <- function(x, y, tit = "Horvath's method", clock = "chronological",
     yy <- "Chronological Age"
   } else if (clock == "GA") {
     yy <- "Gestational Age"
+  } else if (clock == "TL"){
+    yy <- "Age"
   }
-  p <- ggplot2::ggplot(data = df, ggplot2::aes(x = x, y = y)) +
-    ggplot2::geom_smooth(
-      method = "lm", se = FALSE, color = "black",
-      formula = my.formula
-    ) +
-    ggplot2::xlab("DNA Methylation Age") +
-    ggplot2::ylab(yy) +
-    ggplot2::ggtitle(tit) +
-    ggpmisc::stat_poly_eq(
-      formula = my.formula,
-      ggplot2::aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")),
-      parse = TRUE
-    ) +
-    ggplot2::geom_point()
-  p
+  
+  if( clock != 'TL'){
+
+    p <- ggplot2::ggplot(data = df, ggplot2::aes(x = x, y = y)) +
+      ggplot2::geom_smooth(
+        method = "lm", se = FALSE, color = "black",
+        formula = my.formula
+      ) +
+      ggplot2::xlab("DNA Methylation Age") +
+      ggplot2::ylab(yy) +
+      ggplot2::ggtitle(tit) +
+      ggpmisc::stat_poly_eq(
+        formula = my.formula,
+        ggplot2::aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")),
+        parse = TRUE
+      ) +
+      ggplot2::geom_point()
+    p
+  } else {
+    
+    p <- ggplot2::ggplot(data = df, ggplot2::aes(x = x, y = y)) +
+      ggplot2::geom_smooth(
+        method = "lm", se = FALSE, color = "black",
+        formula = my.formula
+      ) +
+      ggplot2::xlab("Methylation - Telomere Length (kb)") +
+      ggplot2::ylab(yy) +
+      ggplot2::ggtitle(tit) +
+      ggpmisc::stat_poly_eq(
+        formula = my.formula,
+        ggplot2::aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")),
+        parse = TRUE
+      ) +
+      ggplot2::geom_point()
+    p
+  }
+    
+  
+  
 }

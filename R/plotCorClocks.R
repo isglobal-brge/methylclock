@@ -16,6 +16,8 @@
 #' plotCorClocks(age.gse)
 #' 
 #' @import ggplot2 ggpubr PerformanceAnalytics
+#' @importFrom tidyr gather
+#' @importFrom gridExtra grid.arrange
 #' 
 #' @export
 
@@ -24,18 +26,47 @@ plotCorClocks <- function(x, ...) {
     "Horvath", "Levine", "BNN", "Horvath2", "Hannum", "PedBE", "skinHorvath",
     "Knigth", "Bohlin", "Mayne", "Lee", "BLUP", "EN"
   )
+  
+  
   sel <- intersect(clocks, colnames(x))
   x.sel <- x[, sel]
   no.na <- apply(x.sel, 2, function(x) !all(is.na(x)))
   x.nona <- x.sel[, no.na]
   nclocks <- ncol(x.nona)
-  ee <- gather(x.nona, key = method, value = clock) %>% add_column(age = rep(x$age, nclocks))
+  ee <- tidyr::gather(x.nona, key = method, value = clock) %>% 
+    add_column(age = rep(x$age, nclocks))
 
-  ggplot(ee, aes(x = clock, y = age)) +
+  p1 <- ggplot(ee, aes(x = clock, y = age)) +
     geom_point() +
     geom_smooth(method = lm, se = FALSE) +
     xlab("DNAm clock") +
     ylab("Chronological Age") +
     ggpubr::stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~"))) +
     facet_grid(~method)
+  
+  
+  clocks <- c( "TL")
+  sel <- intersect(clocks, colnames(x))
+  
+  if( length(sel)>=1 ) {
+    x.sel <- x[, sel]
+    no.na <- apply(x.sel, 2, function(x) !all(is.na(x)))
+    x.nona <- x.sel[, no.na]
+    nclocks <- ncol(x.nona)
+    ee <- tidyr::gather(x.nona, key = method, value = clock) %>% 
+      add_column(age = rep(x$age, nclocks))
+    
+    p2 <- ggplot(ee, aes(x = clock, y = age)) +
+      geom_point() +
+      geom_smooth(method = lm, se = FALSE) +
+      xlab("Telomere Length (kb)") +
+      ylab("Chronological Age") +
+      ggpubr::stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~"))) +
+      facet_grid(~method)
+    gridExtra::grid.arrange( p1, p2 )
+  } else {
+    p1
+  }
+  
+  
 }

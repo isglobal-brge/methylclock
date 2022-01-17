@@ -196,28 +196,64 @@ DNAmGA <- function(x, toBetas = FALSE,
       }
     }
     else {
-      cell.counts <- try(meffil.estimate.cell.counts.from.betas(
-        t(cpgs),
-        cell.count.reference
-      ), TRUE)
-      if (inherits(cell.counts, "try-error")) {
-        stop("cell counts cannot be estimated since your data have missing CpGs for meffil")
+      
+      if( cell.count.reference != 'placenta') {
+        
+        # Cell Counts using meffil estimate cell counts
+        cell.counts <- try(meffil.estimate.cell.counts.from.betas(
+          t(cpgs),
+          cell.count.reference
+        ), TRUE)
+        if (inherits(cell.counts, "try-error")) {
+          message("cell countscannot be estimated since your data have missing CpGs for meffil")
+        } else {
+          ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
+          cell.counts <- cell.counts[, ok]
+          df <- data.frame(age = age, cell.counts)
+          
+          Knight <- ageAcc2(Knight, df, lab = "Knight")
+          Bohlin <- ageAcc2(Bohlin, df, lab = "Bohlin")
+          Mayne <- ageAcc2(Mayne, df, lab = "Mayne")
+          if(exists( "Lee.RPC" )) Lee.RPC <- ageAcc2(Lee.RPC, df, lab = "Lee.RPC")
+          if(exists( "Lee.CPC" )) Lee.CPC <- ageAcc2(Lee.CPC, df, lab = "Lee.CPC")
+          if(exists( "Lee.refRPC" )) Lee.refRPC <- ageAcc2(Lee.refRPC, df, lab = "Lee.refRPC")
+          # Lee <- ageAcc2(Lee, df, lab = "Lee")
+        }
+        
       } else {
-        ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
-        cell.counts <- cell.counts[, ok]
-        df <- data.frame(age = age, cell.counts)
-
-        Knight <- ageAcc2(Knight, df, lab = "Knight")
-        Bohlin <- ageAcc2(Bohlin, df, lab = "Bohlin")
-        Mayne <- ageAcc2(Mayne, df, lab = "Mayne")
-        if(exists( "Lee.RPC" )) Lee.RPC <- ageAcc2(Lee[,c("id", "Lee.RPC")], df, lab = "Lee.RPC")
-        if(exists( "Lee.CPC" )) Lee.CPC <- ageAcc2(Lee[,c("id", "Lee.CPC")], df, lab = "Lee.CPC")
-        if(exists( "Lee.refRPC" )) Lee.refRPC <- ageAcc2(Lee[,c("id", "Lee.refRPC")], df, lab = "Lee.refRPC")
-        # Lee <- ageAcc2(Lee, df, lab = "Lee")
+        
+        require(planet)
+        data("plCellCpGsThird")
+        
+        # Apply planet package to deconvolute data 
+        cell.counts <- try(
+          
+          minfi:::projectCellType(
+            t(cpgs)[which( rownames(t(cpgs)) %in% rownames(plCellCpGsThird)), ],
+            plCellCpGsThird,
+            lessThanOne = FALSE
+          )
+            , TRUE)
+        if (inherits(cell.counts, "try-error")) {
+          message("cell countscannot be estimated since your data have missing CpGs for meffil")
+        } else {
+          ok <- which(apply(cell.counts, 2, IQR) > 10e-6)
+          cell.counts <- cell.counts[, ok]
+          df <- data.frame(age = age, cell.counts)
+          
+          Knight <- ageAcc2(Knight, df, lab = "Knight")
+          Bohlin <- ageAcc2(Bohlin, df, lab = "Bohlin")
+          Mayne <- ageAcc2(Mayne, df, lab = "Mayne")
+          if(exists( "Lee.RPC" )) Lee.RPC <- ageAcc2(Lee[,c("id", "Lee.RPC")], df, lab = "Lee.RPC")
+          if(exists( "Lee.CPC" )) Lee.CPC <- ageAcc2(Lee[,c("id", "Lee.CPC")], df, lab = "Lee.CPC")
+          if(exists( "Lee.refRPC" )) Lee.refRPC <- ageAcc2(Lee[,c("id", "Lee.refRPC")], df, lab = "Lee.refRPC")
+          # Lee <- ageAcc2(Lee, df, lab = "Lee")
+        }
+        
       }
+      
     }
-  }
-  else {
+  } else {
     cell.count <- FALSE
   }
 

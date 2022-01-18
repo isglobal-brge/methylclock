@@ -158,6 +158,7 @@ The EEAA method requires to estimate cell counts. We use the package `meffil` (@
 - **"saliva gse48472"**: Reference generated from the multi-tissue pannel from @slieker2013identification. It includes Buccal, CD4T, CD8T, Mono, Bcell, NK, Gran.
 - **"guintivano dlpfc"**: Reference generated from @guintivano2013cell. It includes dorsolateral prefrontal cortex, NeuN_neg and NeuN_pos.
 - **"combined cord blood"**: References generated based in samples assayed by Bakulski et al, Gervin et al., de Goede et al., and Lin et al. It includes umbilical cord blood, Bcell, CD4T, CD8T, Gran, Mono, NK and nRBC
+- **"placenta"**: References from @planet_cells, @planet_pkg. It includes placental cells from third trimester Trophoblasts, Stromal, Hofbauer, Endothelial, nRBC, Syncytiotrophoblast.
 
 
 # Chronological and biological DNAm age estimation

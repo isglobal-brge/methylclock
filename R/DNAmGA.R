@@ -262,10 +262,22 @@ DNAmGA <- function(x, toBetas = FALSE,
     full_join(Mayne, by = "id")
   
   if( exists( "Lee.RPC" )) {
+    
+    if (inherits(Lee.RPC, "matrix")) {
+      Lee.RPC <- data.frame( cbind(id = rownames(Lee.RPC), Lee.RPC = Lee.RPC[,1]))
+    }
+    if (inherits(Lee.CPC, "matrix")) {
+      Lee.CPC <- data.frame( cbind(id = rownames(Lee.CPC), Lee.CPC = Lee.CPC[,1]))
+    }
+    if (inherits(Lee.refRPC, "matrix")) {
+      Lee.refRPC <- data.frame( cbind(id = rownames(Lee.refRPC), Lee.refRPC = Lee.refRPC[,1]))
+    }
+    
     out <- out %>%
       full_join(Lee.RPC, by = "id") %>%
       full_join(Lee.CPC, by = "id") %>%
       full_join(Lee.refRPC, by = "id")
+    
   } else {
     out <- out %>%
       full_join(Lee, by = "id")

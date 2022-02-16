@@ -24,8 +24,8 @@ checkClocksGA <- function(x, ...) {
   }
 
   checkKnight <- coefKnightGA$CpGmarker[-1][!coefKnightGA$CpGmarker[-1] %in% cpg.names]
-  coefBoh <- coefBohlin$CpGmarker[-1][!coefBohlin$CpGmarker[-1] %in% cpg.names]
-  checkBohlin <- coefBoh[!coefBoh %in% cpg.names]
+  checkBohlin <- coefBohlin$CpGmarker[-1][!coefBohlin$CpGmarker[-1] %in% cpg.names]
+  # checkBohlin <- coefBoh[!coefBoh %in% cpg.names]
   checkMayne <- coefMayneGA$CpGmarker[-1][!coefMayneGA$CpGmarker[-1] %in% cpg.names]
   checkLee <- coefLeeGA$CpGmarker[-1][!coefLeeGA$CpGmarker[-1] %in% cpg.names]
 
@@ -36,7 +36,7 @@ checkClocksGA <- function(x, ...) {
   )
 
   n <- c(
-    nrow(coefKnightGA) - 1, length(coefBoh),
+    nrow(coefKnightGA) - 1, nrow(coefBohlin) - 1,
     nrow(coefMayneGA) - 1, 
     nrow(coefLeeGA) - 1
   )

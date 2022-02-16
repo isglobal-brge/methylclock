@@ -71,7 +71,7 @@ DNAmGA <- function(x, toBetas = FALSE,
     as.character(coefBohlin$CpGmarker[-1]),
     as.character(coefMayneGA$CpGmarker[-1]),
     as.character(coefLeeGA$CpGmarker[-1]),
-    as.character(coefEPIC$CpGmarker)
+    as.character(coefEPIC$CpGmarker[-1])
   )
 
   if (any(!cpgs.all %in% colnames(cpgs))) {
@@ -131,21 +131,19 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   # --------------> Mayne
 
-  epic <- predAge(cpgs.imp, coefEPIC, intercept = FALSE, min.perc)
-  EPIC <- data.frame(
-    id = rownames(cpgs.imp),
-    EPIC = epic
-  )
-  
-  
-  # --------------> EPIC
-  
   mayne <- predAge(cpgs.imp, coefMayneGA, intercept = TRUE, min.perc)
   Mayne <- data.frame(
     id = rownames(cpgs.imp),
     Mayne = mayne
   )
-
+  
+  # --------------> EPIC
+  
+  epic <- predAge(cpgs.imp, coefEPIC, intercept = TRUE, min.perc)
+  EPIC <- data.frame(
+    id = rownames(cpgs.imp),
+    EPIC = epic
+  )
   
   # --------------> Lee
 

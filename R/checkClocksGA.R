@@ -44,7 +44,7 @@ checkClocksGA <- function(x, ...) {
   )
 
   df <- data.frame(
-    clock = c("Knight", "Bohlin", "Mayne", "Lee", "EPICGA"),
+    clock = c("Knight", "Bohlin", "Mayne", "Lee", "EPIC"),
     Cpgs_in_clock = n,
     missing_CpGs = sizes,
     percentage = round((sizes / n) * 100, 1)

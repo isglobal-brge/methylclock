@@ -282,6 +282,26 @@
 #' data(coefEN)
 "coefEN"
 
+
+#' EPIC Gestational Age clock coefficients
+#'
+#' A dataset containing the coefficients and CpGs information from EPIC GA clock
+#'
+#' @docType data
+#'
+#' @usage data(coefEPIC)
+#' @references \url{https://doi.org/10.1186/s13148-021-01055-z}
+#' @format A data frame with 176 CpGs and 3 variables
+#' \describe{
+#'   \item{CpGmarker}{CpGs id}
+#'   \item{CoefficientTraining}{Training Coefficient}
+#'   \item{UCSC_RefGene_Name}{UCSC RefGene Name}
+#' }
+#' @examples
+#' data(coefEPIC)
+"coefEPIC"
+
+
 #' probeAnnotation21kdatMethUsed
 #'
 #' A dataset containing probeAnnotation21kdatMethUsed (REMOVE??)

@@ -70,7 +70,8 @@ DNAmGA <- function(x, toBetas = FALSE,
     as.character(coefKnightGA$CpGmarker[-1]),
     as.character(coefBohlin$CpGmarker[-1]),
     as.character(coefMayneGA$CpGmarker[-1]),
-    as.character(coefLeeGA$CpGmarker[-1])
+    as.character(coefLeeGA$CpGmarker[-1]),
+    as.character(coefEPIC$CpGmarker)
   )
 
   if (any(!cpgs.all %in% colnames(cpgs))) {
@@ -130,6 +131,15 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   # --------------> Mayne
 
+  epic <- predAge(cpgs.imp, coefEPIC, intercept = FALSE, min.perc)
+  EPIC <- data.frame(
+    id = rownames(cpgs.imp),
+    EPIC = epic
+  )
+  
+  
+  # --------------> EPIC
+  
   mayne <- predAge(cpgs.imp, coefMayneGA, intercept = TRUE, min.perc)
   Mayne <- data.frame(
     id = rownames(cpgs.imp),
@@ -189,6 +199,7 @@ DNAmGA <- function(x, toBetas = FALSE,
       Knight <- ageAcc1(Knight, age, lab = "Knight")
       Bohlin <- ageAcc1(Bohlin, age, lab = "Bohlin")
       Mayne <- ageAcc1(Mayne, age, lab = "Mayne")
+      EPIC <- ageAcc1(EPIC, age, lab = "EPIC")
       if( dim(Lee)[2]>2){  #. 04/01/2022.#
         Lee.RPC <- ageAcc1(Lee[,c("id", "Lee.RPC")], age, lab = "Lee.RPC") #. 04/01/2022.#
         Lee.CPC <- ageAcc1(Lee[,c("id", "Lee.CPC")], age, lab = "Lee.CPC") #. 04/01/2022.#
@@ -214,6 +225,7 @@ DNAmGA <- function(x, toBetas = FALSE,
           Knight <- ageAcc2(Knight, df, lab = "Knight")
           Bohlin <- ageAcc2(Bohlin, df, lab = "Bohlin")
           Mayne <- ageAcc2(Mayne, df, lab = "Mayne")
+          EPIC <- ageAcc2(EPIC, df, lab = "EPIC")
           if(exists( "Lee.RPC" )) Lee.RPC <- ageAcc2(Lee.RPC, df, lab = "Lee.RPC")
           if(exists( "Lee.CPC" )) Lee.CPC <- ageAcc2(Lee.CPC, df, lab = "Lee.CPC")
           if(exists( "Lee.refRPC" )) Lee.refRPC <- ageAcc2(Lee.refRPC, df, lab = "Lee.refRPC")
@@ -244,6 +256,7 @@ DNAmGA <- function(x, toBetas = FALSE,
           Knight <- ageAcc2(Knight, df, lab = "Knight")
           Bohlin <- ageAcc2(Bohlin, df, lab = "Bohlin")
           Mayne <- ageAcc2(Mayne, df, lab = "Mayne")
+          EPIC <- ageAcc2(EPIC, df, lab = "EPIC")
           if(exists( "Lee.RPC" )) Lee.RPC <- ageAcc2(Lee[,c("id", "Lee.RPC")], df, lab = "Lee.RPC")
           if(exists( "Lee.CPC" )) Lee.CPC <- ageAcc2(Lee[,c("id", "Lee.CPC")], df, lab = "Lee.CPC")
           if(exists( "Lee.refRPC" )) Lee.refRPC <- ageAcc2(Lee[,c("id", "Lee.refRPC")], df, lab = "Lee.refRPC")
@@ -259,7 +272,8 @@ DNAmGA <- function(x, toBetas = FALSE,
 
   out <- Knight %>%
     full_join(Bohlin, by = "id") %>%
-    full_join(Mayne, by = "id")
+    full_join(Mayne, by = "id") %>%
+    full_join(EPIC, by = "id")
   
   if( exists( "Lee.RPC" )) {
     

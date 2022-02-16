@@ -49,6 +49,7 @@ This manual describes how to estimate chronological and gestational DNA methylat
 - **Knight's clock**: It uses 148 CpGs described in @knight2016epigenetic. It was trained using 27K and 450K arrays in cord blood samples.
 - **Bohlin's clock**: It uses 96 CpGs described in @bohlin2016prediction. It was trained using 450K array in cord blood samples.
 - **Mayne's clock**: It uses 62 CpGs described in @mayne2017accelerated. It was trained using 27K and 450K.
+- **EPIC clock**: EPIC-based predictor of gestational age. It uses 176 CpGs described in @haftorn2021epic. It was trained using EPIC arrays in cord blood samples.
 - **Lee's clocks**: Three different biological clocks described in @lee2019placental are implemented. It was trained for 450K and EPIC arrays in placenta samples.
      - **RPC clock**: Robust placental clock (RPC). It uses 558 CpG sites.
      - **CPC clock**: Control placental clock (CPC). It usses 546 CpG sites.

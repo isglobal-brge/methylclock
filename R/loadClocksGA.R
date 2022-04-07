@@ -22,4 +22,8 @@ load_DNAmGA_Clocks_data <- function() {
         coefLeeGA <- get_coefLeeGA()
         assign("coefLeeGA", coefLeeGA, envir = .GlobalEnv)
     }
+    if (!"coefEPIC" %in% ls()) {
+        coefEPIC <- get_coefEPIC()
+        assign("coefEPIC", coefEPIC, envir = .GlobalEnv)
+    }
 }

@@ -5,15 +5,15 @@
 \title{Gestational DNAm age estimation using different DNA methylation clocks.}
 \usage{
 DNAmGA(
-    x,
-    toBetas = FALSE,
-    fastImp = FALSE,
-    normalize = FALSE,
-    age,
-    cell.count = TRUE,
-    cell.count.reference = "andrews and bakulski cord blood",
-    min.perc = 0.8,
-    ...
+  x,
+  toBetas = FALSE,
+  fastImp = FALSE,
+  normalize = FALSE,
+  age,
+  cell.count = TRUE,
+  cell.count.reference = "andrews and bakulski cord blood",
+  min.perc = 0.8,
+  ...
 )
 }
 \arguments{

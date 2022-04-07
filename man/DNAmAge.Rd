@@ -5,16 +5,16 @@
 \title{DNAm age estimation using different DNA methylation clocks.}
 \usage{
 DNAmAge(
-    x,
-    clocks = "all",
-    toBetas = FALSE,
-    fastImp = FALSE,
-    normalize = FALSE,
-    age,
-    cell.count = TRUE,
-    cell.count.reference = "blood gse35069 complete",
-    min.perc = 0.8,
-    ...
+  x,
+  clocks = "all",
+  toBetas = FALSE,
+  fastImp = FALSE,
+  normalize = FALSE,
+  age,
+  cell.count = TRUE,
+  cell.count.reference = "blood gse35069 complete",
+  min.perc = 0.8,
+  ...
 )
 }
 \arguments{
@@ -24,7 +24,8 @@ Cpgs in rows having CpG names in the rownames), ExpressionSet or
 GenomicRatioSet.}
 
 \item{clocks}{the methods used for estimating DNAmAge. Currrently 
-"Horvath", "Hannum", "Levine", "BNN", "Horvath2", "PedBE" and "all" 
+"Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE", "Wu", "TL",
+"BLUP", "EN" and "all" 
 are available. Default is "all" and all clocks are estimated.}
 
 \item{toBetas}{Should data be transformed to beta values? Default is FALSE. 

@@ -4,7 +4,8 @@
 #' Cpgs in rows having CpG names in the rownames), ExpressionSet or 
 #' GenomicRatioSet.
 #' @param clocks the methods used for estimating DNAmAge. Currrently 
-#' "Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE" and "all" 
+#' "Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE", "Wu", "TL",
+#' "BLUP", "EN" and "all" 
 #' are available. Default is "all" and all clocks are estimated.
 #' @param toBetas Should data be transformed to beta values? Default is FALSE. 
 #' If TRUE, it implies data are M values.
@@ -47,52 +48,67 @@ DNAmAge <- function(x,
                     cell.count.reference = "blood gse35069 complete",
                     min.perc = 0.8,
                     ...) {
+    
     available.clocks <- c( "Horvath", "Hannum", "Levine", "BNN", "skinHorvath",
-                            "PedBE", "Wu", "TL", "all" )
+                            "PedBE", "Wu", "TL", "BLUP", "EN", "all")
     method <- match(clocks, available.clocks)
 
     if (any(is.na(method))) {
         stop("You wrote the name of an unavailable clock. Available clocks are:
-            Horvath, Hannum, Levine, BNN, skinHorvath, PedBE, Wu, TL")
+            Horvath, Hannum, Levine, BNN, skinHorvath, PedBE, Wu, TL, 
+            BLUP and EN")
     }
 
     if (length(available.clocks) %in% method) {
-        method <- seq_len(length(available.clocks) - 1)
-    }
+        method <- seq_len(length(available.clocks) - 1) }
 
     cpgs <- getInputCpgValues(x, toBetas)
 
     if (!all(available.clocks %in% ls(.GlobalEnv))) {
-        load_DNAm_Clocks_data()
+        load_DNAm_Clocks_data() }
+    
+    
+    if (inherits(x, "data.frame")) {
+        cpgs.names <- as.character(x[, 1, drop = TRUE])
+        if (length(grep("cg", cpgs.names)) == 0) {
+            stop("First column should contain CpG names")
+        }
+        cpgs <- t(as.matrix(x[, -1]))
+        colnames(cpgs) <- cpgs.names
+    } else if (inherits(x, "matrix")) {
+        cpgs <- t(x)
+    } else if (inherits(x, "ExpressionSet")) {
+        cpgs <- t(Biobase::exprs(x))
+    } else if (inherits(x, "GenomicRatioSet")) {
+        cpgs <- t(minfi::getBeta(x))
+    } else {
+        stop("x must be a data.frame or a 'GenomicRatioSet' or a 
+             'ExpressionSet' object")
     }
+    
+    if (toBetas) {
+        toBeta <- function(m) {
+            2^m / (2^m + 1)  }
+        cpgs <- toBeta(cpgs)
+    }
+    
+    if (any(cpgs < -0.1 | cpgs > 1.1, na.rm = TRUE)) {
+        stop("Data seems to do not be beta values. Check your data or set 'toBetas=TRUE'")
+    }
+    
 
     cpgs.all <- c( coefHorvath$CpGmarker, coefHannum$CpGmarker,
-                    coefLevine$CpGmarker, coefSkin$CpGmarker,
-                    coefPedBE$CpGmarker, coefWu$CpGmarker, coefTL$CpGmarker)
+                   coefLevine$CpGmarker, coefSkin$CpGmarker,
+                   coefPedBE$CpGmarker, coefWu$CpGmarker, 
+                   coefTL$CpGmarker, coefBLUP$CpGmarker, coefEN$CpGmarker)
 
     cpgs.in <- intersect(cpgs.all, colnames(cpgs))
 
     miss <- apply(cpgs[, cpgs.in], 2, function(x) any(is.na(x)))
 
     if (any(miss)) {
-        if (fastImp) {
-            message("Imputing missing data of", sum(miss), "CpGs .... \n")
-            mm <- apply(cpgs[, cpgs.in], 2, median, na.rm = TRUE)
-            cpgs.imp <- sweep(cpgs[, cpgs.in], 2, STATS = mm,
-                        FUN = function(x, s) ifelse(is.na(x), s, x) )
-        }
-        else {
-            quiet <- function(x) {
-                sink(tempfile())
-                on.exit(sink())
-                invisible(force(x))
-            }
-            message("Imputing missing data of the entire matrix .... \n")
-            cpgs.imp <- quiet(t(impute.knn(t(cpgs), ...)$data))
-        }
-        message("Data imputed. Starting DNAm clock estimation ... \n")
-    }
-    else {
+        cpgs.imp <- cpgs_imputation(miss, cpgs, fastImp, ...)
+    } else {
         cpgs.imp <- cpgs
     }
 
@@ -133,27 +149,42 @@ DNAmAge <- function(x,
         skinHorvath <- predAge(cpgs.imp, coefSkin, intercept = TRUE, min.perc)
         skinHorvath <- anti.trafo(skinHorvath)
         skinHorvath <- data.frame( id = rownames(cpgs.imp),
-                                    skinHorvath = skinHorvath )
+                                   skinHorvath = skinHorvath )
     }
-
+    
     if (6 %in% method) {
         pedBE <- predAge(cpgs.imp, coefPedBE, intercept = TRUE, min.perc)
         pedBE <- anti.trafo(pedBE)
         PedBE <- data.frame( id = rownames(cpgs.imp), PedBE = pedBE )
     }
-
+    
     if (7 %in% method) {
         wu <- predAge(cpgs.imp, coefWu, intercept = TRUE, min.perc)
-        wu <- anti.trafo(wu) / 12
+        wu <- anti.trafo(wu)/12
         Wu <- data.frame( id = rownames(cpgs.imp), Wu = wu )
     }
-
-
+    
+    
     if (8 %in% method) {
         tl <- predAge(cpgs.imp, coefTL, intercept = TRUE, min.perc)
         TL <- data.frame( id = rownames(cpgs.imp), TL = tl )
     }
+    
+    if (9 %in% method | 10 %in% method ) { 
+        colCpGs <- colnames(cpgs.imp)
+        cpgs.imp <- t(apply(cpgs.imp, 1, scale))
+        colnames(cpgs.imp) <- colCpGs
+        if (9 %in% method) {
+            blup <- predAge(cpgs.imp, coefBLUP, intercept = TRUE, min.perc)
+            BLUP <- data.frame( id = rownames(cpgs.imp), BLUP = blup )
+        }
+        if (10 %in% method) {
+            en <- predAge(cpgs.imp, coefEN, intercept = TRUE, min.perc)
+            EN <- data.frame( id = rownames(cpgs.imp), EN = en )
+        }
+    }
 
+    
     if (!missing(age)) {
         if (!cell.count) {
             if (1 %in% method) {
@@ -179,6 +210,12 @@ DNAmAge <- function(x,
             }
             if (8 %in% method) {
                 TL <- ageAcc1(TL, age, lab = "TL")
+            }
+            if (9 %in% method) {
+                BLUP <- ageAcc1(BLUP, age, lab = "BLUP")
+            }
+            if (10 %in% method) {
+                EN <- ageAcc1(EN, age, lab = "EN")
             }
         } else {
             cell.counts <- try(meffilEstimateCellCountsFromBetas(
@@ -218,6 +255,12 @@ DNAmAge <- function(x,
                 if (8 %in% method) {
                     TL <- ageAcc2(TL, df, lab = "TL")
                 }
+                if (9 %in% method) {
+                    BLUP <- ageAcc2(BLUP, df, lab = "BLUP")
+                }
+                if (10 %in% method) {
+                    EN <- ageAcc2(EN, df, lab = "EN")
+                }
             }
         }
     }
@@ -251,31 +294,45 @@ DNAmAge <- function(x,
         }
     }
     if (5 %in% method) {
-        if (is.null(out)) {
+        if(is.null(out)) {
             out <- skinHorvath
-        } else {
+        } else{
             out <- out %>% full_join(skinHorvath, by = "id")
         }
     }
     if (6 %in% method) {
-        if (is.null(out)) {
+        if(is.null(out)) {
             out <- PedBE
-        } else {
+        } else{
             out <- out %>% full_join(PedBE, by = "id")
         }
     }
     if (7 %in% method) {
-        if (is.null(out)) {
+        if(is.null(out)) {
             out <- Wu
-        } else {
+        } else{
             out <- out %>% full_join(Wu, by = "id")
         }
     }
     if (8 %in% method) {
-        if (is.null(out)) {
+        if(is.null(out)) {
             out <- TL
-        } else {
+        } else{
             out <- out %>% full_join(TL, by = "id")
+        }
+    }
+    if (9 %in% method) {
+        if(is.null(out)) {
+            out <- BLUP
+        } else{
+            out <- out %>% full_join(BLUP, by = "id")
+        }
+    }
+    if (10 %in% method) {
+        if(is.null(out)) {
+            out <- EN
+        } else{
+            out <- out %>% full_join(EN, by = "id")
         }
     }
 

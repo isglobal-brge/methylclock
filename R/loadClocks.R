@@ -34,4 +34,12 @@ load_DNAm_Clocks_data <- function() {
         coefTL <- get_coefTL()
         assign("coefTL", coefTL, envir = .GlobalEnv)
     }
+    if (!"coefEN" %in% ls()) {
+        coefEN <- get_coefEN()
+        assign("coefEN", coefEN, envir = .GlobalEnv)
+    }
+    if (!"coefBLUP" %in% ls()) {
+        coefBLUP <- get_coefBLUP()
+        assign("coefBLUP", coefBLUP, envir = .GlobalEnv)
+    }
 }

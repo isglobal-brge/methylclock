@@ -33,22 +33,23 @@ clocks. The package includes the following estimators:
 
 ## Chronological DNAm age (in years)
 
-- **Horvath's clock**: It uses 353 CpGs described in @horvath2013dna. It was
-trained using 27K and 450K arrays in samples from different tissues. Other
-three different age-related biomarkers are also computed:
-- **AgeAcDiff** (DNAmAge acceleration difference): Difference between
-DNAmAge and chronological age.
-- **IEAA** (Intrinsic Epigenetic Age Acceleration): Residuals obtained
-after regressing DNAmAge and chronological age adjusted by cell counts.  
-- **EEAA** (Extrinsic Epigenetic Age Acceleration): Residuals obtained
-after regressing DNAmAge and chronological age. This measure was also
-known as DNAmAge acceleration residual in the first Horvath's paper.
-Hannum's clock**: It uses 71 CpGs described in @hannum2013genome. It
-was trained using 450K array in blood samples. Another are-related
-biomarer is also computed:
-- **AMAR** (Apparent Methylomic Aging Rate): Measure proposed in
-@hannum2013genome computed as the ratio between DNAm age and the
-chronological age.
+- **Horvath's clock**: It uses 353 CpGs described in @horvath2013dna. 
+It was trained using 27K and 450K arrays in samples from different tissues. 
+Other three different age-related biomarkers are also computed:
+     - **AgeAcDiff** (DNAmAge acceleration difference): Difference between 
+     DNAmAge and chronological age.
+     - **IEAA** (Intrinsic Epigenetic Age Acceleration): Residuals obtained 
+     after regressing DNAmAge and chronological age.
+     - **EEAA** (Extrinsic Epigenetic Age Acceleration): Residuals obtained 
+     after regressing DNAmAge and chronological age adjusted by cell counts.
+     This measure was also known as DNAmAge acceleration residual in the 
+     first Horvath's paper.
+- **Hannum's clock**: It uses 71 CpGs described in @hannum2013genome. It was 
+trained using 450K array in blood samples. Another are-related biomarer is 
+also computed:
+     - **AMAR** (Apparent Methylomic Aging Rate): Measure proposed in 
+     @hannum2013genome computed as the ratio between DNAm age and the 
+     chronological age.
 - **BNN**: It uses Horvath's CpGs to train a Bayesian Neural Network
 (BNN) to predict DNAm age as described in @alfonso2018.
 - **Horvath's skin+blood clock (skinHorvath)**: Epigenetic clock for skin
@@ -61,6 +62,14 @@ genome-wide DNAm profiles from 11 different cohorts with individuals aged
 0 to 20 years old. 
 - **Wu's clock**: It uses 111 CpGs described in @wu2019dna. It is designed
 to predict age in children. It was trained using 27K and 450K.
+- **BLUP clock**:  It uses 319607 CpGs described in @zhang2019improved. 
+It was trained using 450K and EPIC arrays in blood (13402 samples) and 
+saliva (259 samples). Age predictors based on training sets with various 
+sample sizes using Best Linear Unbiased Prediction (BLUP)  
+- **EN clock**:  It uses 514 CpGs described in @zhang2019improved. It was 
+trained using 450K and EPIC arrays in blood (13402 samples) and saliva 
+(259 samples). Age predictors based on training sets with various sample 
+sizes using Elastic Net (EN) 
 
 ## Gestational DNAm age (in weeks)
 
@@ -70,6 +79,9 @@ It was trained using 27K and 450K arrays in cord blood samples.
 It was trained using 450K array in cord blood samples.
 - **Mayne's clock**: It uses 62 CpGs described in @mayne2017accelerated.
 It was trained using 27K and 450K.
+- **EPIC clock**: EPIC-based predictor of gestational age. It uses 176 
+CpGs described in @haftorn2021epic. It was trained using EPIC arrays in 
+cord blood samples.
 - **Lee's clocks**: Three different biological clocks described in
 @lee2019placental are implemented. It was trained for 450K and EPIC
 arrays in placenta samples.
@@ -763,5 +775,5 @@ plotCorClocks(age.gse58045)
 # References
 
 ```{sessioninfo}
-sessionInfo()
+utils::sessionInfo()
 ```

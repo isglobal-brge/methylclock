@@ -17,30 +17,44 @@
 #' @export
 
 checkClocksGA <- function(x, ...) {
-    cpg.names <- getInputCpgNames(x)
-    if (!all(c( "coefKnightGA", "coefBohlin", "coefMayneGA", "coefLeeGA") 
-                %in% ls(.GlobalEnv))) {
+    
+    if (inherits(x, "data.frame") & !inherits(x, c("tbl", "tbl_df"))) {
+        cpg.names <- x[, 1]
+    } else if (inherits(x, "matrix")) {
+        cpg.names <- rownames(x)
+    } else if (inherits(x, c("tbl", "tbl_df"))) {
+        cpg.names <- pull(x, 1)
+    } else if (inherits(x, "ExpressionSet")) {
+        cpg.names <- Biobase::featureNames(x)
+    } else if (inherits(x, "GenomicRatioSet")) {
+        cpg.names <- Biobase::featureNames(x)
+    }
+    
+    
+    if (!all(c( "coefKnightGA", "coefBohlin", "coefMayneGA", 
+                "coefLeeGA", "coefEPIC") %in% ls(.GlobalEnv))) {
         load_DNAmGA_Clocks_data()
     }
+
     checkKnight <- coefKnightGA$CpGmarker[-1][!coefKnightGA$CpGmarker[-1]
                                                 %in% cpg.names]
-    coefBoh <- coefBohlin$CpGmarker[-1][!coefBohlin$CpGmarker[-1]
+    checkBohlin <- coefBohlin$CpGmarker[-1][!coefBohlin$CpGmarker[-1]
                                                 %in% cpg.names]
-    checkBohlin <- coefBoh[!coefBoh %in% cpg.names]
     checkMayne <- coefMayneGA$CpGmarker[-1][!coefMayneGA$CpGmarker[-1]
                                                 %in% cpg.names]
-    checkLee <- coefLeeGA$CpGmarker[-1][!coefLeeGA$CpGmarker[-1]
-                                                %in% cpg.names]
+    checkLee <- coefLeeGA$CpGmarker[-1][!coefLeeGA$CpGmarker[-1] %in% cpg.names]
+    checkEPIC <- coefEPIC$CpGmarker[-1][!coefEPIC$CpGmarker[-1] %in% cpg.names]
 
-    sizes <- c( length(checkKnight), length(checkBohlin),
-                length(checkMayne), length(checkLee) )
+    
+    sizes <- c( length(checkKnight), length(checkBohlin), length(checkMayne), 
+                length(checkLee), length(checkEPIC) )
 
-    n <- c( nrow(coefKnightGA) - 1, length(coefBoh),
-            nrow(coefMayneGA) - 1,
-            nrow(coefLeeGA) - 1 )
+    n <- c( nrow(coefKnightGA) - 1, length(checkBohlin),
+            nrow(coefMayneGA) - 1, nrow(coefLeeGA) - 1,
+            nrow(coefEPIC) - 1)
 
     df <- data.frame(
-        clock = c("Knight", "Bohlin", "Mayne", "Lee"),
+        clock = c("Knight", "Bohlin", "Mayne", "Lee", "EPIC"),
         Cpgs_in_clock = n,
         missing_CpGs = sizes,
         percentage = round((sizes / n) * 100, 1)
@@ -53,7 +67,7 @@ checkClocksGA <- function(x, ...) {
         print(df)
     
         out <- list( Knight = checkKnight, Bohlin = checkBohlin, 
-                    Mayne = checkMayne, Lee = checkLee )
+                    Mayne = checkMayne, Lee = checkLee, EPICGA = checkEPIC )
     }
     else {
         message("Your data contain the required CpGs for all clocks")

@@ -6,7 +6,7 @@
 \title{methylclock}
 \description{
 Package to estimate DNA methylation age (DNAmAge)
-using different methylation clocks.
+ using different methylation clocks.
 }
 \author{
 Juan R Gonzalez <juanr.gonzalez@isglobal.org>

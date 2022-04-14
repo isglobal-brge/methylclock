@@ -228,7 +228,9 @@ DNAmGA <- function(x, toBetas = FALSE,
                 
             } else {
                 
-                require(planet)
+                if (!requireNamespace("planet", quietly = TRUE))
+                    install.packages("planet")
+                
                 data("plCellCpGsThird")
                 
                 # Apply planet package to deconvolute data 

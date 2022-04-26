@@ -1,7 +1,7 @@
 Package: methylclock
 Type: Package
 Title: Methylclock - DNA methylation-based clocks
-Version: 1.1.5
+Version: 1.2.0
 Authors@R: c( person("Dolors", "Pelegri-Siso", , "dolors.pelegri@isglobal.org", 
                       role = c("aut", "cre"), 
                       comment = c(ORCID = "0000-0002-5993-3003")),

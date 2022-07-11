@@ -38,11 +38,16 @@ It was trained using 27K and 450K arrays in samples from different tissues.
 Other three different age-related biomarkers are also computed:
      - **AgeAcDiff** (DNAmAge acceleration difference): Difference between 
      DNAmAge and chronological age.
-     - **IEAA** (Intrinsic Epigenetic Age Acceleration): Residuals obtained 
-     after regressing DNAmAge and chronological age.
-     - **EEAA** (Extrinsic Epigenetic Age Acceleration): Residuals obtained 
-     after regressing DNAmAge and chronological age adjusted by cell counts.
-     This measure was also known as DNAmAge acceleration residual in the 
+     <!-- - **IEAA** (Intrinsic Epigenetic Age Acceleration): Residuals obtained  -->
+     <!-- after regressing DNAmAge and chronological age. -->
+     <!-- - **EEAA** (Extrinsic Epigenetic Age Acceleration): Residuals obtained  -->
+     <!-- after regressing DNAmAge and chronological age adjusted by cell counts. -->
+     <!-- This measure was also known as DNAmAge acceleration residual in the  -->
+     <!-- first Horvath's paper. -->
+     - **IEAA** Residuals obtained after regressing DNAmAge and chronological 
+     age adjusted by cell counts.
+     - **EEAA** Residuals obtained after regressing DNAmAge and chronological 
+     age. This measure was also known as DNAmAge acceleration residual in the 
      first Horvath's paper.
 - **Hannum's clock**: It uses 71 CpGs described in @hannum2013genome. It was 
 trained using 450K array in blood samples. Another are-related biomarer is 

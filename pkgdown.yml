@@ -1,0 +1,7 @@
+pandoc: '2.18'
+pkgdown: 2.0.6
+pkgdown_sha: ~
+articles:
+  methylclock: methylclock.html
+last_built: 2022-10-21T10:51Z
+

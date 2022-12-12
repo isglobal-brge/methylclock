@@ -1,69 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/404.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/articles/clocks.html</loc>
   </url>
   <url>
-    <loc>/articles/methylclock.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/articles/index.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/articles/methylclock.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/authors.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/index.html</loc>
   </url>
   <url>
-    <loc>/reference/checkClocks.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/reference/checkClocksGA.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/commonClockCpgs.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/BMIQcalibration.html</loc>
   </url>
   <url>
-    <loc>/reference/DNAmAge.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/checkClocks.html</loc>
   </url>
   <url>
-    <loc>/reference/DNAmGA.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/checkClocksGA.html</loc>
   </url>
   <url>
-    <loc>/reference/getCellTypeReference.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefBlup.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefEN.html</loc>
   </url>
   <url>
-    <loc>/reference/load_DNAmGA_Clocks_data.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefEPIC.html</loc>
   </url>
   <url>
-    <loc>/reference/load_DNAm_Clocks_data.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefHannum.html</loc>
   </url>
   <url>
-    <loc>/reference/meffilEstimateCellCountsFromBetas.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefHorvath.html</loc>
   </url>
   <url>
-    <loc>/reference/meffilListCellTypeReferences.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefKnightGA.html</loc>
   </url>
   <url>
-    <loc>/reference/methylclock.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefLeeGA.html</loc>
   </url>
   <url>
-    <loc>/reference/plotCorClocks.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefLevine.html</loc>
   </url>
   <url>
-    <loc>/reference/plotDNAmAge.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefMayneGA.html</loc>
   </url>
   <url>
-    <loc>/reference/progress_data.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefNEOaPMA450K.html</loc>
   </url>
   <url>
-    <loc>/reference/progress_vars.html</loc>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefNEOaPMAEPIC.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefNEOaPNA450K.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefNEOaPNAEPIC.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefPedBE.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefSkin.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/coefTL.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/cpgs.bn.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/DNAmAge.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/DNAmGA.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/get.cell.type.reference.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/meffil.estimate.cell.counts.from.betas.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/meffil.list.cell.type.references.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/MethylationDataExample55.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/methylclock.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/plotCorClocks.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/plotDNAmAge.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/probeAnnotation21kdatMethUsed.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/progress_data.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/progress_vars.html</loc>
+  </url>
+  <url>
+    <loc>https://isglobal-brge.github.io/methylclock/reference/TestDataset.html</loc>
   </url>
 </urlset>

@@ -1,7 +1,11 @@
-pandoc: '2.18'
+pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
+  clocks: clocks.html
   methylclock: methylclock.html
-last_built: 2022-10-21T10:51Z
+last_built: 2022-12-12T20:56Z
+urls:
+  reference: https://isglobal-brge.github.io/methylclock/reference
+  article: https://isglobal-brge.github.io/methylclock/articles
 

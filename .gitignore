@@ -27,6 +27,7 @@
 # knitr and R markdown default cache directories
 */*_cache/
 */cache/
+/test/
 
 # Temporary files created by R markdown
 *.utf8.md
@@ -50,3 +51,4 @@
 *.aux
 *.gz
 *.old
+*.png

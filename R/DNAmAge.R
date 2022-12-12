@@ -1,13 +1,25 @@
 #' DNAm age estimation using different DNA methylation clocks.
-#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
-#' @param clocks the methods used for estimating DNAmAge. Currrently "Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE", "Wu", "TL", "BLUP", "EN" and "all" are available. Default is "all" and all clocks are estimated.
-#' @param toBetas Should data be transformed to beta values? Default is FALSE. If TRUE, it implies data are M values.
-#' @param fastImp Is fast imputation performed if necessary? (see details). Default is FALSE
+#' @param x data.frame (Individual in columns, CpGs in rows, CpG names in first 
+#' colum - i.e. Horvath's format), matrix (individuals in columns and Cpgs in 
+#' rows having CpG names in the rownames), ExpressionSet or GenomicRatioSet.
+#' @param clocks the methods used for estimating DNAmAge. Currrently "Horvath",
+#' "Hannum", "Levine", "BNN", "skinHorvath", "PedBE", "Wu", "TL", "BLUP", "EN",
+#' "NEOaPMA450K", "NEOaPNA450K", "NEOaPMAEPIC", "NEOaPNAEPIC" and "all" are 
+#' available. Default is "all" and all clocks are estimated.
+#' @param toBetas Should data be transformed to beta values? Default is FALSE.
+#' If TRUE, it implies data are M values.
+#' @param fastImp Is fast imputation performed if necessary? (see details). 
+#' Default is FALSE
 #' @param normalize Is Horvath's normalization performed? By default is FALSE
 #' @param age individual's chronological age.
 #' @param cell.count Are cell counts estimated? Default is TRUE.
-#' @param cell.count.reference Used when 'cell.count' is TRUE. Default is "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' for possible values.
-#' @param min.perc Indicates the minimum conicidence percentage required between CpGs in or dataframee x and CpGs in clock coefficients to perform the calculation. If min.prec is too low, the estimated gestational DNAm age can be poor
+#' @param cell.count.reference Used when 'cell.count' is TRUE. Default is 
+#' "blood gse35069 complete". See 'meffil::meffil.list.cell.count.references()' 
+#' for possible values.
+#' @param min.perc Indicates the minimum conicidence percentage required between
+#'  CpGs in or dataframee x and CpGs in clock coefficients to perform the 
+#'  calculation. If min.prec is too low, the estimated gestational DNAm age 
+#'  can be poor
 #' @param ... Other arguments to be passed through impute package
 #'
 #' @details Imputation is performed when having missing data.
@@ -36,10 +48,14 @@ DNAmAge <- function(x,
                     cell.count.reference = "blood gse35069 complete",
                     min.perc = 0.8,
                     ...) {
-  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "skinHorvath", "PedBE", "Wu", "TL", "BLUP", "EN", "all")
+  available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "skinHorvath", 
+                        "PedBE", "Wu", "TL", "BLUP", "EN", "NEOaPMA450K", 
+                        "NEOaPNA450K", "NEOaPMAEPIC", "NEOaPNAEPIC" ,  "all")
   method <- match(clocks, available.clocks)
   if (any(is.na(method))) {
-    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine, BNN, skinHorvath, PedBE, Wu, TL, BLUP, EN")
+    stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine,
+          BNN, skinHorvath, PedBE, Wu, TL, BLUP, EN, 
+          NEOaPMA450K, NEOaPNA450K, NEOaPMAEPIC, NEOaPNAEPIC")
   }
   if (length(available.clocks) %in% method) {
     method <- c(1:(length(available.clocks) - 1))
@@ -77,7 +93,6 @@ DNAmAge <- function(x,
     stop("Data seems to do not be beta values. Check your data or set 'toBetas=TRUE'")
   }
 
-
   cpgs.all <- c(
     coefHorvath$CpGmarker,
     coefHannum$CpGmarker,
@@ -87,7 +102,11 @@ DNAmAge <- function(x,
     coefWu$CpGmarker,
     coefTL$CpGmarker,
     coefBlup$CpGmarker,
-    coefEN$CpGmarker
+    coefEN$CpGmarker,
+    coefNEOaPMA450K$CpGmarker,
+    coefNEOaPNA450K$CpGmarker,
+    coefNEOaPMAEPIC$CpGmarker,
+    coefNEOaPNAEPIC$CpGmarker
   )
 
   cpgs.in <- intersect(cpgs.all, colnames(cpgs))
@@ -125,7 +144,6 @@ DNAmAge <- function(x,
       Levine = levine
     )
   }
-
 
   if (4 %in% method) {
     if (any(!coefHorvath$CpGmarker[-1] %in% colnames(cpgs.imp))) {
@@ -173,7 +191,6 @@ DNAmAge <- function(x,
     )
   }
   
-  
   if (8 %in% method) {
     tl <- predAge(cpgs.imp, coefTL, intercept = TRUE, min.perc)
     TL <- data.frame(
@@ -204,7 +221,35 @@ DNAmAge <- function(x,
       )
     }
   }
-  
+    
+  if (11 %in% method) {
+    neoapmA450K <- predAge(cpgs.imp, coefNEOaPMA450K, intercept = TRUE, min.perc)
+    NEOaPMA450K <- data.frame(
+      id = rownames(cpgs.imp),
+      NEOaPMA450K = neoapmA450K
+    )
+  }
+  if (12 %in% method) {
+    neoapnA450K <- predAge(cpgs.imp, coefNEOaPNA450K, intercept = TRUE, min.perc)
+    NEOaPNA450K <- data.frame(
+      id = rownames(cpgs.imp),
+      NEOaPNA450K = neoapnA450K
+    )
+  }
+  if (13 %in% method) {
+    neoapmaepic <- predAge(cpgs.imp, coefNEOaPMAEPIC, intercept = TRUE, min.perc)
+    NEOaPMAEPIC <- data.frame(
+      id = rownames(cpgs.imp),
+      NEOaPMAEPIC = neoapmaepic
+    )
+  }
+  if (14 %in% method) {
+    neoapnaepic <- predAge(cpgs.imp, coefNEOaPNAEPIC, intercept = TRUE, min.perc)
+    NEOaPNAEPIC <- data.frame(
+      id = rownames(cpgs.imp),
+      NEOaPNAEPIC = neoapnaepic
+    )
+  }
 
   if (!missing(age)) {
     if (!cell.count) {
@@ -237,6 +282,18 @@ DNAmAge <- function(x,
       }
       if (10 %in% method) {
         EN <- ageAcc1(EN, age, lab = "EN")
+      }
+      if (11 %in% method) {
+        NEOaPMA450K <- ageAcc1(NEOaPMA450K, age, lab = "NEOaPMA450K")
+      }
+      if (12 %in% method) {
+        NEOaPNA450K <- ageAcc1(NEOaPNA450K, age, lab = "NEOaPNA450K")
+      }
+      if (13 %in% method) {
+        NEOaPMAEPIC <- ageAcc1(NEOaPMAEPIC, age, lab = "NEOaPMAEPIC")
+      }
+      if (14 %in% method) {
+        NEOaPNAEPIC <- ageAcc1(NEOaPNAEPIC, age, lab = "NEOaPNAEPIC")
       }
     }
     else {
@@ -280,6 +337,18 @@ DNAmAge <- function(x,
         }
         if (10 %in% method) {
           EN <- ageAcc2(EN, df, lab = "EN")
+        }
+        if (11 %in% method) {
+          NEOaPMA450K <- ageAcc2(NEOaPMA450K, df, lab = "NEOaPMA450K")
+        }
+        if (12 %in% method) {
+          NEOaPNA450K <- ageAcc2(NEOaPNA450K, df, lab = "NEOaPNA450K")
+        }
+        if (13 %in% method) {
+          NEOaPMAEPIC <- ageAcc2(NEOaPMAEPIC, df, lab = "NEOaPMAEPIC")
+        }
+        if (14 %in% method) {
+          NEOaPNAEPIC <- ageAcc2(NEOaPNAEPIC, df, lab = "NEOaPNAEPIC")
         }
       }
     }
@@ -355,6 +424,35 @@ DNAmAge <- function(x,
       out <- out %>% full_join(EN, by = "id")
     }
   }
+  if (11 %in% method) {
+    if(is.null(out)) {
+      out <- NEOaPMA450K
+    } else{
+      out <- out %>% full_join(NEOaPMA450K, by = "id")
+    }
+  }
+  if (12 %in% method) {
+    if(is.null(out)) {
+      out <- NEOaPNA450K
+    } else{
+      out <- out %>% full_join(NEOaPNA450K, by = "id")
+    }
+  }
+  if (13 %in% method) {
+    if(is.null(out)) {
+      out <- NEOaPMAEPIC
+    } else{
+      out <- out %>% full_join(NEOaPMAEPIC, by = "id")
+    }
+  }
+  if (14 %in% method) {
+    if(is.null(out)) {
+      out <- NEOaPNAEPIC
+    } else{
+      out <- out %>% full_join(NEOaPNAEPIC, by = "id")
+    }
+  }
+  
 
   out <- tibble::as_tibble(out)
 

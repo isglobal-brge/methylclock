@@ -35,30 +35,30 @@ checkClocks <- function(x, ...) {
   checkTL <- coefTL$CpGmarker[-1][!coefTL$CpGmarker[-1] %in% cpg.names]
   checkBLUP <- coefBlup$CpGmarker[-1][!coefBlup$CpGmarker[-1] %in% cpg.names]
   checkEN <- coefEN$CpGmarker[-1][!coefEN$CpGmarker[-1] %in% cpg.names]
+  checkNEOaPMA450K <- coefNEOaPMA450K$CpGmarker[-1][!coefNEOaPMA450K$CpGmarker[-1] %in% cpg.names]
+  checkNEOaPNA450K <- coefNEOaPNA450K$CpGmarker[-1][!coefNEOaPNA450K$CpGmarker[-1] %in% cpg.names]
+  checkNEOaPMAEPIC <- coefNEOaPMAEPIC$CpGmarker[-1][!coefNEOaPMAEPIC$CpGmarker[-1] %in% cpg.names]
+  checkNEOaPNAEPIC <- coefNEOaPNAEPIC$CpGmarker[-1][!coefNEOaPNAEPIC$CpGmarker[-1] %in% cpg.names]
 
-  sizes <- c(
-    length(checkHorvath), length(checkHannum),
-    length(checkLevine), length(checkSkin), length(checkPedBE),
-    length(checkWu), length(checkTL), length(checkBLUP), length(checkEN)
-  )
+  sizes <- lengths(list(checkHorvath, checkHannum, checkLevine, checkSkin,
+              checkPedBE, checkWu, checkTL, checkBLUP, checkEN, checkNEOaPMA450K, 
+              checkNEOaPNA450K, checkNEOaPMAEPIC, checkNEOaPNAEPIC))
+
   n <- c(
     nrow(coefHorvath[-1, ]), nrow(coefHannum),
     nrow(coefLevine[-1, ]), nrow(coefSkin[-1, ]), nrow(coefPedBE[-1, ]),
     nrow(coefWu[-1, ]), nrow(coefTL[-1, ]), nrow(coefBlup[-1, ]), 
-    nrow(coefEN[-1, ])
+    nrow(coefEN[-1, ]), nrow(coefNEOaPMA450K[-1, ]), nrow(coefNEOaPNA450K[-1, ]), 
+    nrow(coefNEOaPMAEPIC[-1, ]), nrow(coefNEOaPNAEPIC[-1, ])
   )
 
   df <- data.frame(
-    clock = c(
-      "Horvath", "Hannum", "Levine", "SkinHorvath",
-      "PedBE", "Wu", "TL", "BLUP", "EN"
-    ),
+    clock = c( "Horvath", "Hannum", "Levine", "SkinHorvath", "PedBE", "Wu", 
+       "TL", "BLUP", "EN", "NEOaPMA450K", "NEOaPNA450K", "NEOaPMAEPIC", "NEOaPNAEPIC" ),
     Cpgs_in_clock = n,
     missing_CpGs = sizes,
     percentage = round((sizes / n) * 100, 1)
   )
-
-
 
   if (any(sizes != 0)) {
     cat("There are some clocks that cannot be computed since your data do not contain the required CpGs. 
@@ -67,10 +67,11 @@ checkClocks <- function(x, ...) {
     print(df)
 
     out <- list(
-      Horvath = checkHorvath, Hannum = checkHannum,
-      Levine = checkLevine, skinHorvath = checkSkin,
-      PedBE = checkPedBE, Wu = checkWu, TL = checkTL,
-      BLUP = checkBLUP, EN = checkEN
+      Horvath = checkHorvath, Hannum = checkHannum, Levine = checkLevine, 
+      skinHorvath = checkSkin, PedBE = checkPedBE, Wu = checkWu, TL = checkTL, 
+      BLUP = checkBLUP, EN = checkEN, NEOaPMA450K = checkNEOaPMA450K,
+      NEOaPNA450K = checkNEOaPNA450K, NEOaPMAEPIC = checkNEOaPMAEPIC, 
+      NEOaPNAEPIC = checkNEOaPNAEPIC
     )
   }
   else {

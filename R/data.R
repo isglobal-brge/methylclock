@@ -302,6 +302,82 @@
 "coefEPIC"
 
 
+#' NEOage PostMenstrual age Clock for 450K - Gestational Age clock coefficients
+#'
+#' A dataset containing the coefficients and CpGs information from NEOage 
+#' PostMenstrual age Clock for 450K array data.
+#'
+#' @docType data
+#'
+#' @usage data(coefNEOaPMA450K)
+#' @references \url{https://doi.org/10.18632/aging.203637}
+#' @format A data frame with 409 CpGs and 2 variables
+#' \describe{
+#'   \item{CpGmarker}{CpGs id}
+#'   \item{CoefficientTraining}{Training Coefficient}
+#' }
+#' @examples
+#' data(coefNEOaPMA450K)
+"coefNEOaPMA450K"
+
+
+#' NEOage PostNatal age Clock for 450K - Gestational Age clock coefficients
+#'
+#' A dataset containing the coefficients and CpGs information from NEOage 
+#' PostNatal age Clock for 450K array data.
+#'
+#' @docType data
+#'
+#' @usage data(coefNEOaPMA450K)
+#' @references \url{https://doi.org/10.18632/aging.203637}
+#' @format A data frame with 303 CpGs and 2 variables
+#' \describe{
+#'   \item{CpGmarker}{CpGs id}
+#'   \item{CoefficientTraining}{Training Coefficient}
+#' }
+#' @examples
+#' data(coefNEOaPNA450K)
+"coefNEOaPNA450K"
+
+
+#' NEOage PostMenstrual age Clock for EPIC - Gestational Age clock coefficients
+#'
+#' A dataset containing the coefficients and CpGs information from NEOage 
+#' PostMenstrual age Clock for EPIC array data.
+#'
+#' @docType data
+#'
+#' @usage data(coefNEOaPMAEPIC)
+#' @references \url{https://doi.org/10.18632/aging.203637}
+#' @format A data frame with 522 CpGs and 2 variables
+#' \describe{
+#'   \item{CpGmarker}{CpGs id}
+#'   \item{CoefficientTraining}{Training Coefficient}
+#' }
+#' @examples
+#' data(coefNEOaPMAEPIC)
+"coefNEOaPMAEPIC"
+
+
+#' NEOage PostNatal age Clock for EPIC - Gestational Age clock coefficients
+#'
+#' A dataset containing the coefficients and CpGs information from NEOage 
+#' PostNatal age Clock for EPIC array data.
+#'
+#' @docType data
+#'
+#' @usage data(coefNEOaPMAEPIC)
+#' @references \url{https://doi.org/10.18632/aging.203637}
+#' @format A data frame with 509 CpGs and 2 variables
+#' \describe{
+#'   \item{CpGmarker}{CpGs id}
+#'   \item{CoefficientTraining}{Training Coefficient}
+#' }
+#' @examples
+#' data(coefNEOaPNAEPIC)
+"coefNEOaPNAEPIC"
+
+
 #' probeAnnotation21kdatMethUsed
 #'
 #' A dataset containing probeAnnotation21kdatMethUsed (REMOVE??)

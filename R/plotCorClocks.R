@@ -25,7 +25,8 @@ plotCorClocks <- function(x, ...) {
   
   clocks <- c(
     "Horvath", "Levine", "BNN", "Horvath2", "Hannum", "PedBE", "skinHorvath",
-    "Knight", "Bohlin", "Mayne", "Lee", "BLUP", "EN", "EPIC" )
+    "Knight", "Bohlin", "Mayne", "Lee", "BLUP", "EN", "EPIC", 
+    "NEOaPMA450K", "NEOaPNA450K", "NEOaPMAEPIC", "NEOaPNAEPIC" )
   
   # sel <- intersect(clocks, colnames(x))
   # x.sel <- x[, sel]
@@ -44,8 +45,10 @@ plotCorClocks <- function(x, ...) {
       geom_smooth(method = lm, se = FALSE) +
       xlab("DNAm clock") +
       ylab("Chronological Age") +
-      ggpubr::stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~"))) +
-      facet_grid(~method)
+      ggpubr::stat_cor(aes(label = paste(after_stat(rr.label), 
+                            after_stat(p.label), sep = "~`,`~"))) +
+      #..# facet_grid(~method)
+      facet_wrap(~ method, nrow = 2, scales = "free_x")
   }
   
   
@@ -65,15 +68,16 @@ plotCorClocks <- function(x, ...) {
       geom_smooth(method = lm, se = FALSE) +
       xlab("Telomere Length (kb)") +
       ylab("Chronological Age") +
-      ggpubr::stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~"))) +
+      ggpubr::stat_cor(aes(label = paste(after_stat(rr.label), 
+                            after_stat(p.label), sep = "~`,`~"))) +
       facet_grid(~method)
   } 
   
   if(exists("p1") && exists("p2")) {
-    gridExtra::grid.arrange( p1, p2 )
+    gridExtra::grid.arrange( p1, p2, nrow = 1)
   } else if (exists("p1")) {
     p1
-  }else if (exists("p2")) {
+  } else if (exists("p2")) {
     p2
   } else {
     message("No data to be plotted")
@@ -87,9 +91,9 @@ getNClockstoPlot <- function( clocks, data)
 {
   
   sel <- intersect(clocks, colnames(data))
-  data.sel <- data[, sel]
+  data.sel <- as.data.frame(data[, sel])
   no.na <- apply(data.sel, 2, function(data) !all(is.na(data)))
-  data.nona <- data.sel[, no.na]
+  data.nona <- as.data.frame(data.sel[, no.na])
   nclocks <- ncol(data.nona)
   
   return(list( nclocks = nclocks,

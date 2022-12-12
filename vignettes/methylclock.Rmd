@@ -52,6 +52,11 @@ This manual describes how to estimate chronological and gestational DNA methylat
 - **Wu's clock**: It uses 111 CpGs described in @wu2019dna. It is designed to predict age in children. It was trained using 27K and 450K.
 - **BLUP clock**:  It uses 319607 CpGs described in @zhang2019improved. It was trained using 450K and EPIC arrays in blood (13402 samples) and saliva (259 samples). Age predictors based on training sets with various sample sizes using Best Linear Unbiased Prediction (BLUP)  
 - **EN clock**:  It uses 514 CpGs described in @zhang2019improved. It was trained using 450K and EPIC arrays in blood (13402 samples) and saliva (259 samples). Age predictors based on training sets with various sample sizes using Elastic Net (EN) 
+- **Neonatal Epigenetic Estimator of age (NEOage) clocks**:  These are four epigenetic clocks that are focused on age estimation of preterm infants based on their DNAm profile measured in buccal epithelial cells. The number of CpGs within each clock range from 303-522 CpGs with varying degrees of overlap between the clocks described in @graw2021neoage
+    - **PMA 450K** Post-menstrual age (PMA), it uses 409 CpGs and was trained using 450K arrays. 
+    - **PMA EPIC** Post-menstrual age (PMA), it uses 522 CpGs and was trained using EPIC arrays. 
+    - **PNA 450K** Postnatal age (PNA) is equivalent to chronological age and is the time elapsed after birth, it uses 303 CpGs and was trained using 450K arrays. 
+    - **PNA EPIC** Postnatal age (PNA) is equivalent to chronological age and is the time elapsed after birth, it uses 509 CpGs and was trained using EPIC arrays. 
 
 ## Gestational DNAm age (in weeks)
 

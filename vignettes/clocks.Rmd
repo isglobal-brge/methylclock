@@ -1,0 +1,362 @@
+---
+title: "Clocks summary"
+date: "`r Sys.Date()`"
+output: html_document
+
+vignette: >
+  %\VignetteIndexEntry{DNAm age using diffrent methylation clocks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: methylclock.bib  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-85c2{background-color:#7cd554;border-color:inherit;color:#ffffff;font-weight:bold;text-align:left;vertical-align:top}
+    .tg .tg-dj7o{background-color:#51b87c;border-color:inherit;color:#ffffff;font-weight:bold;text-align:left;vertical-align:top}
+    .tg .tg-a4bq{background-color:#0c9eab;border-color:inherit;color:#ffffff;font-weight:bold;text-align:left;vertical-align:top}
+    .tg .tg-msvc{background-color:#013f73;border-color:inherit;color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
+    .tg .tg-qn4v{background-color:#dbf3cf;border-color:inherit;text-align:left;vertical-align:top}
+    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+    .tg .tg-xuzy{font-size:medium;font-weight:bold;text-align:center;vertical-align:top}
+    .tg .tg-uhil{background-color:#bbe4e8;border-color:inherit;text-align:left;vertical-align:top}
+    .tg .tg-6oc1{background-color:#0c9eab;border-color:inherit;color:#ffffff;font-weight:bold;text-align:right;vertical-align:top}
+    .tg .tg-oesp{border-color:inherit;font-size:medium;font-weight:bold;text-align:center;vertical-align:top}
+    .tg .tg-nmk1{background-color:#beebdb;border-color:inherit;text-align:left;vertical-align:top}
+</style>
+
+\  
+
+### Chronological Age Clocks
+\  
+
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-0pky"></th>
+    <th class="tg-msvc">Tissue</th>
+    <th class="tg-msvc">Type</th>
+    <th class="tg-msvc">Array type</th>
+    <th class="tg-msvc">CpG sites</th>
+    <th class="tg-msvc">Preddiction</th>
+    <th class="tg-msvc">Units</th>
+    <th class="tg-msvc">methylclock</th>
+    <th class="tg-msvc">References</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-a4bq">Horvath</td>
+    <td class="tg-uhil">Different Tissues</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">27K - 450k</td>
+    <td class="tg-uhil">353</td>
+    <td class="tg-uhil">0-99 Years</td>
+    <td class="tg-uhil">Years</td>
+    <td class="tg-uhil">Horvath</td>
+    <td class="tg-uhil">@horvath2013dna</td>
+  </tr>
+  <tr>
+    <td class="tg-a4bq">Hannum</td>
+    <td class="tg-uhil">Blood</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">450k</td>
+    <td class="tg-uhil">71</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">Years</td>
+    <td class="tg-uhil">Hannum</td>
+    <td class="tg-uhil">@hannum2013genome</td>
+  </tr>
+  <tr>
+    <td class="tg-a4bq">BNN</td>
+    <td class="tg-uhil">Skin and blood</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">450K - EPIC</td>
+    <td class="tg-uhil">391</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">Years</td>
+    <td class="tg-uhil">BNN</td>
+    <td class="tg-uhil">@alfonso2018</td>
+  </tr>
+  <tr>
+    <td class="tg-a4bq">Horvath's skin + blood clock</td>
+    <td class="tg-uhil">Skin and blood</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">450K - EPIC</td>
+    <td class="tg-uhil">392</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">Years</td>
+    <td class="tg-uhil">skinHorvath</td>
+    <td class="tg-uhil">@horvath2018epigenetic</td>
+  </tr>
+  <tr>
+    <td class="tg-a4bq">PedBE</td>
+    <td class="tg-uhil">Buccal epithelial cells</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">84</td>
+    <td class="tg-uhil">0-20 Years</td>
+    <td class="tg-uhil">Years</td>
+    <td class="tg-uhil">PedBE</td>
+    <td class="tg-uhil">@mcewen2019pedbe</td>
+  </tr>
+  <tr>
+    <td class="tg-a4bq">Wu's</td>
+    <td class="tg-uhil">Blood</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">27K - 450k</td>
+    <td class="tg-uhil">111</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">Years</td>
+    <td class="tg-uhil">Wu</td>
+    <td class="tg-uhil">@wu2019dna</td>
+  </tr>
+  <tr>
+    <td class="tg-a4bq">Best Linear Unbiased Prediction (BLUP)</td>
+    <td class="tg-uhil">Blood and saliva</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">450K - EPIC</td>
+    <td class="tg-uhil">319607</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">Years</td>
+    <td class="tg-uhil">BLUP</td>
+    <td class="tg-uhil">@zhang2019improved</td>
+  </tr>
+  <tr>
+    <td class="tg-a4bq">Elastic Net (EN)</td>
+    <td class="tg-uhil">Blood and saliva</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">450K - EPIC</td>
+    <td class="tg-uhil">514</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">Years</td>
+    <td class="tg-uhil">EN</td>
+    <td class="tg-uhil">@zhang2019improved</td>
+  </tr>
+  <tr>
+    <td class="tg-a4bq">Neonatal Epigenetic Estimator of age   (NEOage)</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil"></td>
+  </tr>
+  <tr>
+    <td class="tg-6oc1">PMA - 450K</td>
+    <td class="tg-uhil">Bucal epithelial cells</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">450K</td>
+    <td class="tg-uhil">409</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">Weeks</td>
+    <td class="tg-uhil">NEOaPMA450K</td>
+    <td class="tg-uhil">@graw2021neoage</td>
+  </tr>
+  <tr>
+    <td class="tg-6oc1">PMA - EPIC</td>
+    <td class="tg-uhil">Bucal epithelial cells</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">EPIC</td>
+    <td class="tg-uhil">522</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">Weeks</td>
+    <td class="tg-uhil">NEOaPMAEPIC</td>
+    <td class="tg-uhil">@graw2021neoage</td>
+  </tr>
+  <tr>
+    <td class="tg-6oc1">PNA - 450K</td>
+    <td class="tg-uhil">Bucal epithelial cells</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">450K</td>
+    <td class="tg-uhil">303</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">Weeks</td>
+    <td class="tg-uhil">NEOaPNA450K</td>
+    <td class="tg-uhil">@graw2021neoage</td>
+  </tr>
+  <tr>
+    <td class="tg-6oc1">PNA - EPIC</td>
+    <td class="tg-uhil">Bucal epithelial cells</td>
+    <td class="tg-uhil">Chronological</td>
+    <td class="tg-uhil">EPIC</td>
+    <td class="tg-uhil">509</td>
+    <td class="tg-uhil"></td>
+    <td class="tg-uhil">Weeks</td>
+    <td class="tg-uhil">NEOaPNAEPIC</td>
+    <td class="tg-uhil">@graw2021neoage</td>
+  </tr>
+ </tbody>
+ </table>
+
+
+\  
+
+### Chronological Gestational Age Clocks
+
+\  
+
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-0pky"></th>
+    <th class="tg-msvc">Tissue</th>
+    <th class="tg-msvc">Type</th>
+    <th class="tg-msvc">Array type</th>
+    <th class="tg-msvc">CpG sites</th>
+    <th class="tg-msvc">Preddiction</th>
+    <th class="tg-msvc">Units</th>
+    <th class="tg-msvc">methylclock</th>
+    <th class="tg-msvc">References</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-dj7o">Knight</td>
+    <td class="tg-nmk1">Coord blood</td>
+    <td class="tg-nmk1">Chronological Gestational</td>
+    <td class="tg-nmk1">27K - 450k</td>
+    <td class="tg-nmk1">148</td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1">Weeks</td>
+    <td class="tg-nmk1">Knight</td>
+    <td class="tg-nmk1">@knight2016epigenetic</td>
+  </tr>
+  <tr>
+    <td class="tg-dj7o">Bohlin</td>
+    <td class="tg-nmk1">Coord blood</td>
+    <td class="tg-nmk1">Chronological Gestational</td>
+    <td class="tg-nmk1">450K</td>
+    <td class="tg-nmk1">96</td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1">Weeks</td>
+    <td class="tg-nmk1">Bohlin</td>
+    <td class="tg-nmk1">@bohlin2016prediction</td>
+  </tr>
+  <tr>
+    <td class="tg-dj7o">Mayne</td>
+    <td class="tg-nmk1">Placenta</td>
+    <td class="tg-nmk1">Chronological Gestational</td>
+    <td class="tg-nmk1">27K - 450k</td>
+    <td class="tg-nmk1">62</td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1">Weeks</td>
+    <td class="tg-nmk1">Mayne</td>
+    <td class="tg-nmk1">@mayne2017accelerated</td>
+  </tr>
+  <tr>
+    <td class="tg-dj7o">EPIC</td>
+    <td class="tg-nmk1">Coord blood</td>
+    <td class="tg-nmk1">Chronological Gestational</td>
+    <td class="tg-nmk1">EPIC</td>
+    <td class="tg-nmk1">176</td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1">Years</td>
+    <td class="tg-nmk1">EPIC</td>
+    <td class="tg-nmk1">@haftorn2021epic</td>
+  </tr>
+  <tr>
+    <td class="tg-dj7o">Lee</td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1"></td>
+  </tr>
+  <tr>
+    <td class="tg-dj7o">Robust Placnetal clock (RPC)</td>
+    <td class="tg-nmk1">Placenta</td>
+    <td class="tg-nmk1">Chronological Gestational</td>
+    <td class="tg-nmk1">450K - EPIC</td>
+    <td class="tg-nmk1">558</td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1">Weeks</td>
+    <td class="tg-nmk1">Lee.RPC</td>
+    <td class="tg-nmk1">@lee2019placental</td>
+  </tr>
+  <tr>
+    <td class="tg-dj7o">Control placental clock (CPC)</td>
+    <td class="tg-nmk1">Placenta</td>
+    <td class="tg-nmk1">Chronological Gestational</td>
+    <td class="tg-nmk1">450K - EPIC</td>
+    <td class="tg-nmk1">536</td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1">Weeks</td>
+    <td class="tg-nmk1">Lee.CPC</td>
+    <td class="tg-nmk1">@lee2019placental</td>
+  </tr>
+  <tr>
+    <td class="tg-dj7o">Refined RPC</td>
+    <td class="tg-nmk1">Placenta</td>
+    <td class="tg-nmk1">Chronological Gestational</td>
+    <td class="tg-nmk1">450K - EPIC</td>
+    <td class="tg-nmk1">396</td>
+    <td class="tg-nmk1"></td>
+    <td class="tg-nmk1">Weeks</td>
+    <td class="tg-nmk1">Lee.refRPC</td>
+    <td class="tg-nmk1">@lee2019placental</td>
+  </tr>
+</tbody>
+</table>
+
+\    
+
+### Other Biological Age Clocks
+
+\  
+
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-0pky"></th>
+    <th class="tg-msvc">Tissue</th>
+    <th class="tg-msvc">Type</th>
+    <th class="tg-msvc">Array type</th>
+    <th class="tg-msvc">CpG sites</th>
+    <th class="tg-msvc">Preddiction</th>
+    <th class="tg-msvc">Units</th>
+    <th class="tg-msvc">methylclock</th>
+    <th class="tg-msvc">References</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-85c2">Levine</td>
+    <td class="tg-qn4v">Blood</td>
+    <td class="tg-qn4v">Other biological</td>
+    <td class="tg-qn4v">27K - 450k - EPIC</td>
+    <td class="tg-qn4v">313</td>
+    <td class="tg-qn4v"></td>
+    <td class="tg-qn4v">Years</td>
+    <td class="tg-qn4v">Levine</td>
+    <td class="tg-qn4v">@levine2018epigenetic</td>
+  </tr>
+  <tr>
+    <td class="tg-85c2">Telomere Length</td>
+    <td class="tg-qn4v">Blood</td>
+    <td class="tg-qn4v">Other biological</td>
+    <td class="tg-qn4v">450K - EPIC</td>
+    <td class="tg-qn4v">140</td>
+    <td class="tg-qn4v"></td>
+    <td class="tg-qn4v">Kb</td>
+    <td class="tg-qn4v">TL</td>
+    <td class="tg-qn4v">@lu2019dna</td>
+  </tr>
+</tbody>
+</table>
+
+\  
+\  

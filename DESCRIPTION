@@ -1,11 +1,21 @@
 Package: methylclock
 Type: Package
 Title: Chronological and gestational DNAm age estimation using different methylation-based clocks
-Version: 0.8.0.3
-Date: 2022-02-17
-Authors@R: c( person("Dolors", "Pelegri-Siso", , "dolors.pelegri@isglobal.org", role = "aut"),
-              person("Juan R.", "Gonzalez", ,"juanr.gonzalez@isglobal.org", role = c("aut", "cre")))
-Description: Package to estimate DNA methylation age (DNAmAge) using different methylation clocks. 
+Version: 0.8.0.4
+Date: 2022-12-12
+Authors@R: c( person("Dolors", "Pelegri-Siso", , "dolors.pelegri@isglobal.org", 
+                      role = c("aut", "cre"), 
+                      comment = c(ORCID = "0000-0002-5993-3003")),
+              person("Juan R.", "Gonzalez", ,"juanr.gonzalez@isglobal.org", 
+                     role = c("aut"), 
+                     comment = c(ORCID = "0000-0003-3267-2146"))
+              )
+Description: This package allows to estimate chronological and gestational DNA methylation
+       (DNAm) age as well as biological age using different methylation clocks.
+       Chronological DNAm age (in years) : Horvath's clock, Hannum's clock, BNN, 
+       Horvath's skin+blood clock, PedBE clock and Wu's clock.
+       Gestational DNAm age : Knight's clock, Bohlin's clock, Mayne's clock and Lee's clocks.
+       Biological DNAm clocks : Levine's clock and Telomere Length's clock.
 biocViews: 
   DNAMethylation,
   BiologicalQuestion,

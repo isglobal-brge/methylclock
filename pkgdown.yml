@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   clocks: clocks.html
   methylclock: methylclock.html
-last_built: 2022-12-12T21:17Z
+last_built: 2022-12-15T08:45Z
 urls:
   reference: https://isglobal-brge.github.io/methylclock/reference
   article: https://isglobal-brge.github.io/methylclock/articles

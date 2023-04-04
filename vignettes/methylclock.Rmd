@@ -57,6 +57,7 @@ This manual describes how to estimate chronological and gestational DNA methylat
     - **PMA EPIC** Post-menstrual age (PMA), it uses 522 CpGs and was trained using EPIC arrays. 
     - **PNA 450K** Postnatal age (PNA) is equivalent to chronological age and is the time elapsed after birth, it uses 303 CpGs and was trained using 450K arrays. 
     - **PNA EPIC** Postnatal age (PNA) is equivalent to chronological age and is the time elapsed after birth, it uses 509 CpGs and was trained using EPIC arrays. 
+- **Dunedin (P)ace of (A)ging (C)alculated from the (E)pigenome (DunedinPACE) **: It uses 173 CpG sites described in @belsky2022dunedinpace. It works with 450K and EPIC arrays
 
 ## Gestational DNAm age (in weeks)
 

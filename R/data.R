@@ -378,6 +378,27 @@
 "coefNEOaPNAEPIC"
 
 
+
+#' DunedinPACE Clock for 450K and EPIC
+#'
+#' @description dataset containing the coefficients and CpGs information from DunedinPACE clock
+#'
+#' @docType data
+#'
+#' @usage data(coefDunedinPACEGS)
+#' @references \url{https://doi.org/10.7554/eLife.73420}
+#' @format A data frame with 173 CpGs sites and 3 variables
+#' \describe{
+#'   \item{CpGmarker}{CpGs id}
+#'   \item{CoefficientTraining}{Training Coefficient}
+#'   \item{Means}{Means in training data}
+#' }
+#' @examples
+#' data(coefDunedinPACEGS)
+"coefDunedinPACEGS"
+
+
+
 #' probeAnnotation21kdatMethUsed
 #'
 #' A dataset containing probeAnnotation21kdatMethUsed (REMOVE??)

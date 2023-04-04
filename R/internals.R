@@ -1,3 +1,55 @@
+getCpGsData <- function(x) {
+    
+    if (inherits(x, "data.frame")) {
+        cpgs.names <- as.character(x[, 1, drop = TRUE])
+        if (length(grep("cg", cpgs.names)) == 0) {
+            stop("First column should contain CpG names")
+        }
+        cpgs <- t(as.matrix(x[, -1]))
+        colnames(cpgs) <- cpgs.names
+    }
+    else if (inherits(x, "matrix")) {
+        cpgs <- t(x)
+    }
+    else if (inherits(x, "ExpressionSet")) {
+        cpgs <- t(Biobase::exprs(x))
+    }
+    else if (inherits(x, "GenomicRatioSet")) {
+        cpgs <- t(minfi::getBeta(x))
+    } 
+    else if (inherits(x, "SummarizedExperiment")) 
+    {
+        cpgs <- t(SummarizedExperiment::assay(x))
+    }
+    else {
+        stop("x must be a data.frame or a 'GenomicRatioSet' or a 'ExpressionSet' or a 'SummarizedExperiment' object")
+    }
+    
+    return(cpgs)
+    
+}
+
+
+getCpGsFeatures <- function(x) {
+    
+    if (inherits(x, "data.frame") & !inherits(x, c("tbl", "tbl_df"))) {
+        cpg.names <- x[, 1]
+    } else if (inherits(x, "matrix")) {
+        cpg.names <- rownames(x)
+    } else if (inherits(x, c("tbl", "tbl_df"))) {
+        cpg.names <- pull(MethylationData, 1)
+    } else if (inherits(x, "ExpressionSet")) {
+        cpg.names <- Biobase::featureNames(x)
+    } else if (inherits(x, "GenomicRatioSet")) {
+        cpg.names <- Biobase::featureNames(x)
+    } else if (inherits(x, "SummarizedExperiment")) {
+        cpg.names <-  SummarizedExperiment::rownames(x)
+    }
+    
+    return(cpg.names)
+}
+
+
 ageAcc1 <- function(x, age, lab) {
   y <- x[, 2]
   if (all(is.na(y))) {
@@ -54,6 +106,90 @@ predAge <- function(x, coefs, intercept = TRUE, min.perc = 0.8) {
     predAge <- rep(NA, nrow(x))
   }
   predAge
+}
+
+
+
+predAgeDunedin <- function(x, coefs, coefsgs, intercept = TRUE, min.perc = 0.8) {
+    
+    if(inherits(coefs$CpGmarker, "factor")){
+        coefs$CpGmarker <- as.character(coefs$CpGmarker)
+    }
+    
+    intercept <- coefs[1,]
+    coefs <- coefs[-1,]
+    cpgs <- colnames(x)
+    mask <- coefs$CpGmarker %in% cpgs
+    
+    
+    if (mean(mask) > min.perc) {
+        obs.cpgs <- coefsgs$CpGmarker[mask]
+        X <- x[, obs.cpgs]
+
+        toAdd <- coefsgs$CpGmarker[which(!coefsgs$CpGmarker %in% colnames(X))]
+        
+        sapply(toAdd, function(probe) {
+            X <- rbind( X, probe = rep(coefsgs$MeansGS[probe], ncol(X)))
+            colnames(X)[which(colnames(X) == "probe")] == probe
+        })
+        
+        # Remove samples with a lot of missing values
+        toRemove <- rownames(X)[which(apply(X, 1, function(sx) { 1 - ( length(which(is.na(sx))) / length(sx) ) < min.perc}))]
+        if( length(toRemove) > 0 ) {
+            X <- X[ -which(rownames(X) %in% toRemove),]
+        }
+        
+        X <- t(X)
+        
+        if(ncol(X) > 0) {
+            # Identify missingness on a probe level
+            pct_vp <- apply( X, 1, function(sx) { 1 - (length(which(is.na(sx))) / length(sx)) } )
+            # If they're missing values, but less than the proportion required, we impute to the cohort mean
+            toAdjust <- which(pct_vp < 1 & pct_vp >= min.perc)
+            if( length(toAdjust) > 0 ) {
+                if( length(toAdjust) > 1 ) {
+                    X[toAdjust,] <- t(apply( X[toAdjust,], 1 , function(X) {
+                        X[is.na(X)] = mean( X, na.rm = TRUE )
+                        X
+                    }))
+                } else {
+                    X[toAdjust,which(is.na(X[toAdjust,]))] <- mean(X[toAdjust,], na.rm=T)
+                }
+            }
+            # If they're missing too many values, everyones value gets replaced with the mean from the Dunedin cohort
+            if( length(which(pct_vp < min.perc)) > 0 ) {
+                toReplace <- rownames(X)[which(pct_vp < min.perc)]
+                sapply( toReplace, function(prb) {
+                    X[prb,] <- rep(coefs$Means[prb], ncol(X))
+                })
+            }
+            
+            # Normalize the matrix to the gold standard dataset
+            X.norm <- preprocessCore::normalize.quantiles.use.target(X, target=coefsgs$MeansGS)
+            rownames(X.norm) <- rownames(X)
+            colnames(X.norm) <- colnames(X)
+            # Calculate score:
+            score = intercept$CoefficientTraining + rowSums(t(X.norm[coefs$CpGmarker,]) %*% diag(coefs$CoefficientTraining))
+            names(score) <- colnames(X.norm)
+            if( length(toRemove) > 0 ) {
+                score.tmp <- rep(NA, length(toRemove))
+                names(score.tmp) <- toRemove
+                score <- c(score, score.tmp)
+            }
+            
+            predAge <- score[rownames(x)]
+        } else {
+            predAge <- rep(NA, ncol(X))
+            names(predAge) <- rownames(X)
+        }
+        
+    }
+    else {
+        tit <- gsub("GA", "", gsub("coef", "", substitute(coefs)))
+        warning(paste("The number of missing CpGs for", tit, "clock exceeds ",min.perc*100,"%.\n  ---> This DNAm clock will be NA.\n"))
+        predAge <- rep(NA, nrow(x))
+    }
+    return(as.data.frame(predAge))
 }
 
 

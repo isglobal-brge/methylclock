@@ -26,7 +26,7 @@ plotCorClocks <- function(x, ...) {
   clocks <- c(
     "Horvath", "Levine", "BNN", "Horvath2", "Hannum", "PedBE", "skinHorvath",
     "Knight", "Bohlin", "Mayne", "Lee", "BLUP", "EN", "EPIC", 
-    "NEOaPMA450K", "NEOaPNA450K", "NEOaPMAEPIC", "NEOaPNAEPIC" )
+    "NEOaPMA450K", "NEOaPNA450K", "NEOaPMAEPIC", "NEOaPNAEPIC", "DunedinPACE" )
   
   # sel <- intersect(clocks, colnames(x))
   # x.sel <- x[, sel]

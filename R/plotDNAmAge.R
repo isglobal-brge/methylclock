@@ -26,7 +26,7 @@ plotDNAmAge <- function(x, y, tit = "Horvath's method", clock = "chronological",
     yy <- "Age"
   }
   
-  if( clock != 'TL'){
+  if( clock != 'TL' && clock != "DunedinPACE"){
 
     p <- ggplot2::ggplot(data = df, ggplot2::aes(x = x, y = y)) +
       ggplot2::geom_smooth(
@@ -44,22 +44,46 @@ plotDNAmAge <- function(x, y, tit = "Horvath's method", clock = "chronological",
       ggplot2::geom_point()
     p
   } else {
+      
+      if(clock == "TL") {
+          p <- ggplot2::ggplot(data = df, ggplot2::aes(x = x, y = y)) +
+              ggplot2::geom_smooth(
+                  method = "lm", se = FALSE, color = "black",
+                  formula = my.formula
+              ) +
+              ggplot2::xlab("Methylation - Telomere Length (kb)") +
+              ggplot2::ylab(yy) +
+              ggplot2::ggtitle(tit) +
+              ggpmisc::stat_poly_eq(
+                  formula = my.formula,
+                  ggplot2::aes(label = paste(after_stat(eq.label), after_stat(rr.label), sep = "~~~")),
+                  parse = TRUE
+              ) +
+              ggplot2::geom_point()
+          p
+          
+      } else if (clock == "DunedinPACE") {
+          
+          p <- ggplot2::ggplot(data = df, ggplot2::aes(x = x, y = y)) +
+              ggplot2::geom_smooth(
+                  method = "lm", se = FALSE, color = "black",
+                  formula = my.formula
+              ) +
+              ggplot2::xlab("Changes in the pace of biological aging") +
+              ggplot2::ylab(yy) +
+              ggplot2::ggtitle(tit) +
+              ggpmisc::stat_poly_eq(
+                  formula = my.formula,
+                  ggplot2::aes(label = paste(after_stat(eq.label), after_stat(rr.label), sep = "~~~")),
+                  parse = TRUE
+              ) +
+              ggplot2::geom_point()
+          p
+          
+          
+      }
     
-    p <- ggplot2::ggplot(data = df, ggplot2::aes(x = x, y = y)) +
-      ggplot2::geom_smooth(
-        method = "lm", se = FALSE, color = "black",
-        formula = my.formula
-      ) +
-      ggplot2::xlab("Methylation - Telomere Length (kb)") +
-      ggplot2::ylab(yy) +
-      ggplot2::ggtitle(tit) +
-      ggpmisc::stat_poly_eq(
-        formula = my.formula,
-        ggplot2::aes(label = paste(after_stat(eq.label), after_stat(rr.label), sep = "~~~")),
-        parse = TRUE
-      ) +
-      ggplot2::geom_point()
-    p
+    
   }
     
   

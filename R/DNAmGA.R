@@ -34,26 +34,31 @@ DNAmGA <- function(x, toBetas = FALSE,
                    cell.count.reference = "andrews and bakulski cord blood",
                    min.perc = 0.8,
                    ...) {
-  if (inherits(x, "data.frame")) {
-    cpgs.names <- as.character(x[, 1, drop = TRUE])
-    if (length(grep("cg", cpgs.names)) == 0) {
-      stop("First column should contain CpG names")
-    }
-    cpgs <- t(as.matrix(x[, -1]))
-    colnames(cpgs) <- cpgs.names
-  }
-  else if (inherits(x, "matrix")) {
-    cpgs <- t(x)
-  }
-  else if (inherits(x, "ExpressionSet")) {
-    cpgs <- t(Biobase::exprs(x))
-  }
-  else if (inherits(x, "GenomicRatioSet")) {
-    cpgs <- t(minfi::getBeta(x))
-  }
-  else {
-    stop("x must be a data.frame, matrix, 'GenomicRatioSet' or an 'ExpressionSet' object")
-  }
+    
+    
+    
+  # if (inherits(x, "data.frame")) {
+  #   cpgs.names <- as.character(x[, 1, drop = TRUE])
+  #   if (length(grep("cg", cpgs.names)) == 0) {
+  #     stop("First column should contain CpG names")
+  #   }
+  #   cpgs <- t(as.matrix(x[, -1]))
+  #   colnames(cpgs) <- cpgs.names
+  # }
+  # else if (inherits(x, "matrix")) {
+  #   cpgs <- t(x)
+  # }
+  # else if (inherits(x, "ExpressionSet")) {
+  #   cpgs <- t(Biobase::exprs(x))
+  # }
+  # else if (inherits(x, "GenomicRatioSet")) {
+  #   cpgs <- t(minfi::getBeta(x))
+  # }
+  # else {
+  #   stop("x must be a data.frame, matrix, 'GenomicRatioSet' or an 'ExpressionSet' object")
+  # }
+   
+    cpgs <- getCpGsData(x) 
 
   if (toBetas) {
     toBeta <- function(m) {

@@ -50,37 +50,48 @@ DNAmAge <- function(x,
                     ...) {
   available.clocks <- c("Horvath", "Hannum", "Levine", "BNN", "skinHorvath", 
                         "PedBE", "Wu", "TL", "BLUP", "EN", "NEOaPMA450K", 
-                        "NEOaPNA450K", "NEOaPMAEPIC", "NEOaPNAEPIC" ,  "all")
+                        "NEOaPNA450K", "NEOaPMAEPIC", "NEOaPNAEPIC", 
+                        "DunedinPACE", "all")
   method <- match(clocks, available.clocks)
   if (any(is.na(method))) {
     stop("You wrote the name of an unavailable clock: Horvath, Hannum, Levine,
           BNN, skinHorvath, PedBE, Wu, TL, BLUP, EN, 
-          NEOaPMA450K, NEOaPNA450K, NEOaPMAEPIC, NEOaPNAEPIC")
+          NEOaPMA450K, NEOaPNA450K, NEOaPMAEPIC, NEOaPNAEPIC", "DunedinPACE")
   }
   if (length(available.clocks) %in% method) {
     method <- c(1:(length(available.clocks) - 1))
   }
 
-  if (inherits(x, "data.frame")) {
-    cpgs.names <- as.character(x[, 1, drop = TRUE])
-    if (length(grep("cg", cpgs.names)) == 0) {
-      stop("First column should contain CpG names")
-    }
-    cpgs <- t(as.matrix(x[, -1]))
-    colnames(cpgs) <- cpgs.names
-  }
-  else if (inherits(x, "matrix")) {
-    cpgs <- t(x)
-  }
-  else if (inherits(x, "ExpressionSet")) {
-    cpgs <- t(Biobase::exprs(x))
-  }
-  else if (inherits(x, "GenomicRatioSet")) {
-    cpgs <- t(minfi::getBeta(x))
-  }
-  else {
-    stop("x must be a data.frame or a 'GenomicRatioSet' or a 'ExpressionSet' object")
-  }
+  
+  
+  # if (inherits(x, "data.frame")) {
+  #   cpgs.names <- as.character(x[, 1, drop = TRUE])
+  #   if (length(grep("cg", cpgs.names)) == 0) {
+  #     stop("First column should contain CpG names")
+  #   }
+  #   cpgs <- t(as.matrix(x[, -1]))
+  #   colnames(cpgs) <- cpgs.names
+  # }
+  # else if (inherits(x, "matrix")) {
+  #   cpgs <- t(x)
+  # }
+  # else if (inherits(x, "ExpressionSet")) {
+  #   cpgs <- t(Biobase::exprs(x))
+  # }
+  # else if (inherits(x, "GenomicRatioSet")) {
+  #   cpgs <- t(minfi::getBeta(x))
+  # } 
+  # else if (inherits(x, "SummarizedExperiment")) 
+  # {
+  #     cpgs <- t(SummarizedExperiment::assay(x))
+  # }
+  # else {
+  #   stop("x must be a data.frame or a 'GenomicRatioSet' or a 'ExpressionSet' object")
+  # }
+  
+  
+  cpgs <- getCpGsData(x) 
+  
 
   if (toBetas) {
     toBeta <- function(m) {
@@ -106,7 +117,8 @@ DNAmAge <- function(x,
     coefNEOaPMA450K$CpGmarker,
     coefNEOaPNA450K$CpGmarker,
     coefNEOaPMAEPIC$CpGmarker,
-    coefNEOaPNAEPIC$CpGmarker
+    coefNEOaPNAEPIC$CpGmarker,
+    coefDunedinPACE$CpGmarker
   )
 
   cpgs.in <- intersect(cpgs.all, colnames(cpgs))
@@ -250,6 +262,14 @@ DNAmAge <- function(x,
       NEOaPNAEPIC = neoapnaepic
     )
   }
+  if (15 %in% method) {
+      # IMPORTANT!!!: Not imputed CpGs --> imputation in predAgeDunedin
+      dunedin <- predAgeDunedin(cpgs, coefDunedinPACE, coefDunedinPACEGS, intercept = TRUE, min.perc)
+      DUNEDIN <- data.frame(
+          id = rownames(cpgs),
+          DUNEDIN = dunedin
+      )
+  }
 
   if (!missing(age)) {
     if (!cell.count) {
@@ -294,6 +314,9 @@ DNAmAge <- function(x,
       }
       if (14 %in% method) {
         NEOaPNAEPIC <- ageAcc1(NEOaPNAEPIC, age, lab = "NEOaPNAEPIC")
+      }
+      if (15 %in% method) {
+        DUNEDIN <- ageAcc1(DUNEDIN, age, lab = "DunedinPACE")
       }
     }
     else {
@@ -349,6 +372,9 @@ DNAmAge <- function(x,
         }
         if (14 %in% method) {
           NEOaPNAEPIC <- ageAcc2(NEOaPNAEPIC, df, lab = "NEOaPNAEPIC")
+        }
+        if (15 %in% method) {
+            DUNEDIN <- ageAcc2(DUNEDIN, df, lab = "DunedinPACE")
         }
       }
     }
@@ -451,6 +477,13 @@ DNAmAge <- function(x,
     } else{
       out <- out %>% full_join(NEOaPNAEPIC, by = "id")
     }
+  }
+  if (15 %in% method) {
+      if(is.null(out)) {
+          out <- DUNEDIN
+      } else{
+          out <- out %>% full_join(DUNEDIN, by = "id")
+      }
   }
   
 

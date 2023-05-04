@@ -196,7 +196,7 @@ DNAmAge <- function(x,
 
   if (7 %in% method) {
     wu <- predAge(cpgs.imp, coefWu, intercept = TRUE, min.perc)
-    wu <- anti.trafo(wu)/12
+    wu <- anti.trafo(wu, adult.age = 48)/12
     Wu <- data.frame(
       id = rownames(cpgs.imp),
       Wu = wu

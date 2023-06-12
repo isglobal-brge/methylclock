@@ -267,7 +267,7 @@ DNAmAge <- function(x,
       dunedin <- predAgeDunedin(cpgs, coefDunedinPACE, coefDunedinPACEGS, intercept = TRUE, min.perc)
       DUNEDIN <- data.frame(
           id = rownames(cpgs),
-          DUNEDIN = dunedin
+          DUNEDIN = dunedin$predAge
       )
   }
 

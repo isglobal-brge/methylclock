@@ -49,7 +49,7 @@ static float argInit_real_T()
 Rcpp::NumericVector main_NewModel1Clean(Rcpp::RObject odata )
 {
   
-  Rcpp::NumericMatrix data = Rcpp:: as<Rcpp::NumericMatrix>(odata);
+  Rcpp::NumericMatrix data = Rcpp::as<Rcpp::NumericMatrix>(odata);
   
   int icpgs = data.nrow(); // Common CpGs
   int isamples= data.ncol(); // Samples

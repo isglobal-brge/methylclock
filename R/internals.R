@@ -121,9 +121,8 @@ predAgeDunedin <- function(x, coefs, coefsgs, intercept = TRUE, min.perc = 0.8) 
     cpgs <- colnames(x)
     mask <- coefs$CpGmarker %in% cpgs
     
-    
     if (mean(mask) > min.perc) {
-        obs.cpgs <- coefsgs$CpGmarker[mask]
+        obs.cpgs <- coefsgs$CpGmarker[coefsgs$CpGmarker %in% cpgs]
         X <- x[, obs.cpgs]
 
         toAdd <- coefsgs$CpGmarker[which(!coefsgs$CpGmarker %in% colnames(X))]

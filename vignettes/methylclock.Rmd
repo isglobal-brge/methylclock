@@ -117,7 +117,7 @@ library(GEOquery)
 
 # DNA Methylation clocks
 
-The main function to estimate chronological and biological mDNA age is called `DNAmAge` while the gestational DNAm age is estimated using `DNAmGA` function. Both functions have similar input arguments. Next subsections detail some of the important issues to be consider before computind DNAm clocks. 
+The main function to estimate chronological and biological mDNA age is called `DNAmAge` while the gestational DNAm age is estimated using `DNAmGA` function. Both functions have similar input arguments. Next subsections detail some of the important issues to be consider before computing DNAm clocks. 
 
 ## Data format
 The methylation data is given in the argument `x`. They can be either beta or M values. The argument `toBetas` should be set to TRUE when M values are provided. The `x` object can be:

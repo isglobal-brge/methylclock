@@ -26,4 +26,4 @@
 #' @import methylclockData
 #' @useDynLib methylclock
 #' @name methylclock
-NULL
+"_PACKAGE"

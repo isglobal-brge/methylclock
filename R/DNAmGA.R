@@ -172,10 +172,13 @@ DNAmGA <- function(x, toBetas = FALSE,
                 Lee.refRPC = Lee.refRPC
             )
         }
-    }
-    else {
-        warning("The number of missing CpGs for Lee clocks exceeds 80%.
-                \n  ---> This DNAm clock will be NA.")
+    } else {
+        warning(paste0("The number of missing CpGs for Lee clocks is ", 
+                       round(sum(coefLeeGA$CpGmarker[-1] %in% colnames(cpgs.imp)) / 
+                                 length(coefLeeGA$CpGmarker) * 100, 2), 
+                       "% which exceeds the threshold of ", min.perc * 100, "%. ",
+                       "This DNAm clock will be NA."), 
+                call. = FALSE)
         Lee <- data.frame(id=rownames(cpgs.imp), Lee = rep(NA, nrow(cpgs.imp)))
     }
 

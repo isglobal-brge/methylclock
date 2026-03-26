@@ -39,7 +39,7 @@ meffilEstimateCellCountsFromBetas <- function(beta, cellTypeReference,
     stopifnot(is.matrix(beta))
     reference.object <- getCellTypeReference(cellTypeReference)
 
-    beta <- quantile.normalize.betas(beta, reference.object$subsets,
+    beta <- quantile_normalize_betas(beta, reference.object$subsets,
                                         reference.object$quantiles,
                                         verbose = verbose )
 
@@ -53,7 +53,7 @@ meffilEstimateCellCountsFromBetas <- function(beta, cellTypeReference,
 }
 
 
-quantile.normalize.betas <- function(beta, subsets, 
+quantile_normalize_betas <- function(beta, subsets, 
                                     quantiles, verbose = FALSE) {
 
     stopifnot(is.matrix(beta))

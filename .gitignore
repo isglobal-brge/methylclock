@@ -52,3 +52,5 @@
 *.old
 methylclock.Rproj
 R/.normalization.R
+*.Rproj
+vignettes/test_script.R

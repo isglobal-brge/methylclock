@@ -39,20 +39,24 @@ predAge <- function(x, coefs, intercept = TRUE, min.perc = 0.8) {
     
     mask <- coefs$CpGmarker %in% cpgs
 
+    # if(gsub("GA", "", gsub("coef", "", substitute(coefs))) == "TL")
+    #     browser()
+    
     if (mean(mask) > min.perc) {
         obs.cpgs <- coefs$CpGmarker[mask]
         X <- x[, obs.cpgs]
-        predAge <- X %*% coefs$CoefficientTraining[coefs$CpGmarker 
-                                                        %in% obs.cpgs]
+        predAge <- X %*% coefs$CoefficientTraining[coefs$CpGmarker %in% obs.cpgs]
         if (intercept) {
             predAge <- coefs$CoefficientTraining[1] + predAge
         }
     }
     else {
         tit <- gsub("GA", "", gsub("coef", "", substitute(coefs)))
-        warning("The number of missing CpGs for", tit, 
-                "clock exceeds ",min.perc*100,
-                "%.\n  ---> This DNAm clock will be NA.\n")
+        warning(paste0("The number of missing CpGs for  ", tit, " clock is ", 
+                       round((1 - mean(mask)) * 100, 2), 
+                       "% which exceeds the threshold of ", min.perc * 100, "%. ",
+                       "This DNAm clock will be NA."), 
+                call. = FALSE)
         predAge <- rep(NA, nrow(x))
     }
     predAge

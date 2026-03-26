@@ -2,11 +2,20 @@
 % Please edit documentation in R/methylclock.R
 \docType{package}
 \name{methylclock}
+\alias{methylclock-package}
 \alias{methylclock}
 \title{methylclock}
 \description{
 Package to estimate DNA methylation age (DNAmAge)
  using different methylation clocks.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/isglobal-brge/methylclock}
+  \item Report bugs at \url{https://github.com/isglobal-brge/methylclock/issues}
+}
+
 }
 \author{
 Juan R Gonzalez <juanr.gonzalez@isglobal.org>

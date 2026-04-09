@@ -173,12 +173,14 @@ DNAmGA <- function(x, toBetas = FALSE,
             )
         }
     } else {
-        warning(paste0("The number of missing CpGs for Lee clocks is ", 
-                       round(sum(coefLeeGA$CpGmarker[-1] %in% colnames(cpgs.imp)) / 
-                                 length(coefLeeGA$CpGmarker) * 100, 2), 
-                       "% which exceeds the threshold of ", min.perc * 100, "%. ",
-                       "This DNAm clock will be NA."), 
+        pct_avalil <- round( ( sum(coefLeeGA$CpGmarker[-1] %in% colnames(cpgs.imp)) / 
+                                  length(coefLeeGA$CpGmarker)) * 100, 2)
+        
+        warning(paste0("The percentage of available CpGs for Lee clock ",
+                       "is ", pct_avalil,"% which is below the threshold of ", 
+                       min.perc * 100, "%.\n", " ---> This clock will be NA.\n"), 
                 call. = FALSE)
+        
         Lee <- data.frame(id=rownames(cpgs.imp), Lee = rep(NA, nrow(cpgs.imp)))
     }
 

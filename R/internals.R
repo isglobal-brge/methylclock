@@ -168,7 +168,8 @@ predAgeDunedin <- function(x, coefs, coefsgs, intercept = TRUE, min.perc = 0.8) 
             rownames(X.norm) <- rownames(X)
             colnames(X.norm) <- colnames(X)
             # Calculate score:
-            score = intercept$CoefficientTraining + rowSums(t(X.norm[coefs$CpGmarker,]) %*% diag(coefs$CoefficientTraining))
+            CpGmarkerCoefs <- which( coefs$CpGmarker %in% intersect(rownames(X.norm), coefs$CpGmarker))
+            score = intercept$CoefficientTraining + rowSums(t(X.norm[CpGmarkerCoefs,]) %*% diag(coefs$CoefficientTraining[CpGmarkerCoefs]))
             names(score) <- colnames(X.norm)
             if( length(toRemove) > 0 ) {
                 score.tmp <- rep(NA, length(toRemove))

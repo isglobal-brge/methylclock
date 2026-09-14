@@ -32,7 +32,6 @@ Useful links:
 Authors:
 \itemize{
   \item Juan R. Gonzalez \email{juanr.gonzalez@isglobal.org} (\href{https://orcid.org/0000-0003-3267-2146}{ORCID})
-  \item Carlos Ruiz-Arenas \email{carlos.ruiz@isglobal.org}
 }
 
 }

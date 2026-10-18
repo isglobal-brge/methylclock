@@ -1,6 +1,6 @@
 # methylclock 2.0.0
 
-(In Bioconductor devel as version 1.99.0, following the convention for a
+(In Bioconductor devel as the 1.99.x series, following the convention for a
 major rewrite; it becomes 2.0.0 at the next release.)
 
 A ground-up rewrite. The package now computes **44 epigenetic clocks** behind
@@ -11,8 +11,9 @@ ships a toolbox to compare, interpret and quality-control the results.
 
 * **Declarative clock registry** (`clock_register()`, `clock_list()`,
   `clock_info()`, and the shipped `clock_catalog` table): one entry per
-  clock — target, engine, native platforms, training tissue, licence and
-  citation. Adding a clock is adding a row, not editing the engine.
+  clock — target, engine, what it estimates, native platforms, training
+  tissue, licence and citation. Adding a clock is adding a row, not
+  editing the engine.
 * **Manifest-backed resource resolver** (`mcd_resource()`,
   `mcd_backends()`): coefficients are resolved through a configurable
   backend chain — a local mirror, ExperimentHub, or a direct Zenodo
@@ -33,8 +34,12 @@ ships a toolbox to compare, interpret and quality-control the results.
   placenta), neonatal (the four NEOage clocks), mitotic counters, causal
   clocks, and nine trait/exposure EpiScores (opt-in via
   `target = "trait"`).
-* Every clock declares the **tissue it was trained on** and its native
-  arrays; restrictively licensed clocks are implemented and clearly marked.
+* Every clock declares the **tissue it was trained on**, the quantity it
+  estimates with its units (the four NEOage clocks report post-menstrual
+  and postnatal age in weeks; Levine, phenotypic age), and its native
+  arrays. The arrays are where a clock was built and validated, not where
+  it can be computed — CpG coverage decides that. Restrictively licensed
+  clocks are implemented and clearly marked.
 
 ## Scale
 

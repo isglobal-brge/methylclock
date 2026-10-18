@@ -8,11 +8,13 @@
 A data frame with one row per clock and columns:
 \describe{
   \item{clock}{Clock name (pass to \code{methylclock(clocks = )}).}
-  \item{estimates}{What the clock reports, with units (e.g. "Age").}
+  \item{estimates}{What the clock reports, with units (e.g. "Age (years)").}
   \item{tissue}{The tissue the clock was trained on (whole blood, cord
     blood, placenta, buccal, skin, multi-tissue...): a clock reads best
     the tissue it came from.}
-  \item{arrays}{Illumina platforms the clock supports.}
+  \item{arrays}{Illumina platforms the clock was built and validated on
+    (its native platforms). This does not restrict where the clock can be
+    computed.}
   \item{n_cpgs}{Number of CpGs the clock uses.}
   \item{generation}{Clock generation, where defined.}
   \item{target}{The registry target family the clock belongs to.}
@@ -28,8 +30,11 @@ A one-row-per-clock overview meant to be read first: what each clock
 estimates, which arrays it was built for, how many CpGs it uses, and a short
 reference to the paper. It is a frozen snapshot of the registry (regenerated
 when clocks are added), so it can be displayed without resolving any
-coefficients. For the live registry --- to filter or query programmatically ---
-use \code{\link{clock_list}}.
+coefficients. Whether a clock can be computed on a given dataset is decided
+by coverage of the clock's CpGs in the input, not by the array label: a
+clock is computed whenever enough of its CpGs are present. For the live
+registry --- to filter or query programmatically --- use
+\code{\link{clock_list}}.
 }
 \examples{
 data(clock_catalog)

@@ -242,6 +242,18 @@ methylclock(grset)          # a minfi GenomicRatioSet
 methylclock(se)             # a SummarizedExperiment
 ```
 
+The clocks are applied to your betas as they are: methylclock does not re-impose
+the preprocessing used in a clock's original paper. You can start from betas
+normalized by any of the usual methods (Noob, Funnorm, BMIQ, quantile
+normalization), but if that method departs substantially from the one the clock
+was built on, the estimates can suffer. The effect falls mostly on the absolute
+age a clock reports; for comparing groups or reading age acceleration it is
+smaller, as long as every sample is treated the same way. A handful of clocks are
+the exception because they carry their own normalization --- `DunedinPACE`, for
+instance, quantile-normalizes your betas to its own reference before it runs ---
+so they are robust to this and simply expect ordinary normalized betas, not raw
+intensities.
+
 You do not need to worry about a clock's CpGs being missing from your array
 either: a clock is computed only when enough of its CpGs are present, and
 otherwise returns `NA` for every sample rather than a misleading number. Missing

@@ -12,6 +12,7 @@ clock_register(
   platform = character(0),
   compatible = character(0),
   tissue = NA_character_,
+  estimates = NA_character_,
   resource = NULL,
   aux = NULL,
   coef_col = "CoefficientTraining",
@@ -50,6 +51,11 @@ with through probe conversion or adaptation, i.e. not its native platform.}
 blood"}, \code{"buccal epithelium (children)"}, \code{"placenta"},
 \code{"multi-tissue"}): a clock reads best the tissue it came from.
 Empty by default. Selection and estimation treat these as non-native.}
+
+\item{estimates}{Optional description of the quantity the clock
+estimates, with its units (e.g. \code{"Post-menstrual age (weeks)"}).
+When \code{NA}, catalogue displays fall back to a generic label for the
+clock's target family.}
 
 \item{resource}{Resource identifier (resolved by \code{\link{mcd_resource}})
 holding the coefficients, e.g. \code{"coefHorvath"}.}

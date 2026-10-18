@@ -93,6 +93,10 @@ clock_statuses <- c("ok", "license-risk", "out-of-scope", "not-implementable",
 #'   blood"}, \code{"buccal epithelium (children)"}, \code{"placenta"},
 #'   \code{"multi-tissue"}): a clock reads best the tissue it came from.
 #'   Empty by default. Selection and estimation treat these as non-native.
+#' @param estimates Optional description of the quantity the clock
+#'   estimates, with its units (e.g. \code{"Post-menstrual age (weeks)"}).
+#'   When \code{NA}, catalogue displays fall back to a generic label for the
+#'   clock's target family.
 #' @param resource Resource identifier (resolved by \code{\link{mcd_resource}})
 #'   holding the coefficients, e.g. \code{"coefHorvath"}.
 #' @param aux Character vector of auxiliary resource identifiers (e.g.
@@ -140,6 +144,7 @@ clock_register <- function(name,
                            platform = character(0),
                            compatible = character(0),
                            tissue = NA_character_,
+                           estimates = NA_character_,
                            resource = NULL,
                            aux = NULL,
                            coef_col = "CoefficientTraining",
@@ -170,6 +175,7 @@ clock_register <- function(name,
         name = name, target = target, predictor = predictor,
         generation = as.integer(generation), platform = platform,
         compatible = compatible, tissue = as.character(tissue)[1],
+        estimates = as.character(estimates)[1],
         resource = resource, aux = aux, coef_col = coef_col,
         intercept = isTRUE(intercept), standardize = isTRUE(standardize),
         normalize = normalize, agg = agg, transform = transform,

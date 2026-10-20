@@ -18,6 +18,7 @@
 
     clock_register("TL", target = "telomere", generation = NA_integer_,
         tissue = "whole blood",
+        estimates = "Telomere length (kb)",
         platform = "450K", resource = "coefTL", citation = "lu2019tl")
     invisible(NULL)
 }

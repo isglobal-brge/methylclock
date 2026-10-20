@@ -36,7 +36,8 @@ ships a toolbox to compare, interpret and quality-control the results.
   `target = "trait"`).
 * Every clock declares the **tissue it was trained on**, the quantity it
   estimates with its units (the four NEOage clocks report post-menstrual
-  and postnatal age in weeks; Levine, phenotypic age), and its native
+  and postnatal age in weeks; Levine, phenotypic age; TL, telomere
+  length in kilobases), and its native
   arrays. The arrays are where a clock was built and validated, not where
   it can be computed — CpG coverage decides that. Restrictively licensed
   clocks are implemented and clearly marked.
